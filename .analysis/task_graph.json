@@ -1,0 +1,209 @@
+{
+  "graph_metadata": {
+    "description": "Task dependency graph showing relationships and execution constraints",
+    "format": "adjacency_list",
+    "total_nodes": 20,
+    "total_edges": 12
+  },
+  "nodes": [
+    {
+      "task_id": "TASK-001",
+      "title": "Create Environment Configuration Template",
+      "dependencies": [],
+      "dependents": ["TASK-002"],
+      "can_start_immediately": true,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-002",
+      "title": "Enhance README Documentation",
+      "dependencies": ["TASK-001"],
+      "dependents": [],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-003",
+      "title": "Implement Input Validation Module",
+      "dependencies": [],
+      "dependents": ["TASK-004", "TASK-006", "TASK-008", "TASK-010", "TASK-012"],
+      "can_start_immediately": true,
+      "critical_path": true
+    },
+    {
+      "task_id": "TASK-004",
+      "title": "Implement Comprehensive Error Handling",
+      "dependencies": ["TASK-003"],
+      "dependents": ["TASK-005"],
+      "can_start_immediately": false,
+      "critical_path": true
+    },
+    {
+      "task_id": "TASK-005",
+      "title": "Add Retry Mechanism for API Calls",
+      "dependencies": ["TASK-004"],
+      "dependents": ["TASK-010", "TASK-019"],
+      "can_start_immediately": false,
+      "critical_path": true
+    },
+    {
+      "task_id": "TASK-006",
+      "title": "Implement Task Retrieval Functionality",
+      "dependencies": ["TASK-003"],
+      "dependents": ["TASK-007", "TASK-011", "TASK-012"],
+      "can_start_immediately": false,
+      "critical_path": true
+    },
+    {
+      "task_id": "TASK-007",
+      "title": "Implement Task Deletion Functionality",
+      "dependencies": ["TASK-006"],
+      "dependents": ["TASK-011"],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-008",
+      "title": "Fix Assigned To Field Implementation",
+      "dependencies": ["TASK-003"],
+      "dependents": ["TASK-011"],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-009",
+      "title": "Implement Logging Framework",
+      "dependencies": [],
+      "dependents": [],
+      "can_start_immediately": true,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-010",
+      "title": "Implement Batch Operations Support",
+      "dependencies": ["TASK-003", "TASK-005"],
+      "dependents": [],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-011",
+      "title": "Create CLI Interface",
+      "dependencies": ["TASK-006", "TASK-007", "TASK-008"],
+      "dependents": [],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-012",
+      "title": "Create Unit Test Suite",
+      "dependencies": ["TASK-003", "TASK-004", "TASK-006"],
+      "dependents": ["TASK-013", "TASK-016"],
+      "can_start_immediately": false,
+      "critical_path": true
+    },
+    {
+      "task_id": "TASK-013",
+      "title": "Create Integration Test Suite",
+      "dependencies": ["TASK-012"],
+      "dependents": [],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-014",
+      "title": "Add Type Definitions",
+      "dependencies": [],
+      "dependents": [],
+      "can_start_immediately": true,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-015",
+      "title": "Implement Configuration Management",
+      "dependencies": [],
+      "dependents": [],
+      "can_start_immediately": true,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-016",
+      "title": "Add CI/CD Pipeline Configuration",
+      "dependencies": ["TASK-012"],
+      "dependents": [],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-017",
+      "title": "Add ESLint and Prettier Configuration",
+      "dependencies": [],
+      "dependents": ["TASK-020"],
+      "can_start_immediately": true,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-018",
+      "title": "Refactor Main Function to Examples",
+      "dependencies": [],
+      "dependents": [],
+      "can_start_immediately": true,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-019",
+      "title": "Add Rate Limiting Awareness",
+      "dependencies": ["TASK-005"],
+      "dependents": [],
+      "can_start_immediately": false,
+      "critical_path": false
+    },
+    {
+      "task_id": "TASK-020",
+      "title": "Create Contributing Guidelines",
+      "dependencies": ["TASK-017"],
+      "dependents": [],
+      "can_start_immediately": false,
+      "critical_path": false
+    }
+  ],
+  "critical_path": [
+    "TASK-003",
+    "TASK-004",
+    "TASK-005",
+    "TASK-006",
+    "TASK-012"
+  ],
+  "parallel_execution_opportunities": {
+    "wave_1": [
+      "TASK-001",
+      "TASK-003",
+      "TASK-009",
+      "TASK-014",
+      "TASK-015",
+      "TASK-017",
+      "TASK-018"
+    ],
+    "wave_2": [
+      "TASK-002",
+      "TASK-004",
+      "TASK-006",
+      "TASK-008"
+    ],
+    "wave_3": [
+      "TASK-005",
+      "TASK-007",
+      "TASK-012"
+    ],
+    "wave_4": [
+      "TASK-010",
+      "TASK-011",
+      "TASK-013",
+      "TASK-016",
+      "TASK-019"
+    ],
+    "wave_5": [
+      "TASK-020"
+    ]
+  }
+}
