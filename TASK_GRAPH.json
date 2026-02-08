@@ -1,0 +1,153 @@
+{
+  "metadata": {
+    "generated_at": "2026-02-08T00:00:00Z",
+    "project": "Notion Task Tracker Agent",
+    "total_tasks": 12,
+    "task_categories": [
+      "foundation",
+      "core_functionality",
+      "testing",
+      "documentation",
+      "enhancement"
+    ]
+  },
+  "task_graph": {
+    "nodes": [
+      {
+        "task_id": "T001",
+        "task_order_number": 1,
+        "category": "foundation",
+        "dependencies": []
+      },
+      {
+        "task_id": "T002",
+        "task_order_number": 2,
+        "category": "foundation",
+        "dependencies": ["T001"]
+      },
+      {
+        "task_id": "T003",
+        "task_order_number": 3,
+        "category": "core_functionality",
+        "dependencies": ["T002"]
+      },
+      {
+        "task_id": "T004",
+        "task_order_number": 4,
+        "category": "core_functionality",
+        "dependencies": ["T002"]
+      },
+      {
+        "task_id": "T005",
+        "task_order_number": 5,
+        "category": "core_functionality",
+        "dependencies": ["T002"]
+      },
+      {
+        "task_id": "T006",
+        "task_order_number": 6,
+        "category": "core_functionality",
+        "dependencies": ["T003", "T004", "T005"]
+      },
+      {
+        "task_id": "T007",
+        "task_order_number": 7,
+        "category": "core_functionality",
+        "dependencies": ["T006"]
+      },
+      {
+        "task_id": "T008",
+        "task_order_number": 8,
+        "category": "testing",
+        "dependencies": ["T003", "T004", "T005", "T006", "T007"]
+      },
+      {
+        "task_id": "T009",
+        "task_order_number": 9,
+        "category": "testing",
+        "dependencies": ["T008"]
+      },
+      {
+        "task_id": "T010",
+        "task_order_number": 10,
+        "category": "documentation",
+        "dependencies": ["T008"]
+      },
+      {
+        "task_id": "T011",
+        "task_order_number": 11,
+        "category": "enhancement",
+        "dependencies": ["T009", "T010"]
+      },
+      {
+        "task_id": "T012",
+        "task_order_number": 12,
+        "category": "enhancement",
+        "dependencies": ["T009", "T010"]
+      }
+    ],
+    "edges": [
+      {"from": "T001", "to": "T002", "type": "prerequisite"},
+      {"from": "T002", "to": "T003", "type": "prerequisite"},
+      {"from": "T002", "to": "T004", "type": "prerequisite"},
+      {"from": "T002", "to": "T005", "type": "prerequisite"},
+      {"from": "T003", "to": "T006", "type": "prerequisite"},
+      {"from": "T004", "to": "T006", "type": "prerequisite"},
+      {"from": "T005", "to": "T006", "type": "prerequisite"},
+      {"from": "T006", "to": "T007", "type": "prerequisite"},
+      {"from": "T003", "to": "T008", "type": "prerequisite"},
+      {"from": "T004", "to": "T008", "type": "prerequisite"},
+      {"from": "T005", "to": "T008", "type": "prerequisite"},
+      {"from": "T006", "to": "T008", "type": "prerequisite"},
+      {"from": "T007", "to": "T008", "type": "prerequisite"},
+      {"from": "T008", "to": "T009", "type": "prerequisite"},
+      {"from": "T008", "to": "T010", "type": "prerequisite"},
+      {"from": "T009", "to": "T011", "type": "prerequisite"},
+      {"from": "T010", "to": "T011", "type": "prerequisite"},
+      {"from": "T009", "to": "T012", "type": "prerequisite"},
+      {"from": "T010", "to": "T012", "type": "prerequisite"}
+    ],
+    "parallel_execution_groups": [
+      {
+        "group_id": 1,
+        "tasks": ["T001"],
+        "can_execute_parallel": false
+      },
+      {
+        "group_id": 2,
+        "tasks": ["T002"],
+        "can_execute_parallel": false
+      },
+      {
+        "group_id": 3,
+        "tasks": ["T003", "T004", "T005"],
+        "can_execute_parallel": true
+      },
+      {
+        "group_id": 4,
+        "tasks": ["T006"],
+        "can_execute_parallel": false
+      },
+      {
+        "group_id": 5,
+        "tasks": ["T007"],
+        "can_execute_parallel": false
+      },
+      {
+        "group_id": 6,
+        "tasks": ["T008"],
+        "can_execute_parallel": false
+      },
+      {
+        "group_id": 7,
+        "tasks": ["T009", "T010"],
+        "can_execute_parallel": true
+      },
+      {
+        "group_id": 8,
+        "tasks": ["T011", "T012"],
+        "can_execute_parallel": true
+      }
+    ]
+  }
+}
