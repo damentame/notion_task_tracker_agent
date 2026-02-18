@@ -1,0 +1,180 @@
+{
+  "project": "notion_task_tracker_agent",
+  "graph_format": "adjacency_list",
+  "description": "Task dependency graph showing prerequisite relationships and parallel execution opportunities",
+  "dependency_graph": {
+    "TASK-001": {
+      "title": "Add Environment Variable Validation",
+      "depends_on": [],
+      "enables": ["TASK-002", "TASK-009", "TASK-015"],
+      "parallel_group": 1,
+      "critical_path": true
+    },
+    "TASK-002": {
+      "title": "Implement Structured Error Handling",
+      "depends_on": ["TASK-001"],
+      "enables": ["TASK-003", "TASK-004"],
+      "parallel_group": 2,
+      "critical_path": true
+    },
+    "TASK-003": {
+      "title": "Add Input Validation for Task Creation",
+      "depends_on": ["TASK-002"],
+      "enables": ["TASK-006", "TASK-008", "TASK-010"],
+      "parallel_group": 3,
+      "critical_path": true
+    },
+    "TASK-004": {
+      "title": "Implement Task Query Functionality",
+      "depends_on": ["TASK-002"],
+      "enables": ["TASK-005", "TASK-007", "TASK-010"],
+      "parallel_group": 3,
+      "critical_path": true
+    },
+    "TASK-005": {
+      "title": "Add Task Deletion Capability",
+      "depends_on": ["TASK-004"],
+      "enables": ["TASK-010"],
+      "parallel_group": 4,
+      "critical_path": false
+    },
+    "TASK-006": {
+      "title": "Expand Status Options",
+      "depends_on": ["TASK-003"],
+      "enables": ["TASK-010"],
+      "parallel_group": 4,
+      "critical_path": false
+    },
+    "TASK-007": {
+      "title": "Implement Pagination Support",
+      "depends_on": ["TASK-004"],
+      "enables": ["TASK-008"],
+      "parallel_group": 4,
+      "critical_path": true
+    },
+    "TASK-008": {
+      "title": "Add Bulk Operations Support",
+      "depends_on": ["TASK-003", "TASK-007"],
+      "enables": ["TASK-011"],
+      "parallel_group": 5,
+      "critical_path": true
+    },
+    "TASK-009": {
+      "title": "Implement Logging Framework",
+      "depends_on": ["TASK-001"],
+      "enables": ["TASK-011", "TASK-015"],
+      "parallel_group": 2,
+      "critical_path": false
+    },
+    "TASK-010": {
+      "title": "Create CLI Interface",
+      "depends_on": ["TASK-003", "TASK-004", "TASK-005", "TASK-006"],
+      "enables": ["TASK-013"],
+      "parallel_group": 6,
+      "critical_path": false
+    },
+    "TASK-011": {
+      "title": "Add Unit Tests",
+      "depends_on": ["TASK-008", "TASK-009"],
+      "enables": ["TASK-012", "TASK-014"],
+      "parallel_group": 7,
+      "critical_path": true
+    },
+    "TASK-012": {
+      "title": "Add Integration Tests",
+      "depends_on": ["TASK-011"],
+      "enables": [],
+      "parallel_group": 8,
+      "critical_path": false
+    },
+    "TASK-013": {
+      "title": "Create API Documentation",
+      "depends_on": ["TASK-010"],
+      "enables": [],
+      "parallel_group": 8,
+      "critical_path": false
+    },
+    "TASK-014": {
+      "title": "Add CI/CD Pipeline Configuration",
+      "depends_on": ["TASK-011"],
+      "enables": [],
+      "parallel_group": 8,
+      "critical_path": false
+    },
+    "TASK-015": {
+      "title": "Implement Configuration Management",
+      "depends_on": ["TASK-001", "TASK-009"],
+      "enables": [],
+      "parallel_group": 8,
+      "critical_path": false
+    }
+  },
+  "execution_phases": [
+    {
+      "phase": 1,
+      "name": "Foundation",
+      "tasks": ["TASK-001"],
+      "description": "Establish core validation and configuration foundation"
+    },
+    {
+      "phase": 2,
+      "name": "Error Infrastructure",
+      "tasks": ["TASK-002", "TASK-009"],
+      "description": "Build error handling and logging infrastructure",
+      "parallel_execution": true
+    },
+    {
+      "phase": 3,
+      "name": "Core Features",
+      "tasks": ["TASK-003", "TASK-004"],
+      "description": "Implement validation and query capabilities",
+      "parallel_execution": true
+    },
+    {
+      "phase": 4,
+      "name": "Extended Features",
+      "tasks": ["TASK-005", "TASK-006", "TASK-007"],
+      "description": "Add deletion, status expansion, and pagination",
+      "parallel_execution": true
+    },
+    {
+      "phase": 5,
+      "name": "Advanced Operations",
+      "tasks": ["TASK-008"],
+      "description": "Implement bulk operations for efficiency"
+    },
+    {
+      "phase": 6,
+      "name": "User Interface",
+      "tasks": ["TASK-010"],
+      "description": "Create CLI for manual operations"
+    },
+    {
+      "phase": 7,
+      "name": "Testing Infrastructure",
+      "tasks": ["TASK-011"],
+      "description": "Build comprehensive unit test suite"
+    },
+    {
+      "phase": 8,
+      "name": "Finalization",
+      "tasks": ["TASK-012", "TASK-013", "TASK-014", "TASK-015"],
+      "description": "Complete integration tests, documentation, CI/CD, and configuration",
+      "parallel_execution": true
+    }
+  ],
+  "critical_path": [
+    "TASK-001",
+    "TASK-002",
+    "TASK-003",
+    "TASK-007",
+    "TASK-008",
+    "TASK-011"
+  ],
+  "parallel_opportunities": {
+    "phase_2": ["TASK-002", "TASK-009"],
+    "phase_3": ["TASK-003", "TASK-004"],
+    "phase_4": ["TASK-005", "TASK-006", "TASK-007"],
+    "phase_8": ["TASK-012", "TASK-013", "TASK-014", "TASK-015"]
+  }
+}
