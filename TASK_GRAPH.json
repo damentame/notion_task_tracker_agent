@@ -1,0 +1,149 @@
+{
+  "task_graph": {
+    "nodes": [
+      {
+        "task_id": "TASK-001",
+        "task_order_number": 1,
+        "title": "Document Notion Database Schema Requirements",
+        "dependencies": [],
+        "dependents": ["TASK-002", "TASK-003", "TASK-004"]
+      },
+      {
+        "task_id": "TASK-002",
+        "task_order_number": 2,
+        "title": "Implement Task Query/Retrieval Functionality",
+        "dependencies": ["TASK-001"],
+        "dependents": ["TASK-005", "TASK-006", "TASK-007"]
+      },
+      {
+        "task_id": "TASK-003",
+        "task_order_number": 3,
+        "title": "Implement Task Deletion Functionality",
+        "dependencies": ["TASK-001"],
+        "dependents": ["TASK-006", "TASK-007"]
+      },
+      {
+        "task_id": "TASK-004",
+        "task_order_number": 4,
+        "title": "Enhance Assignee Handling",
+        "dependencies": ["TASK-001"],
+        "dependents": ["TASK-007"]
+      },
+      {
+        "task_id": "TASK-005",
+        "task_order_number": 5,
+        "title": "Add Task Search and Filtering",
+        "dependencies": ["TASK-002"],
+        "dependents": ["TASK-009"]
+      },
+      {
+        "task_id": "TASK-006",
+        "task_order_number": 6,
+        "title": "Implement Bulk Task Operations",
+        "dependencies": ["TASK-002", "TASK-003"],
+        "dependents": []
+      },
+      {
+        "task_id": "TASK-007",
+        "task_order_number": 7,
+        "title": "Create Unit Tests for API Functions",
+        "dependencies": ["TASK-002", "TASK-003", "TASK-004"],
+        "dependents": ["TASK-008", "TASK-012"]
+      },
+      {
+        "task_id": "TASK-008",
+        "task_order_number": 8,
+        "title": "Refactor Code into Modular Structure",
+        "dependencies": ["TASK-007"],
+        "dependents": ["TASK-009", "TASK-010"]
+      },
+      {
+        "task_id": "TASK-009",
+        "task_order_number": 9,
+        "title": "Create CLI Interface",
+        "dependencies": ["TASK-005", "TASK-008"],
+        "dependents": ["TASK-011"]
+      },
+      {
+        "task_id": "TASK-010",
+        "task_order_number": 10,
+        "title": "Add Comprehensive Error Handling and Validation",
+        "dependencies": ["TASK-008"],
+        "dependents": ["TASK-011", "TASK-012"]
+      },
+      {
+        "task_id": "TASK-011",
+        "task_order_number": 11,
+        "title": "Create Comprehensive Documentation",
+        "dependencies": ["TASK-009", "TASK-010"],
+        "dependents": []
+      },
+      {
+        "task_id": "TASK-012",
+        "task_order_number": 12,
+        "title": "Add Integration Tests",
+        "dependencies": ["TASK-007", "TASK-010"],
+        "dependents": []
+      }
+    ],
+    "execution_phases": [
+      {
+        "phase": 1,
+        "description": "Foundation - Documentation and Schema",
+        "tasks": ["TASK-001"],
+        "parallel_execution_possible": false
+      },
+      {
+        "phase": 2,
+        "description": "Core API Extensions",
+        "tasks": ["TASK-002", "TASK-003", "TASK-004"],
+        "parallel_execution_possible": true
+      },
+      {
+        "phase": 3,
+        "description": "Advanced Features",
+        "tasks": ["TASK-005", "TASK-006"],
+        "parallel_execution_possible": true
+      },
+      {
+        "phase": 4,
+        "description": "Quality Assurance",
+        "tasks": ["TASK-007"],
+        "parallel_execution_possible": false
+      },
+      {
+        "phase": 5,
+        "description": "Refactoring and Architecture",
+        "tasks": ["TASK-008"],
+        "parallel_execution_possible": false
+      },
+      {
+        "phase": 6,
+        "description": "User Interface and Robustness",
+        "tasks": ["TASK-009", "TASK-010"],
+        "parallel_execution_possible": true
+      },
+      {
+        "phase": 7,
+        "description": "Finalization",
+        "tasks": ["TASK-011", "TASK-012"],
+        "parallel_execution_possible": true
+      }
+    ],
+    "critical_path": [
+      "TASK-001",
+      "TASK-002",
+      "TASK-005",
+      "TASK-007",
+      "TASK-008",
+      "TASK-009",
+      "TASK-011"
+    ]
+  },
+  "metadata": {
+    "total_phases": 7,
+    "total_tasks": 12,
+    "critical_path_length": 7,
+    "max_parallel_tasks": 3
+  }
+}
