@@ -1,0 +1,522 @@
+{
+  "task_definitions_metadata": {
+    "total_tasks": 15,
+    "analysis_date": "2026-03-03",
+    "analyst": "Business Requirements Analyst Agent",
+    "project": "notion_task_tracker_agent",
+    "task_ordering_strategy": "dependency_first_critical_path"
+  },
+  "tasks": [
+    {
+      "task_number": 1,
+      "task_order_number": 1,
+      "task_id": "TASK-001",
+      "title": "Add Environment Variable Validation",
+      "description": "Implement validation function to check that NOTION_API_KEY and NOTION_DATABASE_ID are set before attempting any Notion operations. Should validate format and provide clear error messages.",
+      "category": "Infrastructure",
+      "priority": "critical",
+      "estimated_complexity": "low",
+      "dependencies": [],
+      "blocks": ["TASK-002", "TASK-003", "TASK-004", "TASK-005", "TASK-006"],
+      "related_requirements": ["FR005", "NFR001"],
+      "related_issues": ["I003"],
+      "acceptance_criteria": [
+        "Function validates NOTION_API_KEY exists and has correct format",
+        "Function validates NOTION_DATABASE_ID exists and is valid UUID",
+        "Clear error messages for each validation failure",
+        "Validation runs on module initialization"
+      ],
+      "implementation_hints": [
+        "Create validateConfig() function",
+        "Add regex validation for secret_ prefix",
+        "Add UUID format validation for database ID",
+        "Call validation before creating Notion client"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    },
+    {
+      "task_number": 2,
+      "task_order_number": 2,
+      "task_id": "TASK-002",
+      "title": "Fix Assigned To Parameter Implementation",
+      "description": "Fix the createTask function to properly use the assignedTo parameter. Currently the people array is empty despite accepting assignedTo parameter.",
+      "category": "Bug Fix",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001"],
+      "blocks": [],
+      "related_requirements": ["FR001"],
+      "related_issues": ["I001"],
+      "acceptance_criteria": [
+        "assignedTo parameter properly maps to Notion people field",
+        "Support single person or array of people",
+        "Handle invalid assignee gracefully",
+        "Document assignee format requirements"
+      ],
+      "implementation_hints": [
+        "Research Notion people property format",
+        "Accept either user ID or email",
+        "Convert assignedTo to proper Notion people array format",
+        "Add parameter validation"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    },
+    {
+      "task_number": 3,
+      "task_order_number": 3,
+      "task_id": "TASK-003",
+      "title": "Improve Notes Update Behavior",
+      "description": "Modify updateTask to append to notes instead of overwriting. Add option to control append vs overwrite behavior.",
+      "category": "Enhancement",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-001"],
+      "blocks": [],
+      "related_requirements": ["FR002"],
+      "related_issues": ["I004"],
+      "acceptance_criteria": [
+        "Default behavior appends to existing notes with timestamp",
+        "Optional parameter to overwrite notes",
+        "Read existing notes before updating",
+        "Preserve note formatting"
+      ],
+      "implementation_hints": [
+        "Fetch existing page data first",
+        "Extract current notes from rich_text array",
+        "Append new notes with separator",
+        "Add appendNotes boolean parameter"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    },
+    {
+      "task_number": 4,
+      "task_order_number": 4,
+      "task_id": "TASK-004",
+      "title": "Implement Task Query/Retrieval Functionality",
+      "description": "Create function to query and retrieve tasks from Notion database with filtering capabilities (by status, assignee, date range).",
+      "category": "Feature",
+      "priority": "high",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-001"],
+      "blocks": ["TASK-007", "TASK-011"],
+      "related_requirements": ["FR003"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "getTasks() function implemented",
+        "Filter by status (single or multiple)",
+        "Filter by assignee",
+        "Filter by date range (created/updated)",
+        "Return paginated results",
+        "Handle empty result sets gracefully"
+      ],
+      "implementation_hints": [
+        "Use notion.databases.query() API",
+        "Build filter objects dynamically based on parameters",
+        "Implement pagination handling",
+        "Parse and normalize response data",
+        "Return consistent data structure"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    },
+    {
+      "task_number": 5,
+      "task_order_number": 5,
+      "task_id": "TASK-005",
+      "title": "Implement Error Handling and Retry Logic",
+      "description": "Add comprehensive error handling with retry logic for transient failures, rate limiting, and network errors.",
+      "category": "Infrastructure",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-001"],
+      "blocks": ["TASK-006", "TASK-007"],
+      "related_requirements": ["FR007", "NFR001"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "Wrapper function for API calls with retry logic",
+        "Exponential backoff for retries",
+        "Handle rate limiting (429) appropriately",
+        "Distinguish between transient and permanent errors",
+        "Maximum retry attempts configurable",
+        "Log all retry attempts"
+      ],
+      "implementation_hints": [
+        "Create retryWithBackoff() utility function",
+        "Check error codes to determine retry eligibility",
+        "Implement exponential backoff algorithm",
+        "Add timeout handling",
+        "Wrap existing API calls with retry logic"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    },
+    {
+      "task_number": 6,
+      "task_order_number": 6,
+      "task_id": "TASK-006",
+      "title": "Add Task Deletion/Archive Functionality",
+      "description": "Implement function to delete or archive tasks. Notion doesn't support true deletion, so this should archive pages.",
+      "category": "Feature",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001", "TASK-005"],
+      "blocks": [],
+      "related_requirements": ["FR003"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "deleteTask() or archiveTask() function implemented",
+        "Page archived in Notion",
+        "Confirmation returned",
+        "Handle non-existent task gracefully",
+        "Error handling integrated"
+      ],
+      "implementation_hints": [
+        "Use notion.pages.update() with archived: true",
+        "Validate page exists before archiving",
+        "Return success/failure status",
+        "Consider adding unarchive functionality"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    },
+    {
+      "task_number": 7,
+      "task_order_number": 7,
+      "task_id": "TASK-007",
+      "title": "Implement Bulk Task Operations",
+      "description": "Create functions to perform bulk operations (create multiple tasks, update multiple tasks) with proper error handling for partial failures.",
+      "category": "Feature",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-004", "TASK-005"],
+      "blocks": [],
+      "related_requirements": ["FR004"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "bulkCreateTasks() accepts array of task objects",
+        "bulkUpdateTasks() accepts array of updates",
+        "Parallel execution with Promise.allSettled()",
+        "Return detailed results with successes and failures",
+        "Handle partial failures gracefully",
+        "Report which operations succeeded/failed"
+      ],
+      "implementation_hints": [
+        "Use Promise.allSettled() for parallel operations",
+        "Structure results to show success/failure per item",
+        "Add option for sequential vs parallel execution",
+        "Consider rate limiting implications",
+        "Return comprehensive status report"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    },
+    {
+      "task_number": 8,
+      "task_order_number": 8,
+      "task_id": "TASK-008",
+      "title": "Refactor Main Function and Export Structure",
+      "description": "Remove auto-executing main() function from module. Reorganize as proper library with separate example/demo script.",
+      "category": "Refactoring",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "dependencies": [],
+      "blocks": ["TASK-011"],
+      "related_requirements": ["NFR003"],
+      "related_issues": ["I002"],
+      "acceptance_criteria": [
+        "main() function removed from index.js",
+        "Example usage moved to separate demo.js or examples/ directory",
+        "Clean module exports",
+        "No auto-execution on import",
+        "Module can be used as library"
+      ],
+      "implementation_hints": [
+        "Create examples/demo.js file",
+        "Move main() function to demo file",
+        "Add ES6 export statements at end of index.js",
+        "Update package.json if needed",
+        "Document example usage"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ],
+      "files_to_create": [
+        "examples/demo.js"
+      ]
+    },
+    {
+      "task_number": 9,
+      "task_order_number": 9,
+      "task_id": "TASK-009",
+      "title": "Create Testing Infrastructure",
+      "description": "Set up testing framework (Jest or Mocha) and write unit tests for all functions. Mock Notion API calls.",
+      "category": "Testing",
+      "priority": "high",
+      "estimated_complexity": "high",
+      "dependencies": [],
+      "blocks": [],
+      "related_requirements": ["NFR002"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "Testing framework installed and configured",
+        "Unit tests for createTask()",
+        "Unit tests for updateTask()",
+        "Unit tests for getTasks()",
+        "Unit tests for validation functions",
+        "Notion API calls properly mocked",
+        "Minimum 80% code coverage",
+        "npm test runs successfully"
+      ],
+      "implementation_hints": [
+        "Install jest as dev dependency",
+        "Create __tests__ directory",
+        "Mock @notionhq/client module",
+        "Test happy paths and error cases",
+        "Use beforeEach for setup",
+        "Configure coverage reporting"
+      ],
+      "files_to_modify": [
+        "package.json"
+      ],
+      "files_to_create": [
+        "__tests__/index.test.js",
+        "jest.config.js"
+      ]
+    },
+    {
+      "task_number": 10,
+      "task_order_number": 10,
+      "task_id": "TASK-010",
+      "title": "Create Notion Database Schema Documentation",
+      "description": "Document the required Notion database structure, property names, types, and configuration needed for the integration to work.",
+      "category": "Documentation",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": [],
+      "blocks": ["TASK-013"],
+      "related_requirements": ["NFR003"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "SCHEMA.md document created",
+        "All required properties documented (Task, Assigned To, Status, Notes, ID)",
+        "Property types specified",
+        "Status options enumerated",
+        "Setup instructions provided",
+        "Screenshots or template link included"
+      ],
+      "implementation_hints": [
+        "Create SCHEMA.md file",
+        "List each database property with type",
+        "Document required vs optional properties",
+        "Explain how to create database in Notion",
+        "Provide Notion template link if possible"
+      ],
+      "files_to_create": [
+        "SCHEMA.md"
+      ]
+    },
+    {
+      "task_number": 11,
+      "task_order_number": 11,
+      "task_id": "TASK-011",
+      "title": "Implement CLI Interface",
+      "description": "Create command-line interface for manual task operations using commander or similar CLI framework.",
+      "category": "Feature",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-004", "TASK-008"],
+      "blocks": [],
+      "related_requirements": ["FR006"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "CLI framework integrated (commander.js)",
+        "Commands: create, update, list, delete",
+        "Interactive prompts for missing parameters",
+        "Help documentation for each command",
+        "Formatted output (table for list)",
+        "Error messages user-friendly",
+        "bin entry in package.json"
+      ],
+      "implementation_hints": [
+        "Install commander and inquirer",
+        "Create cli.js or bin/notion-task.js",
+        "Define commands and options",
+        "Use inquirer for interactive prompts",
+        "Format output with cli-table3",
+        "Add shebang for Unix execution"
+      ],
+      "files_to_create": [
+        "cli.js"
+      ],
+      "files_to_modify": [
+        "package.json"
+      ]
+    },
+    {
+      "task_number": 12,
+      "task_order_number": 12,
+      "task_id": "TASK-012",
+      "title": "Add TypeScript Type Definitions",
+      "description": "Create TypeScript declaration file (.d.ts) for better IDE support and type safety for consumers of the library.",
+      "category": "Enhancement",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "dependencies": [],
+      "blocks": [],
+      "related_requirements": ["NFR003"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "index.d.ts file created",
+        "All exported functions typed",
+        "Parameter types documented",
+        "Return types specified",
+        "Interface definitions for task objects",
+        "package.json types field set"
+      ],
+      "implementation_hints": [
+        "Create index.d.ts",
+        "Define TaskObject interface",
+        "Type all function signatures",
+        "Export types and interfaces",
+        "Reference in package.json"
+      ],
+      "files_to_create": [
+        "index.d.ts"
+      ],
+      "files_to_modify": [
+        "package.json"
+      ]
+    },
+    {
+      "task_number": 13,
+      "task_order_number": 13,
+      "task_id": "TASK-013",
+      "title": "Comprehensive README Documentation",
+      "description": "Update README.md with complete documentation including setup instructions, API reference, usage examples, and troubleshooting.",
+      "category": "Documentation",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-010"],
+      "blocks": [],
+      "related_requirements": ["NFR003"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "Installation instructions",
+        "Environment setup guide",
+        "Notion database setup reference",
+        "API function documentation with examples",
+        "CLI usage guide",
+        "Troubleshooting section",
+        "Contributing guidelines",
+        "License information"
+      ],
+      "implementation_hints": [
+        "Use clear section headers",
+        "Include code examples for each function",
+        "Add badges for npm, license, etc.",
+        "Link to SCHEMA.md",
+        "Include FAQ section"
+      ],
+      "files_to_modify": [
+        "README.md"
+      ]
+    },
+    {
+      "task_number": 14,
+      "task_order_number": 14,
+      "task_id": "TASK-014",
+      "title": "Add .env.example Template",
+      "description": "Create example environment file template to help users configure the application.",
+      "category": "Documentation",
+      "priority": "low",
+      "estimated_complexity": "low",
+      "dependencies": [],
+      "blocks": [],
+      "related_requirements": ["NFR003"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        ".env.example file created",
+        "All required environment variables listed",
+        "Comments explaining each variable",
+        "Example values (non-sensitive)",
+        "Instructions for obtaining values"
+      ],
+      "implementation_hints": [
+        "Copy structure from .env but with placeholder values",
+        "Add inline comments",
+        "Reference in README"
+      ],
+      "files_to_create": [
+        ".env.example"
+      ]
+    },
+    {
+      "task_number": 15,
+      "task_order_number": 15,
+      "task_id": "TASK-015",
+      "title": "Add Logging Infrastructure",
+      "description": "Implement structured logging with configurable log levels using winston or similar logging library.",
+      "category": "Infrastructure",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "dependencies": [],
+      "blocks": [],
+      "related_requirements": ["NFR001"],
+      "related_issues": [],
+      "acceptance_criteria": [
+        "Logging library integrated (winston)",
+        "Configurable log levels (debug, info, warn, error)",
+        "Structured log format",
+        "Log to file and/or console",
+        "Replace console.log/error with logger",
+        "Environment-based log level configuration"
+      ],
+      "implementation_hints": [
+        "Install winston",
+        "Create logger.js module",
+        "Configure transports",
+        "Define log format",
+        "Replace all console statements",
+        "Add LOG_LEVEL environment variable"
+      ],
+      "files_to_create": [
+        "lib/logger.js"
+      ],
+      "files_to_modify": [
+        "index.js"
+      ]
+    }
+  ],
+  "task_summary": {
+    "by_category": {
+      "Infrastructure": 3,
+      "Feature": 4,
+      "Bug Fix": 1,
+      "Enhancement": 2,
+      "Testing": 1,
+      "Documentation": 3,
+      "Refactoring": 1
+    },
+    "by_priority": {
+      "critical": 1,
+      "high": 6,
+      "medium": 6,
+      "low": 2
+    },
+    "by_complexity": {
+      "low": 6,
+      "medium": 6,
+      "high": 3
+    }
+  }
+}
