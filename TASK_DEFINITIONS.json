@@ -1,0 +1,506 @@
+{
+  "task_graph_metadata": {
+    "total_tasks": 15,
+    "generated_timestamp": "2026-03-06T14:41:00Z",
+    "project": "notion_task_tracker_agent",
+    "analysis_version": "1.0.0"
+  },
+  "tasks": [
+    {
+      "task_id": "TASK-001",
+      "task_order_number": 1,
+      "title": "Add environment variable validation",
+      "description": "Implement validation function to check that required environment variables (NOTION_API_KEY, NOTION_DATABASE_ID) are present and non-empty before any API operations. Should throw clear error messages indicating which variables are missing.",
+      "category": "reliability",
+      "priority": "critical",
+      "estimated_complexity": "low",
+      "addresses_gaps": ["GAP-005"],
+      "satisfies_requirements": ["NFR-001"],
+      "dependencies": [],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["validateEnvironment"],
+        "validation_rules": [
+          "NOTION_API_KEY must be defined and non-empty",
+          "NOTION_DATABASE_ID must be defined and non-empty",
+          "Should be called at module initialization"
+        ]
+      },
+      "acceptance_criteria": [
+        "Function throws descriptive error if NOTION_API_KEY is missing",
+        "Function throws descriptive error if NOTION_DATABASE_ID is missing",
+        "Validation occurs before any Notion API calls",
+        "Error messages clearly indicate which variable is missing"
+      ]
+    },
+    {
+      "task_id": "TASK-002",
+      "task_order_number": 2,
+      "title": "Improve error handling with custom error classes",
+      "description": "Create custom error classes (NotionConfigError, NotionAPIError) to distinguish between configuration issues and API failures. Update all try-catch blocks to use these errors and provide actionable error messages.",
+      "category": "reliability",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "addresses_gaps": ["GAP-004"],
+      "satisfies_requirements": ["NFR-002"],
+      "dependencies": ["TASK-001"],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_classes": ["NotionConfigError", "NotionAPIError"],
+        "error_handling_strategy": "Wrap API errors with context, preserve stack traces"
+      },
+      "acceptance_criteria": [
+        "Custom error classes extend Error properly",
+        "All API errors are wrapped in NotionAPIError",
+        "Configuration errors use NotionConfigError",
+        "Error messages include actionable information"
+      ]
+    },
+    {
+      "task_id": "TASK-003",
+      "task_order_number": 3,
+      "title": "Implement getTask function to retrieve individual tasks",
+      "description": "Create a function to retrieve a single task by its Notion page ID. Should return the task properties in a structured format or throw an error if the task doesn't exist.",
+      "category": "functionality",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "addresses_gaps": ["GAP-001"],
+      "satisfies_requirements": ["FR-003"],
+      "dependencies": ["TASK-002"],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["getTask"],
+        "api_methods_used": ["notion.pages.retrieve"],
+        "return_format": "Simplified object with task properties"
+      },
+      "acceptance_criteria": [
+        "Function accepts page ID as parameter",
+        "Returns task properties (title, status, notes, assignee)",
+        "Handles non-existent task IDs gracefully",
+        "Uses custom error handling from TASK-002"
+      ]
+    },
+    {
+      "task_id": "TASK-004",
+      "task_order_number": 4,
+      "title": "Implement listTasks function with filtering",
+      "description": "Create a function to query the Notion database and retrieve multiple tasks. Should support optional filtering by status and assignee. Implement pagination handling for large result sets.",
+      "category": "functionality",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "addresses_gaps": ["GAP-003"],
+      "satisfies_requirements": ["FR-004"],
+      "dependencies": ["TASK-003"],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["listTasks"],
+        "api_methods_used": ["notion.databases.query"],
+        "filter_options": ["status", "assignedTo"],
+        "pagination": "Handle has_more and next_cursor"
+      },
+      "acceptance_criteria": [
+        "Function returns array of tasks",
+        "Supports filtering by status",
+        "Supports filtering by assignee",
+        "Handles pagination automatically",
+        "Returns empty array if no tasks match"
+      ]
+    },
+    {
+      "task_id": "TASK-005",
+      "task_order_number": 5,
+      "title": "Implement deleteTask function",
+      "description": "Create a function to archive (soft delete) a task in Notion. Notion doesn't support hard deletion via API, so this should set the archived property to true.",
+      "category": "functionality",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "addresses_gaps": ["GAP-002"],
+      "satisfies_requirements": ["FR-005"],
+      "dependencies": ["TASK-003"],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["deleteTask"],
+        "api_methods_used": ["notion.pages.update"],
+        "deletion_method": "Archive page (set archived: true)"
+      },
+      "acceptance_criteria": [
+        "Function accepts page ID as parameter",
+        "Archives the task in Notion",
+        "Returns success confirmation",
+        "Handles non-existent task IDs gracefully"
+      ]
+    },
+    {
+      "task_id": "TASK-006",
+      "task_order_number": 6,
+      "title": "Extend updateTask to support all properties",
+      "description": "Enhance the existing updateTask function to support updating title, assignee, status, and notes. Make all parameters optional except pageId, only updating properties that are provided.",
+      "category": "functionality",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "addresses_gaps": ["GAP-008"],
+      "satisfies_requirements": ["FR-006"],
+      "dependencies": ["TASK-002"],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "modified_functions": ["updateTask"],
+        "new_parameters": ["title", "assignedTo"],
+        "update_strategy": "Build properties object dynamically based on provided parameters"
+      },
+      "acceptance_criteria": [
+        "Can update title independently",
+        "Can update assignee independently",
+        "Can update status independently",
+        "Can update notes independently",
+        "Can update multiple properties in single call",
+        "Maintains backward compatibility"
+      ]
+    },
+    {
+      "task_id": "TASK-007",
+      "task_order_number": 7,
+      "title": "Refactor to prevent auto-execution on import",
+      "description": "Move the main() function call to a conditional that only executes when the file is run directly, not when imported as a module. Use ES modules pattern with import.meta.url checking.",
+      "category": "architecture",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "addresses_gaps": ["GAP-009"],
+      "satisfies_requirements": ["NFR-005"],
+      "dependencies": [],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "refactoring_approach": "Check if import.meta.url === new URL(process.argv[1], 'file://').href",
+        "alternative_approach": "Move main() to separate CLI file"
+      },
+      "acceptance_criteria": [
+        "main() does not execute when file is imported",
+        "main() executes when file is run directly with node",
+        "All functions remain exportable",
+        "No breaking changes to existing functionality"
+      ]
+    },
+    {
+      "task_id": "TASK-008",
+      "task_order_number": 8,
+      "title": "Create comprehensive unit tests",
+      "description": "Set up testing framework (Jest or Mocha) and create unit tests for all functions. Mock Notion API calls to test logic without requiring actual API access. Aim for >80% code coverage.",
+      "category": "testing",
+      "priority": "high",
+      "estimated_complexity": "high",
+      "addresses_gaps": ["GAP-006"],
+      "satisfies_requirements": ["NFR-003"],
+      "dependencies": ["TASK-001", "TASK-002", "TASK-003", "TASK-004", "TASK-005", "TASK-006"],
+      "technical_details": {
+        "files_to_create": ["index.test.js", "jest.config.js or mocha.opts"],
+        "testing_framework": "Jest (recommended) or Mocha with Chai",
+        "mocking_strategy": "Mock @notionhq/client",
+        "test_categories": [
+          "Environment validation tests",
+          "Task creation tests",
+          "Task retrieval tests",
+          "Task update tests",
+          "Task deletion tests",
+          "Task listing/filtering tests",
+          "Error handling tests"
+        ]
+      },
+      "acceptance_criteria": [
+        "Testing framework installed and configured",
+        "Tests for all exported functions",
+        "Tests for error conditions",
+        "Tests for environment validation",
+        "All tests pass",
+        "Code coverage >80%",
+        "npm test command works"
+      ]
+    },
+    {
+      "task_id": "TASK-009",
+      "task_order_number": 9,
+      "title": "Create .env.example file",
+      "description": "Create a template .env.example file documenting all required environment variables with descriptive comments and placeholder values. This helps users understand configuration requirements.",
+      "category": "documentation",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "addresses_gaps": ["GAP-007"],
+      "satisfies_requirements": ["NFR-004"],
+      "dependencies": ["TASK-001"],
+      "technical_details": {
+        "files_to_create": [".env.example"],
+        "content_requirements": [
+          "All required environment variables listed",
+          "Comments explaining each variable",
+          "Placeholder values showing expected format",
+          "Link to Notion API documentation"
+        ]
+      },
+      "acceptance_criteria": [
+        "File contains NOTION_API_KEY with explanation",
+        "File contains NOTION_DATABASE_ID with explanation",
+        "Comments explain how to obtain each value",
+        "File added to git (not in .gitignore)"
+      ]
+    },
+    {
+      "task_id": "TASK-010",
+      "task_order_number": 10,
+      "title": "Expand README with comprehensive documentation",
+      "description": "Rewrite README.md to include: project overview, features list, prerequisites, installation steps, configuration instructions, usage examples for all functions, API reference, troubleshooting section, and contribution guidelines.",
+      "category": "documentation",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "addresses_gaps": ["GAP-007"],
+      "satisfies_requirements": ["NFR-004"],
+      "dependencies": ["TASK-009"],
+      "technical_details": {
+        "files_to_modify": ["README.md"],
+        "sections_to_include": [
+          "Project description",
+          "Features",
+          "Prerequisites",
+          "Installation",
+          "Configuration",
+          "Usage examples",
+          "API reference",
+          "Testing",
+          "Troubleshooting",
+          "Contributing"
+        ]
+      },
+      "acceptance_criteria": [
+        "README includes all required sections",
+        "Installation steps are clear and complete",
+        "Configuration instructions reference .env.example",
+        "Usage examples provided for each function",
+        "Code examples use proper syntax highlighting",
+        "Troubleshooting covers common issues"
+      ]
+    },
+    {
+      "task_id": "TASK-011",
+      "task_order_number": 11,
+      "title": "Add JSDoc comments to all functions",
+      "description": "Add comprehensive JSDoc documentation to all functions including parameter types, return types, descriptions, examples, and error conditions. This enables better IDE autocomplete and generated documentation.",
+      "category": "documentation",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "addresses_gaps": ["GAP-007"],
+      "satisfies_requirements": ["NFR-004"],
+      "dependencies": ["TASK-006"],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "documentation_standard": "JSDoc 3",
+        "elements_to_document": [
+          "@param with types and descriptions",
+          "@returns with type and description",
+          "@throws for error conditions",
+          "@example for usage examples"
+        ]
+      },
+      "acceptance_criteria": [
+        "All exported functions have JSDoc comments",
+        "Parameter types documented",
+        "Return types documented",
+        "Error conditions documented",
+        "At least one usage example per function"
+      ]
+    },
+    {
+      "task_id": "TASK-012",
+      "task_order_number": 12,
+      "title": "Add input validation to all functions",
+      "description": "Implement parameter validation for all functions to check types, required fields, and value constraints before making API calls. Throw clear validation errors for invalid inputs.",
+      "category": "reliability",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "addresses_gaps": ["GAP-004"],
+      "satisfies_requirements": ["NFR-002"],
+      "dependencies": ["TASK-002"],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "validation_requirements": {
+          "pageId": "Must be non-empty string",
+          "title": "Must be non-empty string when provided",
+          "status": "Must be valid status value",
+          "notes": "Must be string",
+          "assignedTo": "Must be string or array"
+        }
+      },
+      "acceptance_criteria": [
+        "All functions validate required parameters",
+        "Type checking for all parameters",
+        "Meaningful validation error messages",
+        "Validation errors are thrown before API calls"
+      ]
+    },
+    {
+      "task_id": "TASK-013",
+      "task_order_number": 13,
+      "title": "Create integration tests with Notion API",
+      "description": "Create integration tests that run against a real Notion test database (optional, skipped if credentials not available). Tests should verify actual API interactions and end-to-end workflows.",
+      "category": "testing",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "addresses_gaps": ["GAP-006"],
+      "satisfies_requirements": ["NFR-003"],
+      "dependencies": ["TASK-008"],
+      "technical_details": {
+        "files_to_create": ["index.integration.test.js"],
+        "test_requirements": [
+          "Tests should be skippable if no credentials",
+          "Use separate test database",
+          "Clean up created test data",
+          "Test full CRUD cycle"
+        ],
+        "npm_script": "npm run test:integration"
+      },
+      "acceptance_criteria": [
+        "Integration tests can run against real API",
+        "Tests are skipped gracefully if no credentials",
+        "Full CRUD workflow tested",
+        "Test data cleaned up after run",
+        "Separate npm script for integration tests"
+      ]
+    },
+    {
+      "task_id": "TASK-014",
+      "task_order_number": 14,
+      "title": "Add TypeScript type definitions",
+      "description": "Create TypeScript declaration file (index.d.ts) to provide type definitions for all exported functions. This improves developer experience for TypeScript users without converting the entire project.",
+      "category": "developer_experience",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "addresses_gaps": [],
+      "satisfies_requirements": ["NFR-004"],
+      "dependencies": ["TASK-011"],
+      "technical_details": {
+        "files_to_create": ["index.d.ts"],
+        "type_definitions_needed": [
+          "Task interface",
+          "Function signatures",
+          "Error classes",
+          "Filter options"
+        ]
+      },
+      "acceptance_criteria": [
+        "index.d.ts file created",
+        "All exported functions have type definitions",
+        "Custom error classes typed",
+        "Task object interface defined",
+        "Types work in TypeScript projects"
+      ]
+    },
+    {
+      "task_id": "TASK-015",
+      "task_order_number": 15,
+      "title": "Add CLI interface (optional enhancement)",
+      "description": "Create a command-line interface wrapper allowing the tool to be used directly from terminal with commands like 'notion-task create', 'notion-task list', etc. Use a CLI framework like Commander.js.",
+      "category": "enhancement",
+      "priority": "low",
+      "estimated_complexity": "high",
+      "addresses_gaps": ["GAP-010"],
+      "satisfies_requirements": [],
+      "dependencies": ["TASK-007", "TASK-011"],
+      "technical_details": {
+        "files_to_create": ["cli.js", "bin/notion-task"],
+        "cli_framework": "Commander.js or Yargs",
+        "commands_to_implement": [
+          "create <title> [options]",
+          "list [options]",
+          "get <id>",
+          "update <id> [options]",
+          "delete <id>"
+        ],
+        "package_json_updates": "Add bin field for global installation"
+      },
+      "acceptance_criteria": [
+        "CLI commands work from terminal",
+        "Help text available for all commands",
+        "Options properly parsed",
+        "Errors displayed in user-friendly format",
+        "Can be installed globally with npm install -g"
+      ]
+    }
+  ],
+  "dependency_graph": {
+    "description": "Task dependencies showing which tasks must be completed before others",
+    "nodes": [
+      {"task_id": "TASK-001", "depends_on": []},
+      {"task_id": "TASK-002", "depends_on": ["TASK-001"]},
+      {"task_id": "TASK-003", "depends_on": ["TASK-002"]},
+      {"task_id": "TASK-004", "depends_on": ["TASK-003"]},
+      {"task_id": "TASK-005", "depends_on": ["TASK-003"]},
+      {"task_id": "TASK-006", "depends_on": ["TASK-002"]},
+      {"task_id": "TASK-007", "depends_on": []},
+      {"task_id": "TASK-008", "depends_on": ["TASK-001", "TASK-002", "TASK-003", "TASK-004", "TASK-005", "TASK-006"]},
+      {"task_id": "TASK-009", "depends_on": ["TASK-001"]},
+      {"task_id": "TASK-010", "depends_on": ["TASK-009"]},
+      {"task_id": "TASK-011", "depends_on": ["TASK-006"]},
+      {"task_id": "TASK-012", "depends_on": ["TASK-002"]},
+      {"task_id": "TASK-013", "depends_on": ["TASK-008"]},
+      {"task_id": "TASK-014", "depends_on": ["TASK-011"]},
+      {"task_id": "TASK-015", "depends_on": ["TASK-007", "TASK-011"]}
+    ],
+    "critical_path": ["TASK-001", "TASK-002", "TASK-003", "TASK-004", "TASK-008"],
+    "parallel_execution_opportunities": [
+      {
+        "group": "foundation",
+        "tasks": ["TASK-001", "TASK-007"],
+        "note": "Can be done in parallel"
+      },
+      {
+        "group": "crud_operations",
+        "tasks": ["TASK-003", "TASK-004", "TASK-005", "TASK-006"],
+        "note": "After TASK-002, TASK-003/TASK-005 can run parallel to TASK-006"
+      },
+      {
+        "group": "documentation",
+        "tasks": ["TASK-009", "TASK-011"],
+        "note": "Can be done in parallel after their dependencies"
+      }
+    ]
+  },
+  "implementation_sequence": {
+    "description": "Recommended order for task implementation with rationale",
+    "phases": [
+      {
+        "phase_number": 1,
+        "phase_name": "Foundation & Reliability",
+        "tasks": ["TASK-001", "TASK-002", "TASK-007"],
+        "rationale": "Establish solid foundation with validation and error handling before adding features",
+        "can_parallelize": true
+      },
+      {
+        "phase_number": 2,
+        "phase_name": "Core CRUD Operations",
+        "tasks": ["TASK-003", "TASK-006", "TASK-004", "TASK-005", "TASK-012"],
+        "rationale": "Build out complete CRUD functionality with proper validation",
+        "can_parallelize": "partial (TASK-003/TASK-006 first, then others)"
+      },
+      {
+        "phase_number": 3,
+        "phase_name": "Testing Infrastructure",
+        "tasks": ["TASK-008"],
+        "rationale": "Implement comprehensive tests once all core functions are complete",
+        "can_parallelize": false
+      },
+      {
+        "phase_number": 4,
+        "phase_name": "Documentation",
+        "tasks": ["TASK-009", "TASK-011", "TASK-010"],
+        "rationale": "Document after implementation is stable and tested",
+        "can_parallelize": "partial (TASK-009/TASK-011 parallel, TASK-010 depends on TASK-009)"
+      },
+      {
+        "phase_number": 5,
+        "phase_name": "Enhancements (Optional)",
+        "tasks": ["TASK-013", "TASK-014", "TASK-015"],
+        "rationale": "Lower priority enhancements that add value but aren't critical",
+        "can_parallelize": true
+      }
+    ],
+    "suggested_sequence": [1, 2, 7, 3, 6, 12, 4, 5, 8, 9, 11, 10, 13, 14, 15],
+    "minimum_viable_product": [1, 2, 3, 4, 6, 8, 9, 10],
+    "quick_wins": [1, 7, 9]
+  }
+}
