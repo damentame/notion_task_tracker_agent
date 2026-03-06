@@ -1,0 +1,326 @@
+{
+  "task_definitions": [
+    {
+      "task_order_number": 1,
+      "task_id": "TASK-001",
+      "task_name": "Add Environment Variable Validation",
+      "description": "Implement validation to check that required environment variables (NOTION_API_KEY, NOTION_DATABASE_ID) are present before attempting API calls. Prevents runtime errors and provides clear feedback.",
+      "category": "reliability",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Script checks for NOTION_API_KEY on startup",
+        "Script checks for NOTION_DATABASE_ID on startup",
+        "Clear error messages displayed if variables missing",
+        "Script exits gracefully if validation fails"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Add validation function at module initialization, before Notion client instantiation"
+    },
+    {
+      "task_order_number": 2,
+      "task_id": "TASK-002",
+      "task_name": "Implement Task Retrieval Function",
+      "description": "Create a function to retrieve/query tasks from the Notion database. Should support fetching by task ID, status, or other properties.",
+      "category": "feature",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-001"],
+      "acceptance_criteria": [
+        "Function can retrieve task by page ID",
+        "Function can query tasks by status",
+        "Function returns structured task data",
+        "Proper error handling implemented"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Use notion.pages.retrieve() and notion.databases.query() APIs"
+    },
+    {
+      "task_order_number": 3,
+      "task_id": "TASK-003",
+      "task_name": "Fix Assignee Functionality",
+      "description": "Update createTask function to properly assign tasks to people. Currently passes empty array which doesn't utilize the assignedTo parameter.",
+      "category": "bug_fix",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001"],
+      "acceptance_criteria": [
+        "assignedTo parameter properly utilized",
+        "Tasks can be assigned to Notion users",
+        "Supports both user IDs and email addresses",
+        "Handles invalid assignee gracefully"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Notion API requires user IDs in specific format. May need user lookup functionality."
+    },
+    {
+      "task_order_number": 4,
+      "task_id": "TASK-004",
+      "task_name": "Add Comprehensive Error Handling",
+      "description": "Enhance error handling throughout the application with specific error types, better error messages, and error recovery strategies.",
+      "category": "reliability",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-001", "TASK-002"],
+      "acceptance_criteria": [
+        "All async functions have try-catch blocks",
+        "Errors include context and actionable messages",
+        "Different error types handled appropriately (auth, network, validation)",
+        "Errors don't expose sensitive information"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Consider creating custom error classes for different scenarios"
+    },
+    {
+      "task_order_number": 5,
+      "task_id": "TASK-005",
+      "task_name": "Implement Logging System",
+      "description": "Add structured logging to track operations, errors, and debug information. Replace console.log with proper logging framework.",
+      "category": "infrastructure",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001"],
+      "acceptance_criteria": [
+        "Logging library integrated (e.g., winston, pino)",
+        "Different log levels implemented (info, warn, error, debug)",
+        "Logs include timestamps and context",
+        "Log output configurable via environment"
+      ],
+      "affected_files": ["index.js", "package.json"],
+      "implementation_notes": "Add winston or pino as dependency"
+    },
+    {
+      "task_order_number": 6,
+      "task_id": "TASK-006",
+      "task_name": "Add Task Deletion Function",
+      "description": "Implement functionality to archive or delete tasks from the Notion database.",
+      "category": "feature",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001", "TASK-002"],
+      "acceptance_criteria": [
+        "Function can archive tasks (Notion's soft delete)",
+        "Function accepts task/page ID",
+        "Proper error handling for non-existent tasks",
+        "Success confirmation returned"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Use notion.pages.update() with archived: true property"
+    },
+    {
+      "task_order_number": 7,
+      "task_id": "TASK-007",
+      "task_name": "Implement Task Filtering and Search",
+      "description": "Add advanced filtering capabilities to search and filter tasks by multiple criteria (status, assignee, date range, keywords).",
+      "category": "feature",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-002"],
+      "acceptance_criteria": [
+        "Filter by status (multiple statuses)",
+        "Filter by assignee",
+        "Search by task title/notes",
+        "Support date range filtering",
+        "Combine multiple filters"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Use Notion database query filters API with compound conditions"
+    },
+    {
+      "task_order_number": 8,
+      "task_id": "TASK-008",
+      "task_name": "Add Bulk Operations Support",
+      "description": "Implement functions to perform bulk operations (create multiple tasks, update multiple tasks, batch status changes).",
+      "category": "feature",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-002", "TASK-004"],
+      "acceptance_criteria": [
+        "Bulk create tasks from array",
+        "Bulk update task statuses",
+        "Rate limiting respected",
+        "Partial failure handling",
+        "Progress reporting for large batches"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Implement with Promise.all but respect Notion API rate limits (3 requests/second)"
+    },
+    {
+      "task_order_number": 9,
+      "task_id": "TASK-009",
+      "task_name": "Add Due Date Management",
+      "description": "Extend task functionality to support due dates, including setting and updating due dates on tasks.",
+      "category": "feature",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-001"],
+      "acceptance_criteria": [
+        "Tasks can be created with due dates",
+        "Due dates can be updated",
+        "Support both date and datetime formats",
+        "Validate date formats",
+        "Query tasks by due date range"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Requires adding Date property to Notion database schema or using existing date field"
+    },
+    {
+      "task_order_number": 10,
+      "task_id": "TASK-010",
+      "task_name": "Add Priority Field Support",
+      "description": "Implement task prioritization with priority levels (High, Medium, Low, Urgent).",
+      "category": "feature",
+      "priority": "low",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001"],
+      "acceptance_criteria": [
+        "Tasks can be created with priority",
+        "Priority can be updated",
+        "Filter/sort tasks by priority",
+        "Valid priority values enforced"
+      ],
+      "affected_files": ["index.js"],
+      "implementation_notes": "Requires Priority select/multi-select property in Notion database"
+    },
+    {
+      "task_order_number": 11,
+      "task_id": "TASK-011",
+      "task_name": "Create CLI Interface",
+      "description": "Build a command-line interface for interacting with the task manager without modifying code.",
+      "category": "feature",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-002", "TASK-006", "TASK-007"],
+      "acceptance_criteria": [
+        "CLI commands for create, read, update, delete operations",
+        "Interactive mode and command mode supported",
+        "Help documentation built-in",
+        "Input validation",
+        "Colored output for better UX"
+      ],
+      "affected_files": ["index.js", "cli.js", "package.json"],
+      "implementation_notes": "Use commander.js or yargs for CLI framework. Add chalk for colors."
+    },
+    {
+      "task_order_number": 12,
+      "task_id": "TASK-012",
+      "task_name": "Refactor to Modular Architecture",
+      "description": "Split single-file implementation into modular structure with separate files for different concerns (API client, task operations, utilities, CLI).",
+      "category": "refactoring",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-004", "TASK-005"],
+      "acceptance_criteria": [
+        "Separate module for Notion client initialization",
+        "Separate module for task CRUD operations",
+        "Separate module for validation utilities",
+        "Separate module for CLI (if implemented)",
+        "Clean import/export structure",
+        "No breaking changes to existing API"
+      ],
+      "affected_files": ["index.js", "lib/client.js", "lib/tasks.js", "lib/utils.js", "lib/cli.js"],
+      "implementation_notes": "Create lib/ directory structure. Maintain backward compatibility."
+    },
+    {
+      "task_order_number": 13,
+      "task_id": "TASK-013",
+      "task_name": "Implement Unit Tests",
+      "description": "Create comprehensive unit test suite covering all functions with mocked Notion API calls.",
+      "category": "testing",
+      "priority": "high",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-012"],
+      "acceptance_criteria": [
+        "80%+ code coverage",
+        "Tests for all CRUD operations",
+        "Tests for error scenarios",
+        "Tests for validation logic",
+        "Mocked Notion API responses",
+        "CI-ready test suite"
+      ],
+      "affected_files": ["package.json", "tests/tasks.test.js", "tests/utils.test.js"],
+      "implementation_notes": "Use Jest or Vitest. Mock @notionhq/client."
+    },
+    {
+      "task_order_number": 14,
+      "task_id": "TASK-014",
+      "task_name": "Add Integration Tests",
+      "description": "Create integration tests that verify actual Notion API interaction with test database.",
+      "category": "testing",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-013"],
+      "acceptance_criteria": [
+        "Tests use real Notion API with test database",
+        "Setup/teardown for test data",
+        "Can run independently or be skipped",
+        "Environment variable configuration for test database",
+        "Document test database setup"
+      ],
+      "affected_files": ["package.json", "tests/integration.test.js", "tests/setup.js"],
+      "implementation_notes": "Requires separate test Notion database. Add to CI with secrets."
+    },
+    {
+      "task_order_number": 15,
+      "task_id": "TASK-015",
+      "task_name": "Create Comprehensive Documentation",
+      "description": "Write complete documentation including setup guide, API reference, usage examples, and troubleshooting.",
+      "category": "documentation",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-011", "TASK-012"],
+      "acceptance_criteria": [
+        "README with setup instructions",
+        "API documentation for all functions",
+        "CLI usage examples",
+        "Environment variable documentation",
+        "Troubleshooting guide",
+        "Contributing guidelines"
+      ],
+      "affected_files": ["README.md", "docs/API.md", "docs/SETUP.md", "docs/CONTRIBUTING.md"],
+      "implementation_notes": "Include code examples and screenshots where appropriate"
+    },
+    {
+      "task_order_number": 16,
+      "task_id": "TASK-016",
+      "task_name": "Add CI/CD Pipeline",
+      "description": "Set up continuous integration and deployment pipeline with automated testing, linting, and release process.",
+      "category": "infrastructure",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-013", "TASK-014"],
+      "acceptance_criteria": [
+        "GitHub Actions workflow configured",
+        "Automated test execution on PR",
+        "Linting checks (ESLint)",
+        "Automated npm package publishing",
+        "Version tagging automation"
+      ],
+      "affected_files": [".github/workflows/ci.yml", ".github/workflows/release.yml", ".eslintrc.json", "package.json"],
+      "implementation_notes": "Use semantic-release for automated versioning"
+    }
+  ],
+  "task_statistics": {
+    "total_tasks": 16,
+    "by_category": {
+      "feature": 7,
+      "reliability": 2,
+      "bug_fix": 1,
+      "infrastructure": 2,
+      "refactoring": 1,
+      "testing": 2,
+      "documentation": 1
+    },
+    "by_priority": {
+      "high": 5,
+      "medium": 8,
+      "low": 3
+    },
+    "by_complexity": {
+      "low": 5,
+      "medium": 8,
+      "high": 3
+    }
+  }
+}
