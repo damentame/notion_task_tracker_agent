@@ -1,0 +1,325 @@
+{
+  "graph_metadata": {
+    "total_nodes": 15,
+    "total_edges": 18,
+    "critical_path_length": 6,
+    "max_parallel_tasks": 4
+  },
+  "nodes": [
+    {
+      "task_order_number": 1,
+      "task_id": "TASK-001",
+      "title": "Environment Configuration Validation",
+      "tier": 1,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 2,
+      "task_id": "TASK-002",
+      "title": "Fix Task Assignment Implementation",
+      "tier": 2,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 3,
+      "task_id": "TASK-003",
+      "title": "Implement Task Retrieval Functionality",
+      "tier": 2,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 4,
+      "task_id": "TASK-004",
+      "title": "Implement Task Deletion Functionality",
+      "tier": 3,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 5,
+      "task_id": "TASK-005",
+      "title": "Add Input Validation Layer",
+      "tier": 3,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 6,
+      "task_id": "TASK-006",
+      "title": "Implement Structured Logging System",
+      "tier": 2,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 7,
+      "task_id": "TASK-007",
+      "title": "Implement Batch Operations",
+      "tier": 4,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 8,
+      "task_id": "TASK-008",
+      "title": "Add Task Search and Filtering",
+      "tier": 4,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 9,
+      "task_id": "TASK-009",
+      "title": "Refactor Main Function for Library Usage",
+      "tier": 1,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 10,
+      "task_id": "TASK-010",
+      "title": "Create Comprehensive Unit Tests",
+      "tier": 5,
+      "can_parallelize": false
+    },
+    {
+      "task_order_number": 11,
+      "task_id": "TASK-011",
+      "title": "Add Rate Limiting and Retry Logic",
+      "tier": 3,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 12,
+      "task_id": "TASK-012",
+      "title": "Create API Documentation",
+      "tier": 5,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 13,
+      "task_id": "TASK-013",
+      "title": "Add CLI Interface",
+      "tier": 5,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 14,
+      "task_id": "TASK-014",
+      "title": "Implement Error Recovery and Transaction Safety",
+      "tier": 5,
+      "can_parallelize": true
+    },
+    {
+      "task_order_number": 15,
+      "task_id": "TASK-015",
+      "title": "Create Integration Tests",
+      "tier": 6,
+      "can_parallelize": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "TASK-001",
+      "to": "TASK-002",
+      "relationship": "prerequisite",
+      "reason": "Environment validation must exist before fixing API calls"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-003",
+      "relationship": "prerequisite",
+      "reason": "Environment validation needed for retrieval operations"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-006",
+      "relationship": "prerequisite",
+      "reason": "Logging should log environment validation results"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-004",
+      "relationship": "prerequisite",
+      "reason": "Environment validation needed for deletion operations"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-005",
+      "relationship": "prerequisite",
+      "reason": "Need working assignment before validating assignment inputs"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-007",
+      "relationship": "prerequisite",
+      "reason": "Batch operations should use fixed assignment logic"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-012",
+      "relationship": "prerequisite",
+      "reason": "Documentation should reflect corrected assignment behavior"
+    },
+    {
+      "from": "TASK-003",
+      "to": "TASK-004",
+      "relationship": "prerequisite",
+      "reason": "Retrieval functionality helps verify deletion"
+    },
+    {
+      "from": "TASK-003",
+      "to": "TASK-008",
+      "relationship": "prerequisite",
+      "reason": "Search builds on basic retrieval functionality"
+    },
+    {
+      "from": "TASK-003",
+      "to": "TASK-012",
+      "relationship": "prerequisite",
+      "reason": "Documentation needs all CRUD operations complete"
+    },
+    {
+      "from": "TASK-003",
+      "to": "TASK-013",
+      "relationship": "prerequisite",
+      "reason": "CLI needs retrieval to implement list command"
+    },
+    {
+      "from": "TASK-004",
+      "to": "TASK-012",
+      "relationship": "prerequisite",
+      "reason": "Documentation needs all CRUD operations complete"
+    },
+    {
+      "from": "TASK-004",
+      "to": "TASK-013",
+      "relationship": "prerequisite",
+      "reason": "CLI needs deletion to implement delete command"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-007",
+      "relationship": "prerequisite",
+      "reason": "Batch operations should use validation layer"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-011",
+      "relationship": "prerequisite",
+      "reason": "Retry logic should use structured logging"
+    },
+    {
+      "from": "TASK-007",
+      "to": "TASK-012",
+      "relationship": "prerequisite",
+      "reason": "Documentation should include batch operations"
+    },
+    {
+      "from": "TASK-007",
+      "to": "TASK-014",
+      "relationship": "prerequisite",
+      "reason": "Transaction safety primarily for batch operations"
+    },
+    {
+      "from": "TASK-008",
+      "to": "TASK-012",
+      "relationship": "prerequisite",
+      "reason": "Documentation should include search functionality"
+    },
+    {
+      "from": "TASK-009",
+      "to": "TASK-013",
+      "relationship": "prerequisite",
+      "reason": "CLI implementation requires clean library structure"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-010",
+      "relationship": "prerequisite",
+      "reason": "Core fixes needed before comprehensive testing"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-010",
+      "relationship": "prerequisite",
+      "reason": "Core fixes needed before comprehensive testing"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-010",
+      "relationship": "prerequisite",
+      "reason": "Core fixes needed before comprehensive testing"
+    },
+    {
+      "from": "TASK-009",
+      "to": "TASK-010",
+      "relationship": "prerequisite",
+      "reason": "Core fixes needed before comprehensive testing"
+    },
+    {
+      "from": "TASK-010",
+      "to": "TASK-015",
+      "relationship": "prerequisite",
+      "reason": "Unit tests before integration tests"
+    },
+    {
+      "from": "TASK-012",
+      "to": "TASK-015",
+      "relationship": "prerequisite",
+      "reason": "Documentation needed for integration test setup"
+    },
+    {
+      "from": "TASK-011",
+      "to": "TASK-014",
+      "relationship": "prerequisite",
+      "reason": "Retry logic is foundation for error recovery"
+    }
+  ],
+  "execution_phases": [
+    {
+      "phase": 1,
+      "name": "Foundation",
+      "tasks": ["TASK-001", "TASK-009"],
+      "description": "Core infrastructure and architecture fixes",
+      "parallel_execution": true
+    },
+    {
+      "phase": 2,
+      "name": "Core Features",
+      "tasks": ["TASK-002", "TASK-003", "TASK-006"],
+      "description": "Fix and implement essential CRUD operations",
+      "parallel_execution": true
+    },
+    {
+      "phase": 3,
+      "name": "Quality & Reliability",
+      "tasks": ["TASK-004", "TASK-005", "TASK-011"],
+      "description": "Add validation, deletion, and reliability features",
+      "parallel_execution": true
+    },
+    {
+      "phase": 4,
+      "name": "Advanced Features",
+      "tasks": ["TASK-007", "TASK-008"],
+      "description": "Batch operations and advanced search",
+      "parallel_execution": true
+    },
+    {
+      "phase": 5,
+      "name": "Testing & Documentation",
+      "tasks": ["TASK-010", "TASK-012", "TASK-013", "TASK-014"],
+      "description": "Comprehensive testing, docs, and CLI",
+      "parallel_execution": true
+    },
+    {
+      "phase": 6,
+      "name": "Integration Validation",
+      "tasks": ["TASK-015"],
+      "description": "End-to-end integration testing",
+      "parallel_execution": false
+    }
+  ],
+  "critical_path": [
+    "TASK-001",
+    "TASK-002",
+    "TASK-005",
+    "TASK-007",
+    "TASK-010",
+    "TASK-015"
+  ]
+}
