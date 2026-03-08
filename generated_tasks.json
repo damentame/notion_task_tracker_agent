@@ -1,0 +1,449 @@
+{
+  "tasks": [
+    {
+      "task_name": "Establish Core Project Team Structure",
+      "task_type": "implementation",
+      "description": "Establish the core project team structure as defined in the requirement specification. The team should consist of 4-5 people distributed across the following roles:\n\n- 1 Product Manager\n- 1 Technical Lead\n- 2 Backend/CLI Developers\n- 1 Quality Assurance\n\nThis task involves formalizing the team composition, ensuring each role is filled or assigned, and documenting the organizational structure. The hierarchical structure must be clearly defined with reporting lines and collaboration patterns established between roles.",
+      "parameters": {
+        "team_size": "4-5 people",
+        "roles": [
+          "Product Manager (1)",
+          "Technical Lead (1)",
+          "Backend/CLI Developer (2)",
+          "Quality Assurance (1)"
+        ]
+      },
+      "status": "PENDING",
+      "priority": 1,
+      "task_notes": "This is a foundational organizational task that must be completed before role-specific work can begin. Consider resource availability and skills when assigning roles.",
+      "task_data": {
+        "requirement_snippets": [
+          "### **6.1 Core Team Structure**\n```\nProject Team (4-5 people)\n├── Product Manager (1)\n├── Technical Lead (1)\n├── Backend/CLI Developer (2)\n└── Quality Assurance (1)\n```"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Team must consist of 4-5 people total",
+          "Must include exactly 1 Product Manager",
+          "Must include exactly 1 Technical Lead",
+          "Must include exactly 2 Backend/CLI Developers",
+          "Must include exactly 1 Quality Assurance person"
+        ],
+        "success_criteria": [
+          "Team structure is documented and formalized",
+          "All 4-5 roles are assigned or filled",
+          "Organizational hierarchy is clearly defined"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": []
+      }
+    },
+    {
+      "task_name": "Define Product Manager Role and Responsibilities",
+      "task_type": "design",
+      "description": "Define and document the Product Manager role, including all responsibilities and expected deliverables for the MVP phase.\n\nResponsibilities to be formalized:\n- Define and prioritize feature roadmap\n- Gather user requirements and feedback\n- Coordinate between stakeholders and development team\n- Manage project timeline and milestones\n- Ensure business requirements are met\n- User documentation and marketing materials\n\nThis task involves creating a detailed role description, establishing workflows, and defining success metrics for the Product Manager position.",
+      "parameters": {
+        "role": "Product Manager",
+        "responsibilities": [
+          "Define and prioritize feature roadmap",
+          "Gather user requirements and feedback",
+          "Coordinate between stakeholders and development team",
+          "Manage project timeline and milestones",
+          "Ensure business requirements are met",
+          "User documentation and marketing materials"
+        ],
+        "mvp_deliverables": [
+          "User stories and acceptance criteria",
+          "MVP scope definition",
+          "User testing plan",
+          "Go-to-market strategy for CLI tool"
+        ]
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "This role definition should be aligned with the overall project goals and the CLI tool development. The Product Manager will be responsible for key strategic deliverables.",
+      "task_data": {
+        "requirement_snippets": [
+          "#### **6.2.1 Product Manager**\n**Responsibilities:**\n- Define and prioritize feature roadmap\n- Gather user requirements and feedback\n- Coordinate between stakeholders and development team\n- Manage project timeline and milestones\n- Ensure business requirements are met\n- User documentation and marketing materials\n\n**MVP Deliverables:**\n- User stories and acceptance criteria\n- MVP scope definition\n- User testing plan\n- Go-to-market strategy for CLI tool"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [],
+        "success_criteria": [
+          "Role description is documented with all responsibilities",
+          "MVP deliverables are clearly defined and assigned",
+          "Workflows and processes are established"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Establish Core Project Team Structure"]
+      }
+    },
+    {
+      "task_name": "Define Technical Lead Role and Responsibilities",
+      "task_type": "design",
+      "description": "Define and document the Technical Lead role, including all responsibilities and technical oversight areas.\n\nResponsibilities to be formalized:\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers\n\nThis task involves creating a comprehensive role description, establishing technical governance processes, code review standards, and defining the Technical Lead's involvement in implementation and mentorship activities.",
+      "parameters": {
+        "role": "Technical Lead",
+        "responsibilities": [
+          "Architecture design and technical decisions",
+          "Code review and quality standards",
+          "Implementation of core modules",
+          "Integration with Notion API",
+          "Performance and security oversight",
+          "Mentoring other developers"
+        ]
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "The Technical Lead has dual responsibilities: strategic technical oversight and hands-on implementation. Special attention should be given to the Notion API integration requirement. Mentoring responsibilities should include supporting the 2 Backend/CLI Developers.",
+      "task_data": {
+        "requirement_snippets": [
+          "#### **6.2.2 Technical Lead**\n**Responsibilities:**\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must provide technical oversight for Notion API integration"
+        ],
+        "success_criteria": [
+          "Role description is documented with all responsibilities",
+          "Technical governance processes are established",
+          "Code review standards are defined",
+          "Mentorship framework is created"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Establish Core Project Team Structure"]
+      }
+    },
+    {
+      "task_name": "Create User Stories and Acceptance Criteria",
+      "task_type": "design",
+      "description": "Create comprehensive user stories and acceptance criteria for the CLI tool MVP. This is a core Product Manager deliverable.\n\nThis task involves:\n- Identifying key user personas and their needs\n- Writing user stories in standard format (As a [user], I want [goal], so that [benefit])\n- Defining clear, testable acceptance criteria for each user story\n- Prioritizing stories based on MVP scope\n- Ensuring alignment with business requirements\n\nThe user stories should cover all essential functionality for the CLI tool and provide clear guidance to the development team.",
+      "parameters": {
+        "deliverable_type": "MVP Deliverable - Product Manager",
+        "output_format": "User stories with acceptance criteria"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "User stories should be written collaboratively with input from stakeholders and the development team. Each story should have SMART (Specific, Measurable, Achievable, Relevant, Time-bound) acceptance criteria.",
+      "task_data": {
+        "requirement_snippets": [
+          "**MVP Deliverables:**\n- User stories and acceptance criteria\n- MVP scope definition\n- User testing plan\n- Go-to-market strategy for CLI tool"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must be completed as part of MVP phase",
+          "Must align with CLI tool functionality"
+        ],
+        "success_criteria": [
+          "User stories are documented in standard format",
+          "Each story has clear, testable acceptance criteria",
+          "Stories are prioritized for MVP",
+          "Stories cover all essential CLI tool functionality"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Product Manager Role and Responsibilities"]
+      }
+    },
+    {
+      "task_name": "Define MVP Scope",
+      "task_type": "design",
+      "description": "Define the detailed scope for the Minimum Viable Product (MVP) of the CLI tool. This is a core Product Manager deliverable.\n\nThis task involves:\n- Identifying must-have features for the MVP\n- Defining what is explicitly out of scope for MVP\n- Setting clear boundaries for the initial release\n- Establishing success metrics for MVP\n- Creating a feature prioritization framework\n- Documenting assumptions and dependencies\n\nThe MVP scope definition will guide all development activities and help the team focus on delivering core value quickly.",
+      "parameters": {
+        "deliverable_type": "MVP Deliverable - Product Manager",
+        "scope_type": "CLI tool MVP",
+        "output_format": "MVP scope document"
+      },
+      "status": "PENDING",
+      "priority": 1,
+      "task_notes": "MVP scope should balance ambition with feasibility. Consider technical constraints, timeline, and resource availability. The scope should enable rapid user feedback and validation of core assumptions.",
+      "task_data": {
+        "requirement_snippets": [
+          "**MVP Deliverables:**\n- User stories and acceptance criteria\n- MVP scope definition\n- User testing plan\n- Go-to-market strategy for CLI tool"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must be completed as part of MVP phase",
+          "Must define clear boundaries for CLI tool initial release"
+        ],
+        "success_criteria": [
+          "MVP features are clearly identified and documented",
+          "Out-of-scope items are explicitly listed",
+          "Success metrics are defined",
+          "Timeline and resource estimates are included"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Product Manager Role and Responsibilities"]
+      }
+    },
+    {
+      "task_name": "Create User Testing Plan",
+      "task_type": "design",
+      "description": "Develop a comprehensive user testing plan for the CLI tool MVP. This is a core Product Manager deliverable that will guide validation activities.\n\nThis task involves:\n- Defining testing objectives and key questions\n- Identifying target user segments for testing\n- Designing test scenarios and tasks\n- Establishing success metrics and evaluation criteria\n- Planning logistics (participant recruitment, scheduling, tools)\n- Creating testing scripts and materials\n- Defining feedback collection and analysis methods\n\nThe testing plan should enable structured gathering of user feedback to validate MVP assumptions and identify improvements.",
+      "parameters": {
+        "deliverable_type": "MVP Deliverable - Product Manager",
+        "testing_target": "CLI tool",
+        "output_format": "User testing plan document"
+      },
+      "status": "PENDING",
+      "priority": 3,
+      "task_notes": "Testing plan should balance rigor with resource constraints. Consider both usability testing and functional validation. Plan for iterative testing cycles if timeline permits.",
+      "task_data": {
+        "requirement_snippets": [
+          "**MVP Deliverables:**\n- User stories and acceptance criteria\n- MVP scope definition\n- User testing plan\n- Go-to-market strategy for CLI tool"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must be completed as part of MVP phase",
+          "Must be executable within project timeline"
+        ],
+        "success_criteria": [
+          "Testing objectives are clearly defined",
+          "User segments are identified",
+          "Test scenarios are documented",
+          "Logistics plan is complete",
+          "Feedback collection methods are established"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Product Manager Role and Responsibilities", "Define MVP Scope"]
+      }
+    },
+    {
+      "task_name": "Develop Go-to-Market Strategy for CLI Tool",
+      "task_type": "design",
+      "description": "Develop a comprehensive go-to-market (GTM) strategy for the CLI tool MVP launch. This is a core Product Manager deliverable.\n\nThis task involves:\n- Defining target market and user segments\n- Creating positioning and messaging framework\n- Planning distribution channels\n- Developing launch timeline and milestones\n- Creating marketing and communication plan\n- Defining success metrics and KPIs\n- Planning user onboarding and support\n- Identifying partnerships or integration opportunities\n\nThe GTM strategy should ensure successful market entry and user adoption of the CLI tool.",
+      "parameters": {
+        "deliverable_type": "MVP Deliverable - Product Manager",
+        "product": "CLI tool",
+        "output_format": "Go-to-market strategy document"
+      },
+      "status": "PENDING",
+      "priority": 3,
+      "task_notes": "GTM strategy should consider the technical nature of CLI tool users. Focus on developer-friendly channels and communication styles. Consider documentation quality as a key differentiator.",
+      "task_data": {
+        "requirement_snippets": [
+          "**MVP Deliverables:**\n- User stories and acceptance criteria\n- MVP scope definition\n- User testing plan\n- Go-to-market strategy for CLI tool"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must be completed as part of MVP phase",
+          "Must be specific to CLI tool product"
+        ],
+        "success_criteria": [
+          "Target market is clearly defined",
+          "Positioning and messaging are established",
+          "Distribution channels are identified",
+          "Launch timeline is documented",
+          "Marketing plan is complete",
+          "Success metrics are defined"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Product Manager Role and Responsibilities", "Define MVP Scope"]
+      }
+    },
+    {
+      "task_name": "Design System Architecture",
+      "task_type": "design",
+      "description": "Design the overall system architecture for the CLI tool, including integration with Notion API. This is a core Technical Lead responsibility.\n\nThis task involves:\n- Defining high-level system architecture and components\n- Designing module structure and interfaces\n- Planning Notion API integration approach\n- Establishing data flow and state management patterns\n- Defining technology stack and frameworks\n- Creating architecture documentation and diagrams\n- Identifying technical risks and mitigation strategies\n- Planning for scalability, performance, and security\n\nThe architecture design will guide all implementation work and ensure technical coherence across the project.",
+      "parameters": {
+        "responsibility": "Technical Lead",
+        "integration_requirement": "Notion API",
+        "output_format": "Architecture documentation"
+      },
+      "status": "PENDING",
+      "priority": 1,
+      "task_notes": "Architecture should prioritize maintainability and extensibility while meeting MVP requirements. Special attention needed for Notion API integration patterns. Consider CLI-specific concerns like argument parsing, output formatting, and error handling.",
+      "task_data": {
+        "requirement_snippets": [
+          "**Responsibilities:**\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must include Notion API integration"
+        ],
+        "success_criteria": [
+          "System architecture is documented with diagrams",
+          "Module structure is defined",
+          "Notion API integration approach is specified",
+          "Technology stack is selected and justified",
+          "Technical risks are identified with mitigation plans"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Technical Lead Role and Responsibilities", "Define MVP Scope"]
+      }
+    },
+    {
+      "task_name": "Establish Code Review Process and Quality Standards",
+      "task_type": "implementation",
+      "description": "Establish the code review process and quality standards for the project. This is a core Technical Lead responsibility.\n\nThis task involves:\n- Defining code review workflow and approval process\n- Creating coding standards and style guides\n- Establishing quality metrics and thresholds\n- Setting up automated code quality tools (linters, formatters, static analysis)\n- Defining testing requirements (unit, integration, coverage targets)\n- Creating review checklists and guidelines\n- Setting up CI/CD pipelines for quality gates\n- Documenting the process for all team members\n\nThe code review process will ensure consistency, quality, and knowledge sharing across the development team.",
+      "parameters": {
+        "responsibility": "Technical Lead",
+        "team_size": "2 Backend/CLI Developers + Technical Lead",
+        "output_format": "Code review guidelines and quality standards document"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Process should balance thoroughness with velocity. Consider the small team size (2 developers + lead). Automated tooling is critical for maintaining standards without bottlenecking development.",
+      "task_data": {
+        "requirement_snippets": [
+          "**Responsibilities:**\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [],
+        "success_criteria": [
+          "Code review workflow is documented and implemented",
+          "Coding standards are defined",
+          "Quality metrics are established",
+          "Automated quality tools are configured",
+          "Testing requirements are specified",
+          "CI/CD pipeline includes quality gates"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Technical Lead Role and Responsibilities"]
+      }
+    },
+    {
+      "task_name": "Implement Core Modules",
+      "task_type": "implementation",
+      "description": "Implement the core modules of the CLI tool as defined in the system architecture. This is a hands-on Technical Lead responsibility with support from Backend/CLI Developers.\n\nThis task involves:\n- Implementing foundational modules and utilities\n- Creating CLI framework and command structure\n- Building core business logic components\n- Implementing data models and validation\n- Creating error handling and logging infrastructure\n- Implementing configuration management\n- Writing tests for core modules\n\nThe core modules form the foundation for all other functionality and should be robust, well-tested, and maintainable.",
+      "parameters": {
+        "responsibility": "Technical Lead (with Backend/CLI Developers)",
+        "module_type": "Core modules",
+        "output_format": "Implemented code with tests"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "This is a hands-on implementation task for the Technical Lead. Should be done in collaboration with the Backend/CLI Developers to establish patterns and mentor the team. Core modules should be completed before feature-specific work begins.",
+      "task_data": {
+        "requirement_snippets": [
+          "**Responsibilities:**\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [],
+        "success_criteria": [
+          "Core modules are implemented according to architecture",
+          "Code passes quality standards and review",
+          "Unit tests provide adequate coverage",
+          "Documentation is complete",
+          "Integration points are well-defined"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Design System Architecture", "Establish Code Review Process and Quality Standards"]
+      }
+    },
+    {
+      "task_name": "Implement Notion API Integration",
+      "task_type": "implementation",
+      "description": "Implement integration with the Notion API as a core component of the CLI tool. This is a critical Technical Lead responsibility.\n\nThis task involves:\n- Implementing Notion API client and authentication\n- Creating abstraction layer for Notion operations\n- Implementing error handling for API calls\n- Managing rate limiting and retries\n- Implementing data synchronization logic\n- Creating integration tests with Notion API\n- Documenting API usage and limitations\n- Implementing caching strategies if needed\n\nThe Notion API integration is central to the CLI tool's functionality and must be reliable, performant, and maintainable.",
+      "parameters": {
+        "responsibility": "Technical Lead",
+        "integration_target": "Notion API",
+        "output_format": "Implemented integration code with tests"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "This is a critical integration that requires careful error handling and testing. Consider API rate limits, authentication flows, and data consistency. Integration tests may require test Notion workspace. Document any API limitations that affect functionality.",
+      "task_data": {
+        "requirement_snippets": [
+          "**Responsibilities:**\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must integrate with Notion API"
+        ],
+        "success_criteria": [
+          "Notion API client is implemented and tested",
+          "Authentication is working correctly",
+          "Error handling is comprehensive",
+          "Rate limiting is properly managed",
+          "Integration tests pass",
+          "API usage is documented"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Design System Architecture", "Implement Core Modules"]
+      }
+    },
+    {
+      "task_name": "Establish Performance and Security Standards",
+      "task_type": "design",
+      "description": "Establish performance and security standards and oversight mechanisms for the CLI tool. This is a core Technical Lead responsibility.\n\nThis task involves:\n- Defining performance requirements and benchmarks\n- Establishing security standards and best practices\n- Identifying security risks and mitigation strategies\n- Planning performance testing approach\n- Setting up security scanning tools\n- Creating performance monitoring plan\n- Documenting security guidelines for the team\n- Planning regular security and performance reviews\n\nPerformance and security oversight ensures the CLI tool is production-ready and trustworthy.",
+      "parameters": {
+        "responsibility": "Technical Lead",
+        "areas": ["Performance", "Security"],
+        "output_format": "Performance and security standards document"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Security is critical for a tool that integrates with user data via Notion API. Consider authentication security, data handling, and dependency vulnerabilities. Performance is important for CLI tool user experience. Both should be proactively addressed rather than reactive fixes.",
+      "task_data": {
+        "requirement_snippets": [
+          "**Responsibilities:**\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [],
+        "success_criteria": [
+          "Performance requirements are defined with metrics",
+          "Security standards are documented",
+          "Security risks are identified with mitigation plans",
+          "Security scanning tools are configured",
+          "Performance testing approach is established",
+          "Review processes are in place"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Technical Lead Role and Responsibilities", "Design System Architecture"]
+      }
+    },
+    {
+      "task_name": "Establish Developer Mentoring Program",
+      "task_type": "implementation",
+      "description": "Establish a mentoring program for the Backend/CLI Developers led by the Technical Lead. This is a core Technical Lead responsibility.\n\nThis task involves:\n- Creating onboarding materials for developers\n- Establishing regular 1-on-1 meetings\n- Planning knowledge sharing sessions\n- Setting up pair programming opportunities\n- Creating learning resources and documentation\n- Defining skill development goals\n- Establishing feedback mechanisms\n- Planning code review as learning opportunities\n\nMentoring ensures the development team grows in capability and maintains consistent quality standards.",
+      "parameters": {
+        "responsibility": "Technical Lead",
+        "mentees": "2 Backend/CLI Developers",
+        "output_format": "Mentoring program documentation"
+      },
+      "status": "PENDING",
+      "priority": 3,
+      "task_notes": "Mentoring should be built into regular development activities rather than separate overhead. Consider the small team size and balance mentoring with delivery pressure. Focus on practical learning through code review and pair programming.",
+      "task_data": {
+        "requirement_snippets": [
+          "**Responsibilities:**\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [],
+        "success_criteria": [
+          "Mentoring program is documented",
+          "Regular 1-on-1 meetings are scheduled",
+          "Knowledge sharing sessions are planned",
+          "Onboarding materials are created",
+          "Feedback mechanisms are established"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [373, 354, 335, 316, 297, 278, 259, 240, 221, 12],
+        "dependencies": ["Define Technical Lead Role and Responsibilities", "Establish Code Review Process and Quality Standards"]
+      }
+    }
+  ]
+}
