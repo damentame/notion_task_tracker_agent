@@ -1,0 +1,261 @@
+{
+  "graph_metadata": {
+    "project": "notion_task_tracker_agent",
+    "graph_type": "directed_acyclic_graph",
+    "node_count": 15,
+    "edge_count": 14
+  },
+  "nodes": [
+    {
+      "id": "TASK-001",
+      "label": "Add task retrieval functionality",
+      "level": 1,
+      "parallel_group": "A"
+    },
+    {
+      "id": "TASK-002",
+      "label": "Add task listing with filters",
+      "level": 2,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-003",
+      "label": "Add input validation layer",
+      "level": 3,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-004",
+      "label": "Enhance error handling with retry logic",
+      "level": 4,
+      "parallel_group": "B"
+    },
+    {
+      "id": "TASK-005",
+      "label": "Implement task deletion functionality",
+      "level": 2,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-006",
+      "label": "Extract configuration to separate module",
+      "level": 1,
+      "parallel_group": "A"
+    },
+    {
+      "id": "TASK-007",
+      "label": "Separate Notion API client into module",
+      "level": 2,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-008",
+      "label": "Add bulk task operations",
+      "level": 5,
+      "parallel_group": "C"
+    },
+    {
+      "id": "TASK-009",
+      "label": "Create comprehensive test suite",
+      "level": 5,
+      "parallel_group": "C"
+    },
+    {
+      "id": "TASK-010",
+      "label": "Add comprehensive documentation",
+      "level": 6,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-011",
+      "label": "Add JSDoc documentation to all functions",
+      "level": 3,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-012",
+      "label": "Add support for custom task properties",
+      "level": 3,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-013",
+      "label": "Implement CLI interface",
+      "level": 5,
+      "parallel_group": "C"
+    },
+    {
+      "id": "TASK-014",
+      "label": "Add webhook/event listener support",
+      "level": 3,
+      "parallel_group": null
+    },
+    {
+      "id": "TASK-015",
+      "label": "Add logging framework",
+      "level": 2,
+      "parallel_group": null
+    }
+  ],
+  "edges": [
+    {
+      "from": "TASK-001",
+      "to": "TASK-002",
+      "dependency_type": "functional",
+      "reason": "Listing depends on retrieval pattern"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-005",
+      "dependency_type": "functional",
+      "reason": "Deletion should validate task exists"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-003",
+      "dependency_type": "functional",
+      "reason": "Validation should cover all operations"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-003",
+      "dependency_type": "functional",
+      "reason": "Validation should cover all operations"
+    },
+    {
+      "from": "TASK-003",
+      "to": "TASK-004",
+      "dependency_type": "functional",
+      "reason": "Retry logic builds on validation"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-007",
+      "dependency_type": "structural",
+      "reason": "Client module uses configuration"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-015",
+      "dependency_type": "structural",
+      "reason": "Logger configuration managed centrally"
+    },
+    {
+      "from": "TASK-007",
+      "to": "TASK-011",
+      "dependency_type": "documentation",
+      "reason": "Document refactored modules"
+    },
+    {
+      "from": "TASK-007",
+      "to": "TASK-012",
+      "dependency_type": "functional",
+      "reason": "Custom properties need client abstraction"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-012",
+      "dependency_type": "structural",
+      "reason": "Custom properties configured centrally"
+    },
+    {
+      "from": "TASK-007",
+      "to": "TASK-014",
+      "dependency_type": "structural",
+      "reason": "Webhook uses client module"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-008",
+      "dependency_type": "functional",
+      "reason": "Bulk operations use single operation patterns"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-008",
+      "dependency_type": "functional",
+      "reason": "Bulk operations use single operation patterns"
+    },
+    {
+      "from": "TASK-004",
+      "to": "TASK-008",
+      "dependency_type": "functional",
+      "reason": "Bulk operations need retry logic"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-013",
+      "dependency_type": "functional",
+      "reason": "CLI wraps core functions"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-013",
+      "dependency_type": "functional",
+      "reason": "CLI wraps core functions"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-013",
+      "dependency_type": "functional",
+      "reason": "CLI wraps core functions"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-009",
+      "dependency_type": "testing",
+      "reason": "Tests cover implemented features"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-009",
+      "dependency_type": "testing",
+      "reason": "Tests cover implemented features"
+    },
+    {
+      "from": "TASK-003",
+      "to": "TASK-009",
+      "dependency_type": "testing",
+      "reason": "Tests cover implemented features"
+    },
+    {
+      "from": "TASK-004",
+      "to": "TASK-009",
+      "dependency_type": "testing",
+      "reason": "Tests cover implemented features"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-009",
+      "dependency_type": "testing",
+      "reason": "Tests cover implemented features"
+    },
+    {
+      "from": "TASK-009",
+      "to": "TASK-010",
+      "dependency_type": "documentation",
+      "reason": "Documentation includes test instructions"
+    }
+  ],
+  "critical_path": [
+    "TASK-001",
+    "TASK-002",
+    "TASK-003",
+    "TASK-004",
+    "TASK-008",
+    "TASK-009",
+    "TASK-010"
+  ],
+  "parallelization_opportunities": [
+    {
+      "group": "A",
+      "tasks": ["TASK-001", "TASK-006"],
+      "note": "Can be implemented simultaneously"
+    },
+    {
+      "group": "C",
+      "tasks": ["TASK-008", "TASK-009", "TASK-013"],
+      "note": "Can be implemented once dependencies complete"
+    }
+  ]
+}
