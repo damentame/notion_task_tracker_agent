@@ -1,0 +1,173 @@
+{
+  "graph_metadata": {
+    "total_tasks": 15,
+    "critical_path_length": 7,
+    "parallel_opportunities": 3
+  },
+  "tasks": [
+    {
+      "task_order_number": 1,
+      "id": "task_001",
+      "name": "Add input validation for createTask function",
+      "dependencies": [],
+      "blocks": ["task_002", "task_007"],
+      "complexity": "low",
+      "estimated_effort": "small"
+    },
+    {
+      "task_order_number": 2,
+      "id": "task_002",
+      "name": "Implement getTask function to retrieve single task by ID",
+      "dependencies": ["task_001"],
+      "blocks": ["task_005"],
+      "complexity": "low",
+      "estimated_effort": "small"
+    },
+    {
+      "task_order_number": 3,
+      "id": "task_003",
+      "name": "Implement queryTasks function with filtering capabilities",
+      "dependencies": ["task_001"],
+      "blocks": ["task_006"],
+      "complexity": "medium",
+      "estimated_effort": "medium"
+    },
+    {
+      "task_order_number": 4,
+      "id": "task_004",
+      "name": "Implement deleteTask function",
+      "dependencies": ["task_001"],
+      "blocks": [],
+      "complexity": "low",
+      "estimated_effort": "small"
+    },
+    {
+      "task_order_number": 5,
+      "id": "task_005",
+      "name": "Add comprehensive error handling with custom error classes",
+      "dependencies": ["task_002"],
+      "blocks": ["task_009"],
+      "complexity": "medium",
+      "estimated_effort": "medium"
+    },
+    {
+      "task_order_number": 6,
+      "id": "task_006",
+      "name": "Implement bulk operations (createMultipleTasks, updateMultipleTasks)",
+      "dependencies": ["task_003"],
+      "blocks": [],
+      "complexity": "medium",
+      "estimated_effort": "medium"
+    },
+    {
+      "task_order_number": 7,
+      "id": "task_007",
+      "name": "Fix assignedTo parameter implementation in createTask",
+      "dependencies": ["task_001"],
+      "blocks": [],
+      "complexity": "medium",
+      "estimated_effort": "small"
+    },
+    {
+      "task_order_number": 8,
+      "id": "task_008",
+      "name": "Add API rate limiting and request throttling",
+      "dependencies": [],
+      "blocks": ["task_009"],
+      "complexity": "medium",
+      "estimated_effort": "medium"
+    },
+    {
+      "task_order_number": 9,
+      "id": "task_009",
+      "name": "Implement structured logging system",
+      "dependencies": ["task_005", "task_008"],
+      "blocks": ["task_010"],
+      "complexity": "low",
+      "estimated_effort": "small"
+    },
+    {
+      "task_order_number": 10,
+      "id": "task_010",
+      "name": "Create comprehensive unit tests for all functions",
+      "dependencies": ["task_009"],
+      "blocks": [],
+      "complexity": "high",
+      "estimated_effort": "large"
+    },
+    {
+      "task_order_number": 11,
+      "id": "task_011",
+      "name": "Create integration tests with Notion API mocking",
+      "dependencies": ["task_010"],
+      "blocks": [],
+      "complexity": "high",
+      "estimated_effort": "large"
+    },
+    {
+      "task_order_number": 12,
+      "id": "task_012",
+      "name": "Add JSDoc documentation to all exported functions",
+      "dependencies": [],
+      "blocks": ["task_013"],
+      "complexity": "low",
+      "estimated_effort": "small"
+    },
+    {
+      "task_order_number": 13,
+      "id": "task_013",
+      "name": "Create API documentation with usage examples",
+      "dependencies": ["task_012"],
+      "blocks": [],
+      "complexity": "low",
+      "estimated_effort": "medium"
+    },
+    {
+      "task_order_number": 14,
+      "id": "task_014",
+      "name": "Add TypeScript type definitions or convert to TypeScript",
+      "dependencies": [],
+      "blocks": [],
+      "complexity": "medium",
+      "estimated_effort": "medium"
+    },
+    {
+      "task_order_number": 15,
+      "id": "task_015",
+      "name": "Create CLI interface for manual task management",
+      "dependencies": ["task_005", "task_009"],
+      "blocks": [],
+      "complexity": "medium",
+      "estimated_effort": "medium"
+    }
+  ],
+  "dependency_chains": [
+    {
+      "chain_id": "core_crud",
+      "description": "Core CRUD operations completion path",
+      "sequence": ["task_001", "task_002", "task_003", "task_004", "task_006"]
+    },
+    {
+      "chain_id": "quality_assurance",
+      "description": "Error handling and testing path",
+      "sequence": ["task_001", "task_002", "task_005", "task_008", "task_009", "task_010", "task_011"]
+    },
+    {
+      "chain_id": "documentation",
+      "description": "Documentation completion path",
+      "sequence": ["task_012", "task_013"]
+    }
+  ],
+  "parallel_execution_groups": [
+    {
+      "group_id": "initial_enhancements",
+      "can_execute_parallel": ["task_001", "task_008", "task_012", "task_014"],
+      "note": "These tasks have no dependencies and can start immediately"
+    },
+    {
+      "group_id": "crud_operations",
+      "can_execute_parallel": ["task_002", "task_003", "task_004", "task_007"],
+      "note": "After task_001 completes, these can run in parallel"
+    }
+  ]
+}
