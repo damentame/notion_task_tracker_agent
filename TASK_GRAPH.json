@@ -1,0 +1,93 @@
+{
+  "project": "notion_task_tracker_agent",
+  "graph_type": "directed_acyclic_graph",
+  "total_nodes": 15,
+  "description": "Task dependency graph showing prerequisite relationships and parallel execution opportunities",
+  "nodes": [
+    {"id": "TASK-001", "title": "Create .env.example", "level": 0},
+    {"id": "TASK-002", "title": "Enhance README", "level": 1},
+    {"id": "TASK-003", "title": "Add Input Validation", "level": 0},
+    {"id": "TASK-004", "title": "Task Query/List", "level": 1},
+    {"id": "TASK-005", "title": "Fix Assigned To", "level": 1},
+    {"id": "TASK-006", "title": "Add Retry Mechanism", "level": 1},
+    {"id": "TASK-007", "title": "Task Deletion", "level": 2},
+    {"id": "TASK-008", "title": "Unit Tests", "level": 3},
+    {"id": "TASK-009", "title": "Integration Tests", "level": 4},
+    {"id": "TASK-010", "title": "CLI Interface", "level": 2},
+    {"id": "TASK-011", "title": "TypeScript Definitions", "level": 2},
+    {"id": "TASK-012", "title": "Structured Logging", "level": 0},
+    {"id": "TASK-013", "title": "Additional Properties", "level": 1},
+    {"id": "TASK-014", "title": "Config Validation", "level": 0},
+    {"id": "TASK-015", "title": "CI/CD Pipeline", "level": 4}
+  ],
+  "edges": [
+    {"from": "TASK-001", "to": "TASK-002", "reason": "README documents env configuration"},
+    {"from": "TASK-003", "to": "TASK-004", "reason": "Query needs validation"},
+    {"from": "TASK-003", "to": "TASK-005", "reason": "Assigned To fix needs validation"},
+    {"from": "TASK-003", "to": "TASK-006", "reason": "Retry wraps validated calls"},
+    {"from": "TASK-003", "to": "TASK-007", "reason": "Delete needs validation"},
+    {"from": "TASK-003", "to": "TASK-013", "reason": "New properties need validation"},
+    {"from": "TASK-004", "to": "TASK-007", "reason": "Delete references query patterns"},
+    {"from": "TASK-004", "to": "TASK-010", "reason": "CLI uses list functionality"},
+    {"from": "TASK-003", "to": "TASK-010", "reason": "CLI uses validated functions"},
+    {"from": "TASK-007", "to": "TASK-010", "reason": "CLI includes delete command"},
+    {"from": "TASK-003", "to": "TASK-011", "reason": "Types match validated signatures"},
+    {"from": "TASK-004", "to": "TASK-011", "reason": "Types include list function"},
+    {"from": "TASK-007", "to": "TASK-011", "reason": "Types include delete function"},
+    {"from": "TASK-003", "to": "TASK-008", "reason": "Tests validate functions"},
+    {"from": "TASK-004", "to": "TASK-008", "reason": "Tests cover list function"},
+    {"from": "TASK-005", "to": "TASK-008", "reason": "Tests cover assignment"},
+    {"from": "TASK-006", "to": "TASK-008", "reason": "Tests cover retry logic"},
+    {"from": "TASK-007", "to": "TASK-008", "reason": "Tests cover delete function"},
+    {"from": "TASK-008", "to": "TASK-009", "reason": "Integration tests follow unit tests"},
+    {"from": "TASK-008", "to": "TASK-015", "reason": "CI runs unit tests"}
+  ],
+  "execution_levels": {
+    "level_0_parallel": {
+      "description": "Independent foundational tasks - can execute in parallel",
+      "tasks": ["TASK-001", "TASK-003", "TASK-012", "TASK-014"],
+      "estimated_time": "2-3 hours",
+      "dependencies": []
+    },
+    "level_1_parallel": {
+      "description": "Feature enhancements requiring validation - can execute in parallel",
+      "tasks": ["TASK-002", "TASK-004", "TASK-005", "TASK-006", "TASK-013"],
+      "estimated_time": "4-6 hours",
+      "dependencies": ["level_0_parallel"]
+    },
+    "level_2_parallel": {
+      "description": "Advanced features - can execute in parallel",
+      "tasks": ["TASK-007", "TASK-010", "TASK-011"],
+      "estimated_time": "3-4 hours",
+      "dependencies": ["level_1_parallel"]
+    },
+    "level_3_sequential": {
+      "description": "Unit testing - must complete before integration tests",
+      "tasks": ["TASK-008"],
+      "estimated_time": "4-6 hours",
+      "dependencies": ["level_2_parallel"]
+    },
+    "level_4_parallel": {
+      "description": "Final testing and automation - can execute in parallel",
+      "tasks": ["TASK-009", "TASK-015"],
+      "estimated_time": "2-3 hours",
+      "dependencies": ["level_3_sequential"]
+    }
+  },
+  "critical_path": [
+    "TASK-003",
+    "TASK-004",
+    "TASK-007",
+    "TASK-008",
+    "TASK-009"
+  ],
+  "critical_path_duration": "13-18 hours",
+  "parallel_opportunities": {
+    "high": [
+      "TASK-001, TASK-003, TASK-012, TASK-014 can all start immediately",
+      "TASK-004, TASK-005, TASK-006, TASK-013 can run together after TASK-003",
+      "TASK-007, TASK-010, TASK-011 can run together after level 1"
+    ],
+    "notes": "Maximum parallelization could reduce total time from 18-26 hours to 13-18 hours"
+  }
+}
