@@ -1,0 +1,430 @@
+{
+  "task_definitions_metadata": {
+    "generated_date": "2026-03-08",
+    "total_tasks": 20,
+    "project_id": "notion-task-manager-v1",
+    "ordering_field": "task_order_number"
+  },
+  "tasks": [
+    {
+      "task_id": "TASK-001",
+      "task_order_number": 1,
+      "title": "Create Configuration Validation Module",
+      "description": "Implement a configuration validation module that checks for required environment variables (NOTION_API_KEY, NOTION_DATABASE_ID) on application startup. Should throw descriptive errors if variables are missing or invalid format.",
+      "type": "feature",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Validates presence of NOTION_API_KEY",
+        "Validates presence of NOTION_DATABASE_ID",
+        "Validates DATABASE_ID format (UUID)",
+        "Throws clear error messages for missing/invalid config",
+        "Exported as reusable function"
+      ],
+      "files_to_create": ["src/config/validator.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Use regex for UUID validation, consider using a config schema validator like joi or zod"
+    },
+    {
+      "task_id": "TASK-002",
+      "task_order_number": 2,
+      "title": "Implement Input Validation for Task Operations",
+      "description": "Create validation functions for task creation and update operations. Validate required fields, data types, string lengths, and enum values (status types).",
+      "type": "feature",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Validates task title (required, non-empty, max 2000 chars)",
+        "Validates status values against allowed list",
+        "Validates notes field (optional, max length)",
+        "Validates assignedTo field format",
+        "Returns descriptive validation error messages"
+      ],
+      "files_to_create": ["src/validation/taskValidation.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Define ALLOWED_STATUSES constant array, consider extracting validation logic before API calls"
+    },
+    {
+      "task_id": "TASK-003",
+      "task_order_number": 3,
+      "title": "Enhance Error Handling with Retry Logic",
+      "description": "Implement comprehensive error handling with exponential backoff retry logic for transient failures. Handle rate limiting, network errors, and API errors appropriately.",
+      "type": "enhancement",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Implements exponential backoff for retries",
+        "Handles Notion API rate limiting (429 errors)",
+        "Differentiates between retryable and non-retryable errors",
+        "Logs retry attempts with context",
+        "Configurable max retry attempts",
+        "Respects Notion's retry-after headers"
+      ],
+      "files_to_create": ["src/utils/retryHandler.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Consider using async-retry library or implement custom retry wrapper"
+    },
+    {
+      "task_id": "TASK-004",
+      "task_order_number": 4,
+      "title": "Refactor createTask with Enhanced Validation",
+      "description": "Update the existing createTask function to use the new validation and error handling modules. Integrate input validation and improved error handling.",
+      "type": "refactor",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001", "TASK-002", "TASK-003"],
+      "acceptance_criteria": [
+        "Uses configuration validator",
+        "Uses input validation before API call",
+        "Uses retry handler for API calls",
+        "Maintains backward compatibility",
+        "Returns structured response with success/error status"
+      ],
+      "files_to_create": [],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Ensure function signature remains compatible with existing usage"
+    },
+    {
+      "task_id": "TASK-005",
+      "task_order_number": 5,
+      "title": "Refactor updateTask with Enhanced Validation",
+      "description": "Update the existing updateTask function to use the new validation and error handling modules. Add support for partial updates and field-level validation.",
+      "type": "refactor",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-001", "TASK-002", "TASK-003"],
+      "acceptance_criteria": [
+        "Uses input validation before API call",
+        "Uses retry handler for API calls",
+        "Supports partial updates (optional fields)",
+        "Validates pageId format",
+        "Returns structured response"
+      ],
+      "files_to_create": [],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Consider allowing null/undefined for fields that shouldn't be updated"
+    },
+    {
+      "task_id": "TASK-006",
+      "task_order_number": 6,
+      "title": "Implement Task Retrieval Functionality",
+      "description": "Create functions to query and retrieve tasks from the Notion database. Support retrieval by task ID (page ID) and retrieval of all tasks with pagination.",
+      "type": "feature",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-003"],
+      "acceptance_criteria": [
+        "getTaskById(pageId) function retrieves single task",
+        "getAllTasks(options) function retrieves all tasks with pagination",
+        "Handles pagination automatically or returns page tokens",
+        "Transforms Notion API response to simplified format",
+        "Includes error handling with retries"
+      ],
+      "files_to_create": ["src/operations/taskRetrieval.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Use notion.databases.query() for listing, notion.pages.retrieve() for single item"
+    },
+    {
+      "task_id": "TASK-007",
+      "task_order_number": 7,
+      "title": "Implement Task Search and Filtering",
+      "description": "Create functions to search and filter tasks based on various criteria (status, assignee, date ranges, text search in title/notes).",
+      "type": "feature",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-006"],
+      "acceptance_criteria": [
+        "searchTasks(filters) function with multiple filter options",
+        "Filter by status (single or multiple)",
+        "Filter by assignee",
+        "Filter by date created/modified",
+        "Text search in task title and notes",
+        "Supports combining multiple filters",
+        "Returns paginated results"
+      ],
+      "files_to_create": ["src/operations/taskSearch.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Use Notion database query filters API, build filter objects dynamically"
+    },
+    {
+      "task_id": "TASK-008",
+      "task_order_number": 8,
+      "title": "Implement Task Deletion/Archive Functionality",
+      "description": "Create function to delete or archive tasks. Notion API archives pages rather than deleting them permanently.",
+      "type": "feature",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "dependencies": ["TASK-003"],
+      "acceptance_criteria": [
+        "deleteTask(pageId) function archives task",
+        "Uses retry handler",
+        "Validates pageId before API call",
+        "Returns success/error status",
+        "Logs deletion action"
+      ],
+      "files_to_create": ["src/operations/taskDeletion.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Use notion.pages.update() with archived: true property"
+    },
+    {
+      "task_id": "TASK-009",
+      "task_order_number": 9,
+      "title": "Implement Batch Task Creation",
+      "description": "Create function to create multiple tasks in a single operation with proper error handling for partial failures.",
+      "type": "feature",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-004"],
+      "acceptance_criteria": [
+        "createTasksBatch(tasks[]) function accepts array of task objects",
+        "Processes tasks concurrently with rate limiting",
+        "Returns array of results with success/failure for each",
+        "Continues processing if individual tasks fail",
+        "Respects Notion API rate limits",
+        "Provides summary of successes/failures"
+      ],
+      "files_to_create": ["src/operations/batchOperations.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Use Promise.allSettled() for concurrent execution, implement rate limiter (e.g., p-limit)"
+    },
+    {
+      "task_id": "TASK-010",
+      "task_order_number": 10,
+      "title": "Implement Batch Task Updates",
+      "description": "Create function to update multiple tasks in a single operation with proper error handling for partial failures.",
+      "type": "feature",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-005"],
+      "acceptance_criteria": [
+        "updateTasksBatch(updates[]) function accepts array of update objects",
+        "Each update object contains pageId and fields to update",
+        "Processes updates concurrently with rate limiting",
+        "Returns array of results with success/failure for each",
+        "Continues processing if individual updates fail",
+        "Provides summary of successes/failures"
+      ],
+      "files_to_create": [],
+      "files_to_modify": ["src/operations/batchOperations.js", "index.js"],
+      "technical_notes": "Reuse rate limiting logic from batch creation"
+    },
+    {
+      "task_id": "TASK-011",
+      "task_order_number": 11,
+      "title": "Implement Structured Logging System",
+      "description": "Replace console.log statements with structured logging system supporting different log levels (debug, info, warn, error) and optional log output to file.",
+      "type": "enhancement",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Logger module with debug, info, warn, error methods",
+        "Configurable log level via environment variable",
+        "Structured log format (timestamp, level, message, context)",
+        "Option to log to file and/or console",
+        "Includes correlation IDs for tracing operations"
+      ],
+      "files_to_create": ["src/utils/logger.js"],
+      "files_to_modify": ["index.js", "src/**/*.js"],
+      "technical_notes": "Consider using winston or pino for production-grade logging"
+    },
+    {
+      "task_id": "TASK-012",
+      "task_order_number": 12,
+      "title": "Create Database Schema Configuration Module",
+      "description": "Create flexible configuration for Notion database schema to avoid hardcoded field names. Allow field mapping to be configurable.",
+      "type": "feature",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Schema config file (JSON or environment variables)",
+        "Field name mappings (title, status, assignee, notes, id)",
+        "Schema validation on startup",
+        "Fallback to default field names if not configured",
+        "Documentation for custom schema setup"
+      ],
+      "files_to_create": ["src/config/schema.js", "schema.config.json"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Allows system to work with different Notion database structures"
+    },
+    {
+      "task_id": "TASK-013",
+      "task_order_number": 13,
+      "title": "Implement CLI Interface",
+      "description": "Create command-line interface for interacting with the task manager. Support all CRUD operations and search functionality through CLI commands.",
+      "type": "feature",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-008"],
+      "acceptance_criteria": [
+        "CLI command: create <title> [options] - creates task",
+        "CLI command: update <id> [options] - updates task",
+        "CLI command: get <id> - retrieves task",
+        "CLI command: list [filters] - lists tasks",
+        "CLI command: search <query> - searches tasks",
+        "CLI command: delete <id> - deletes task",
+        "Help command showing usage",
+        "Pretty-formatted output",
+        "Support for JSON output format option"
+      ],
+      "files_to_create": ["src/cli/index.js", "bin/notion-tasks"],
+      "files_to_modify": ["package.json"],
+      "technical_notes": "Use commander or yargs for CLI parsing, update package.json with bin entry"
+    },
+    {
+      "task_id": "TASK-014",
+      "task_order_number": 14,
+      "title": "Add Unit Tests for Validation Modules",
+      "description": "Create comprehensive unit tests for configuration validation, input validation, and validation utilities.",
+      "type": "testing",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-001", "TASK-002"],
+      "acceptance_criteria": [
+        "Tests for config validator with valid/invalid inputs",
+        "Tests for task validation with edge cases",
+        "Tests for all validation error scenarios",
+        "Minimum 90% code coverage for validation modules",
+        "Uses appropriate testing framework (Jest or Mocha)"
+      ],
+      "files_to_create": ["tests/config/validator.test.js", "tests/validation/taskValidation.test.js"],
+      "files_to_modify": ["package.json"],
+      "technical_notes": "Install Jest or Mocha as dev dependency, add test script to package.json"
+    },
+    {
+      "task_id": "TASK-015",
+      "task_order_number": 15,
+      "title": "Add Unit Tests for Core Operations",
+      "description": "Create unit tests for createTask, updateTask, and other core operations using mocked Notion API client.",
+      "type": "testing",
+      "priority": "high",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-004", "TASK-005", "TASK-006", "TASK-008"],
+      "acceptance_criteria": [
+        "Tests for createTask with mocked API",
+        "Tests for updateTask with mocked API",
+        "Tests for getTaskById with mocked API",
+        "Tests for deleteTask with mocked API",
+        "Tests for error scenarios and retry logic",
+        "Minimum 85% code coverage for core operations"
+      ],
+      "files_to_create": ["tests/operations/taskOperations.test.js", "tests/__mocks__/notionClient.js"],
+      "files_to_modify": ["package.json"],
+      "technical_notes": "Mock @notionhq/client, test both success and failure scenarios"
+    },
+    {
+      "task_id": "TASK-016",
+      "task_order_number": 16,
+      "title": "Add Integration Tests",
+      "description": "Create integration tests that interact with a test Notion database to verify end-to-end functionality.",
+      "type": "testing",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-008"],
+      "acceptance_criteria": [
+        "Integration test suite using test database",
+        "Tests full CRUD lifecycle (create, read, update, delete)",
+        "Tests search and filter functionality",
+        "Tests batch operations",
+        "Setup/teardown to clean test data",
+        "Can run separately from unit tests",
+        "Documentation for setting up test database"
+      ],
+      "files_to_create": ["tests/integration/fullCrud.test.js", "tests/integration/setup.js"],
+      "files_to_modify": ["package.json", "README.md"],
+      "technical_notes": "Requires separate NOTION_TEST_DATABASE_ID, use test:integration script"
+    },
+    {
+      "task_id": "TASK-017",
+      "task_order_number": 17,
+      "title": "Create API Documentation",
+      "description": "Generate comprehensive API documentation for all functions, including JSDoc comments in code and markdown documentation.",
+      "type": "documentation",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-008", "TASK-009", "TASK-010"],
+      "acceptance_criteria": [
+        "JSDoc comments for all exported functions",
+        "API.md file with detailed function documentation",
+        "Parameter descriptions with types and examples",
+        "Return value documentation",
+        "Error handling documentation",
+        "Code examples for each function",
+        "Can generate HTML docs with JSDoc tool"
+      ],
+      "files_to_create": ["docs/API.md"],
+      "files_to_modify": ["index.js", "src/**/*.js", "README.md"],
+      "technical_notes": "Use JSDoc standard format, consider using documentation generator"
+    },
+    {
+      "task_id": "TASK-018",
+      "task_order_number": 18,
+      "title": "Create Setup and Usage Guide",
+      "description": "Create comprehensive README and setup documentation covering installation, configuration, and usage examples.",
+      "type": "documentation",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-013"],
+      "acceptance_criteria": [
+        "Updated README.md with project overview",
+        "Installation instructions",
+        "Configuration guide (environment variables, schema config)",
+        "Quick start guide",
+        "CLI usage examples",
+        "Programmatic API usage examples",
+        "Troubleshooting section",
+        "Contributing guidelines"
+      ],
+      "files_to_create": ["docs/SETUP.md", "docs/EXAMPLES.md"],
+      "files_to_modify": ["README.md"],
+      "technical_notes": "Include screenshots/GIFs if creating CLI interface"
+    },
+    {
+      "task_id": "TASK-019",
+      "task_order_number": 19,
+      "title": "Implement Rate Limiting Protection",
+      "description": "Add proactive rate limiting to prevent hitting Notion API rate limits. Implement token bucket or sliding window algorithm.",
+      "type": "enhancement",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-003"],
+      "acceptance_criteria": [
+        "Rate limiter module with configurable limits",
+        "Integrates with all API calls",
+        "Queues requests when limit is reached",
+        "Logs rate limit warnings",
+        "Configurable via environment variables",
+        "Supports different limits for different operation types"
+      ],
+      "files_to_create": ["src/utils/rateLimiter.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Notion API typically allows 3 requests per second, implement p-limit or bottleneck"
+    },
+    {
+      "task_id": "TASK-020",
+      "task_order_number": 20,
+      "title": "Add Assignee Management Functionality",
+      "description": "Implement proper assignee handling with support for Notion user IDs or emails. Query Notion users and properly assign tasks.",
+      "type": "feature",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "dependencies": ["TASK-004", "TASK-005"],
+      "acceptance_criteria": [
+        "Function to retrieve Notion workspace users",
+        "Support assigning by user ID",
+        "Support assigning by user email (with lookup)",
+        "Cache user lookups to avoid repeated API calls",
+        "Validate assignee exists before assignment",
+        "Support multiple assignees",
+        "Documentation for assignee usage"
+      ],
+      "files_to_create": ["src/operations/userManagement.js"],
+      "files_to_modify": ["index.js"],
+      "technical_notes": "Use notion.users.list() to fetch users, implement caching with TTL"
+    }
+  ]
+}
