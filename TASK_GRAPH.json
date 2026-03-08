@@ -1,0 +1,288 @@
+{
+  "task_graph": {
+    "description": "Dependency graph showing relationships between tasks. Tasks can begin once all dependencies are complete.",
+    "nodes": [
+      {
+        "task_id": "T001",
+        "task_order_number": 1,
+        "title": "Add Environment Variable Validation",
+        "depends_on": [],
+        "blocks": ["T002", "T003"],
+        "can_start_immediately": true,
+        "critical_path": true
+      },
+      {
+        "task_id": "T002",
+        "task_order_number": 2,
+        "title": "Refactor Main Function to Prevent Auto-Execution",
+        "depends_on": ["T001"],
+        "blocks": [],
+        "can_start_immediately": false,
+        "critical_path": false
+      },
+      {
+        "task_id": "T003",
+        "task_order_number": 3,
+        "title": "Enhance Error Handling with Proper Error Propagation",
+        "depends_on": ["T001"],
+        "blocks": ["T004", "T005", "T011", "T015"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T004",
+        "task_order_number": 4,
+        "title": "Fix Task Assignment Functionality",
+        "depends_on": ["T003"],
+        "blocks": ["T008"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T005",
+        "task_order_number": 5,
+        "title": "Implement Task Retrieval Function",
+        "depends_on": ["T003"],
+        "blocks": ["T006", "T007"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T006",
+        "task_order_number": 6,
+        "title": "Implement getTaskById Function",
+        "depends_on": ["T005"],
+        "blocks": ["T007", "T010"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T007",
+        "task_order_number": 7,
+        "title": "Add Advanced Task Filtering",
+        "depends_on": ["T005", "T006"],
+        "blocks": ["T013"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T008",
+        "task_order_number": 8,
+        "title": "Implement Batch Task Creation",
+        "depends_on": ["T004"],
+        "blocks": ["T009"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T009",
+        "task_order_number": 9,
+        "title": "Implement Batch Task Updates",
+        "depends_on": ["T008"],
+        "blocks": ["T013"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T010",
+        "task_order_number": 10,
+        "title": "Enhance Notes Handling to Support Append Mode",
+        "depends_on": ["T006"],
+        "blocks": ["T013"],
+        "can_start_immediately": false,
+        "critical_path": false
+      },
+      {
+        "task_id": "T011",
+        "task_order_number": 11,
+        "title": "Implement Structured Logging System",
+        "depends_on": ["T003"],
+        "blocks": ["T012"],
+        "can_start_immediately": false,
+        "critical_path": false
+      },
+      {
+        "task_id": "T012",
+        "task_order_number": 12,
+        "title": "Create Comprehensive Test Suite",
+        "depends_on": ["T001", "T002", "T003", "T004", "T005", "T006", "T010", "T011"],
+        "blocks": ["T014"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T013",
+        "task_order_number": 13,
+        "title": "Create CLI Interface",
+        "depends_on": ["T007", "T009", "T010"],
+        "blocks": ["T014"],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T014",
+        "task_order_number": 14,
+        "title": "Write Comprehensive Documentation",
+        "depends_on": ["T012", "T013"],
+        "blocks": [],
+        "can_start_immediately": false,
+        "critical_path": true
+      },
+      {
+        "task_id": "T015",
+        "task_order_number": 15,
+        "title": "Add Retry Logic with Exponential Backoff",
+        "depends_on": ["T003"],
+        "blocks": [],
+        "can_start_immediately": false,
+        "critical_path": false
+      }
+    ],
+    "parallel_execution_opportunities": [
+      {
+        "phase": 1,
+        "description": "Initial setup and foundation",
+        "tasks": ["T001"],
+        "note": "Must complete before any other tasks"
+      },
+      {
+        "phase": 2,
+        "description": "Core improvements - can be parallelized",
+        "tasks": ["T002", "T003"],
+        "note": "T002 and T003 both depend only on T001, can run in parallel"
+      },
+      {
+        "phase": 3,
+        "description": "Feature development - parallel streams",
+        "tasks": ["T004", "T005", "T015"],
+        "note": "T004 and T005 depend on T003; T015 also depends on T003. All three can run in parallel"
+      },
+      {
+        "phase": 4,
+        "description": "Extended features - multiple parallel tracks",
+        "tasks": ["T006", "T008", "T011"],
+        "note": "T006 depends on T005; T008 on T004; T011 on T003. All can run in parallel"
+      },
+      {
+        "phase": 5,
+        "description": "Advanced features",
+        "tasks": ["T007", "T009", "T010"],
+        "note": "T007 depends on T005+T006; T009 on T008; T010 on T006. T009 and T010 can parallel; T007 slightly behind"
+      },
+      {
+        "phase": 6,
+        "description": "Quality and polish - parallel completion",
+        "tasks": ["T012", "T013"],
+        "note": "T012 waits for core features; T013 waits for T007+T009+T010. May have some overlap"
+      },
+      {
+        "phase": 7,
+        "description": "Final documentation",
+        "tasks": ["T014"],
+        "note": "Must wait for T012 and T013 to complete"
+      }
+    ],
+    "critical_path": [
+      "T001",
+      "T003",
+      "T005",
+      "T006",
+      "T007",
+      "T004",
+      "T008",
+      "T009",
+      "T013",
+      "T014"
+    ],
+    "critical_path_description": "The longest dependency chain determining minimum project completion time. Tasks: T001 -> T003 -> (T004 -> T008 -> T009 and T005 -> T006 -> T007) -> T013 -> T014"
+  },
+  "dependency_matrix": {
+    "description": "Matrix showing which tasks depend on which (rows depend on columns)",
+    "matrix": [
+      ["", "T001", "T002", "T003", "T004", "T005", "T006", "T007", "T008", "T009", "T010", "T011", "T012", "T013", "T014", "T015"],
+      ["T001", "-", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["T002", "X", "-", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["T003", "X", "", "-", "", "", "", "", "", "", "", "", "", "", "", ""],
+      ["T004", "", "", "X", "-", "", "", "", "", "", "", "", "", "", "", ""],
+      ["T005", "", "", "X", "", "-", "", "", "", "", "", "", "", "", "", ""],
+      ["T006", "", "", "", "", "X", "-", "", "", "", "", "", "", "", "", ""],
+      ["T007", "", "", "", "", "X", "X", "-", "", "", "", "", "", "", "", ""],
+      ["T008", "", "", "", "X", "", "", "", "-", "", "", "", "", "", "", ""],
+      ["T009", "", "", "", "", "", "", "", "X", "-", "", "", "", "", "", ""],
+      ["T010", "", "", "", "", "", "X", "", "", "", "-", "", "", "", "", ""],
+      ["T011", "", "", "X", "", "", "", "", "", "", "", "-", "", "", "", ""],
+      ["T012", "X", "X", "X", "X", "X", "X", "", "", "", "X", "X", "-", "", "", ""],
+      ["T013", "", "", "", "", "", "", "X", "", "X", "X", "", "", "", "-", ""],
+      ["T014", "", "", "", "", "", "", "", "", "", "", "", "", "X", "X", "-", ""],
+      ["T015", "", "", "X", "", "", "", "", "", "", "", "", "", "", "", "", "-"]
+    ]
+  },
+  "implementation_phases": {
+    "phase_1_foundation": {
+      "phase_number": 1,
+      "name": "Foundation & Configuration",
+      "tasks": ["T001", "T002", "T003"],
+      "objectives": [
+        "Establish robust configuration validation",
+        "Fix module architecture",
+        "Implement proper error handling"
+      ],
+      "estimated_complexity": "low-medium",
+      "deliverables": [
+        "Validated environment setup",
+        "Proper module structure",
+        "Error handling framework"
+      ]
+    },
+    "phase_2_core_features": {
+      "phase_number": 2,
+      "name": "Core Feature Development",
+      "tasks": ["T004", "T005", "T006", "T015"],
+      "objectives": [
+        "Fix and enhance existing features",
+        "Add essential retrieval capabilities",
+        "Implement reliability mechanisms"
+      ],
+      "estimated_complexity": "medium",
+      "deliverables": [
+        "Working task assignment",
+        "Task retrieval functions",
+        "Reliable API calls with retry logic"
+      ]
+    },
+    "phase_3_advanced_features": {
+      "phase_number": 3,
+      "name": "Advanced Features & Batch Operations",
+      "tasks": ["T007", "T008", "T009", "T010", "T011"],
+      "objectives": [
+        "Add advanced filtering",
+        "Enable batch operations",
+        "Improve notes handling",
+        "Implement structured logging"
+      ],
+      "estimated_complexity": "medium-high",
+      "deliverables": [
+        "Advanced query capabilities",
+        "Batch create/update functions",
+        "Append-mode notes",
+        "Production-ready logging"
+      ]
+    },
+    "phase_4_polish": {
+      "phase_number": 4,
+      "name": "Testing, CLI & Documentation",
+      "tasks": ["T012", "T013", "T014"],
+      "objectives": [
+        "Ensure code quality with comprehensive tests",
+        "Provide CLI for manual operations",
+        "Document all features thoroughly"
+      ],
+      "estimated_complexity": "high",
+      "deliverables": [
+        "Complete test suite with >80% coverage",
+        "Functional CLI tool",
+        "Comprehensive documentation"
+      ]
+    }
+  }
+}

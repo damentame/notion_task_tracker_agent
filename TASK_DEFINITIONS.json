@@ -1,0 +1,493 @@
+{
+  "task_definitions": [
+    {
+      "task_id": "T001",
+      "task_order_number": 1,
+      "title": "Add Environment Variable Validation",
+      "description": "Implement validation function to check for required environment variables (NOTION_API_KEY, NOTION_DATABASE_ID) at startup. Throw descriptive errors if missing or invalid. Prevents runtime failures.",
+      "category": "configuration",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": [],
+      "deliverables": [
+        "validateConfig() function",
+        "Error messages for missing variables",
+        "Validation call at module initialization"
+      ],
+      "acceptance_criteria": [
+        "Function checks both required environment variables",
+        "Throws descriptive error if any variable is missing or empty",
+        "Validates before Notion client initialization",
+        "Provides clear error messages with setup instructions"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Test with missing NOTION_API_KEY",
+        "Test with missing NOTION_DATABASE_ID",
+        "Test with valid configuration"
+      ]
+    },
+    {
+      "task_id": "T002",
+      "task_order_number": 2,
+      "title": "Refactor Main Function to Prevent Auto-Execution",
+      "description": "Remove automatic execution of main() function on module import. Export main as a named function instead. This allows the module to be imported as a library without side effects.",
+      "category": "architecture",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "dependencies": ["T001"],
+      "deliverables": [
+        "Export main function",
+        "Remove auto-execution (line 88)",
+        "Update README with usage instructions"
+      ],
+      "acceptance_criteria": [
+        "Module can be imported without executing main()",
+        "main() function is exported and callable",
+        "Example usage documented in README"
+      ],
+      "files_to_modify": ["index.js", "README.md"],
+      "testing_requirements": [
+        "Import module without execution",
+        "Call main() explicitly",
+        "Verify no side effects on import"
+      ]
+    },
+    {
+      "task_id": "T003",
+      "task_order_number": 3,
+      "title": "Enhance Error Handling with Proper Error Propagation",
+      "description": "Improve error handling in createTask() and updateTask() functions. Throw errors instead of only logging. Add specific error types for different failure scenarios (authentication, network, validation).",
+      "category": "error_handling",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["T001"],
+      "deliverables": [
+        "Custom error classes (NotionAuthError, NotionAPIError)",
+        "Error propagation in createTask() and updateTask()",
+        "Detailed error messages with context"
+      ],
+      "acceptance_criteria": [
+        "Functions throw errors instead of silently failing",
+        "Error messages include actionable information",
+        "Different error types for different failure modes",
+        "Stack traces preserved for debugging"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Test with invalid API key",
+        "Test with invalid database ID",
+        "Test with network errors",
+        "Test with malformed data"
+      ]
+    },
+    {
+      "task_id": "T004",
+      "task_order_number": 4,
+      "title": "Fix Task Assignment Functionality",
+      "description": "Implement proper people assignment in createTask() function. Support assignment by Notion user ID or email. Currently hardcoded to empty array. Add parameter validation.",
+      "category": "feature_enhancement",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["T003"],
+      "deliverables": [
+        "Support for assigning tasks by user ID",
+        "Support for assigning tasks by email",
+        "Input validation for assignment data",
+        "Documentation for assignment formats"
+      ],
+      "acceptance_criteria": [
+        "Tasks can be assigned using Notion user ID",
+        "Tasks can be assigned using email address",
+        "Invalid assignment data is rejected with clear error",
+        "Multiple assignees supported",
+        "Unassigned tasks supported (empty array)"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Assign task by user ID",
+        "Assign task by email",
+        "Assign task to multiple users",
+        "Create unassigned task",
+        "Test with invalid user data"
+      ]
+    },
+    {
+      "task_id": "T005",
+      "task_order_number": 5,
+      "title": "Implement Task Retrieval Function",
+      "description": "Create getTasks() function to query and retrieve tasks from Notion database. Support basic filtering by status. Return formatted task objects with all properties.",
+      "category": "feature_new",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["T003"],
+      "deliverables": [
+        "getTasks() function with optional status filter",
+        "Task object formatting helper",
+        "Pagination support for large result sets",
+        "Export function for external use"
+      ],
+      "acceptance_criteria": [
+        "Can retrieve all tasks from database",
+        "Can filter tasks by status",
+        "Returns properly formatted task objects",
+        "Handles pagination automatically",
+        "Returns empty array if no tasks found"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Retrieve all tasks",
+        "Filter by single status",
+        "Handle empty database",
+        "Handle large result sets (>100 tasks)"
+      ]
+    },
+    {
+      "task_id": "T006",
+      "task_order_number": 6,
+      "title": "Implement getTaskById Function",
+      "description": "Create function to retrieve a specific task by its Notion page ID. Return formatted task object or null if not found. Include error handling for invalid IDs.",
+      "category": "feature_new",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "dependencies": ["T005"],
+      "deliverables": [
+        "getTaskById() function",
+        "ID validation",
+        "Formatted task object response",
+        "Not found handling"
+      ],
+      "acceptance_criteria": [
+        "Retrieves task by valid page ID",
+        "Returns null for non-existent IDs",
+        "Validates ID format",
+        "Returns complete task data",
+        "Handles permission errors gracefully"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Get task with valid ID",
+        "Get task with invalid ID",
+        "Get task with non-existent ID",
+        "Test permission denied scenario"
+      ]
+    },
+    {
+      "task_id": "T007",
+      "task_order_number": 7,
+      "title": "Add Advanced Task Filtering",
+      "description": "Extend getTasks() to support filtering by multiple criteria: assignee, date ranges, custom properties. Implement query builder pattern for flexible filtering.",
+      "category": "feature_enhancement",
+      "priority": "medium",
+      "estimated_complexity": "high",
+      "dependencies": ["T005", "T006"],
+      "deliverables": [
+        "Extended getTasks() with filter options",
+        "Filter by assignee",
+        "Filter by date range",
+        "Filter by multiple statuses",
+        "Query builder helper"
+      ],
+      "acceptance_criteria": [
+        "Can filter by single assignee",
+        "Can filter by multiple statuses",
+        "Can filter by date created/modified",
+        "Filters can be combined",
+        "Invalid filters return descriptive errors"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Filter by assignee",
+        "Filter by multiple statuses",
+        "Filter by date range",
+        "Combine multiple filters",
+        "Test empty results"
+      ]
+    },
+    {
+      "task_id": "T008",
+      "task_order_number": 8,
+      "title": "Implement Batch Task Creation",
+      "description": "Create createTasksBatch() function to create multiple tasks efficiently. Use Promise.all for parallel creation. Include progress tracking and partial failure handling.",
+      "category": "feature_new",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["T004"],
+      "deliverables": [
+        "createTasksBatch() function",
+        "Parallel task creation",
+        "Results array with success/failure status",
+        "Partial failure handling"
+      ],
+      "acceptance_criteria": [
+        "Creates multiple tasks in parallel",
+        "Returns array of created task IDs",
+        "Continues on partial failures",
+        "Reports which tasks failed",
+        "Validates all tasks before creation"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Create multiple valid tasks",
+        "Handle partial failures",
+        "Handle complete failure",
+        "Validate input array",
+        "Test with empty array"
+      ]
+    },
+    {
+      "task_id": "T009",
+      "task_order_number": 9,
+      "title": "Implement Batch Task Updates",
+      "description": "Create updateTasksBatch() function to update multiple tasks. Support bulk status changes and property updates. Handle rate limiting gracefully.",
+      "category": "feature_new",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["T008"],
+      "deliverables": [
+        "updateTasksBatch() function",
+        "Bulk status updates",
+        "Bulk property updates",
+        "Rate limiting handling",
+        "Progress reporting"
+      ],
+      "acceptance_criteria": [
+        "Updates multiple tasks efficiently",
+        "Handles rate limits with retries",
+        "Reports success/failure for each task",
+        "Validates all updates before execution",
+        "Supports partial updates"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Update multiple tasks",
+        "Handle rate limiting",
+        "Test partial failures",
+        "Validate input data"
+      ]
+    },
+    {
+      "task_id": "T010",
+      "task_order_number": 10,
+      "title": "Enhance Notes Handling to Support Append Mode",
+      "description": "Modify updateTask() to support both replace and append modes for notes. Add appendToNotes parameter. Retrieve existing notes before appending.",
+      "category": "feature_enhancement",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["T006"],
+      "deliverables": [
+        "Append mode in updateTask()",
+        "appendToNotes parameter",
+        "Timestamp support for append entries",
+        "Preserve existing notes"
+      ],
+      "acceptance_criteria": [
+        "Can replace notes (current behavior)",
+        "Can append to existing notes",
+        "Appended notes include timestamp",
+        "Existing notes are preserved",
+        "Empty notes handled correctly"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Replace notes (default)",
+        "Append to existing notes",
+        "Append to empty notes",
+        "Multiple appends",
+        "Test timestamp formatting"
+      ]
+    },
+    {
+      "task_id": "T011",
+      "task_order_number": 11,
+      "title": "Implement Structured Logging System",
+      "description": "Replace console.log/error with structured logging library (e.g., winston or pino). Support different log levels (debug, info, warn, error). Add log formatting and optional file output.",
+      "category": "infrastructure",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["T003"],
+      "deliverables": [
+        "Logging library integration",
+        "Log level configuration",
+        "Structured log format (JSON)",
+        "File and console transports",
+        "Replace all console.* calls"
+      ],
+      "acceptance_criteria": [
+        "All logging uses structured format",
+        "Log levels configurable via environment",
+        "Logs include context (function, task ID)",
+        "Sensitive data is redacted",
+        "Performance impact is minimal"
+      ],
+      "files_to_modify": ["index.js", "package.json"],
+      "testing_requirements": [
+        "Verify log output format",
+        "Test different log levels",
+        "Verify sensitive data redaction",
+        "Test file output"
+      ]
+    },
+    {
+      "task_id": "T012",
+      "task_order_number": 12,
+      "title": "Create Comprehensive Test Suite",
+      "description": "Implement unit and integration tests using Jest or Mocha. Mock Notion API calls. Test all functions with various scenarios including edge cases and errors.",
+      "category": "testing",
+      "priority": "high",
+      "estimated_complexity": "high",
+      "dependencies": ["T001", "T002", "T003", "T004", "T005", "T006", "T010", "T011"],
+      "deliverables": [
+        "Test framework setup",
+        "Unit tests for all functions",
+        "Integration tests with mocked API",
+        "Test coverage report",
+        "CI configuration for automated testing"
+      ],
+      "acceptance_criteria": [
+        "All functions have unit tests",
+        "Code coverage >80%",
+        "Tests pass consistently",
+        "Mocking properly isolates tests",
+        "Tests run in under 30 seconds"
+      ],
+      "files_to_modify": ["package.json"],
+      "files_to_create": [
+        "test/index.test.js",
+        "test/setup.js",
+        ".github/workflows/test.yml"
+      ],
+      "testing_requirements": [
+        "Run full test suite",
+        "Generate coverage report",
+        "Test in CI environment"
+      ]
+    },
+    {
+      "task_id": "T013",
+      "task_order_number": 13,
+      "title": "Create CLI Interface",
+      "description": "Build command-line interface using Commander.js or Yargs. Support commands for create, update, get, and list tasks. Include interactive mode with prompts.",
+      "category": "feature_new",
+      "priority": "low",
+      "estimated_complexity": "high",
+      "dependencies": ["T007", "T009", "T010"],
+      "deliverables": [
+        "CLI framework integration",
+        "Commands: create, update, get, list",
+        "Interactive mode with prompts",
+        "Formatted output (table, JSON)",
+        "Help documentation"
+      ],
+      "acceptance_criteria": [
+        "All core functions accessible via CLI",
+        "Interactive prompts for missing arguments",
+        "Output formatting options",
+        "Error messages user-friendly",
+        "Help text comprehensive"
+      ],
+      "files_to_create": ["cli.js", "bin/notion-task"],
+      "files_to_modify": ["package.json"],
+      "testing_requirements": [
+        "Test each CLI command",
+        "Test interactive mode",
+        "Test output formats",
+        "Test error scenarios"
+      ]
+    },
+    {
+      "task_id": "T014",
+      "task_order_number": 14,
+      "title": "Write Comprehensive Documentation",
+      "description": "Create detailed README with setup instructions, API documentation, usage examples, and troubleshooting guide. Add JSDoc comments to all functions. Create CONTRIBUTING.md and API reference.",
+      "category": "documentation",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "dependencies": ["T012", "T013"],
+      "deliverables": [
+        "Enhanced README.md with setup guide",
+        "JSDoc comments for all functions",
+        "API_REFERENCE.md",
+        "CONTRIBUTING.md",
+        "Example scripts directory",
+        "Troubleshooting guide"
+      ],
+      "acceptance_criteria": [
+        "README covers all features",
+        "Setup instructions are clear and complete",
+        "Code examples work without modification",
+        "API reference documents all parameters",
+        "JSDoc comments on all exported functions"
+      ],
+      "files_to_modify": ["README.md", "index.js"],
+      "files_to_create": [
+        "API_REFERENCE.md",
+        "CONTRIBUTING.md",
+        "examples/basic-usage.js",
+        "examples/batch-operations.js",
+        "examples/advanced-filtering.js"
+      ],
+      "testing_requirements": [
+        "Verify all code examples run",
+        "Check links in documentation",
+        "Validate JSDoc syntax"
+      ]
+    },
+    {
+      "task_id": "T015",
+      "task_order_number": 15,
+      "title": "Add Retry Logic with Exponential Backoff",
+      "description": "Implement retry mechanism for API calls that fail due to network issues or rate limiting. Use exponential backoff with jitter. Make retry attempts configurable.",
+      "category": "reliability",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "dependencies": ["T003"],
+      "deliverables": [
+        "Retry wrapper function",
+        "Exponential backoff implementation",
+        "Configurable retry attempts",
+        "Retry on specific error types only",
+        "Logging of retry attempts"
+      ],
+      "acceptance_criteria": [
+        "Retries on transient failures",
+        "Does not retry on permanent failures",
+        "Exponential backoff implemented",
+        "Maximum retry attempts configurable",
+        "Retry attempts logged"
+      ],
+      "files_to_modify": ["index.js"],
+      "testing_requirements": [
+        "Test with transient network errors",
+        "Test with rate limiting",
+        "Test with permanent errors",
+        "Verify backoff timing",
+        "Test max retries limit"
+      ]
+    }
+  ],
+  "summary": {
+    "total_tasks": 15,
+    "priority_breakdown": {
+      "high": 7,
+      "medium": 7,
+      "low": 1
+    },
+    "complexity_breakdown": {
+      "low": 3,
+      "medium": 9,
+      "high": 3
+    },
+    "category_breakdown": {
+      "configuration": 1,
+      "architecture": 1,
+      "error_handling": 1,
+      "feature_enhancement": 3,
+      "feature_new": 5,
+      "infrastructure": 1,
+      "testing": 1,
+      "documentation": 1,
+      "reliability": 1
+    }
+  }
+}
