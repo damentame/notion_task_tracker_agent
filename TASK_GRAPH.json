@@ -1,0 +1,177 @@
+{
+  "task_graph": {
+    "nodes": [
+      {
+        "task_id": "TASK-001",
+        "task_number": 1,
+        "title": "Environment Configuration Setup"
+      },
+      {
+        "task_id": "TASK-002",
+        "task_number": 2,
+        "title": "Input Validation for Task Operations"
+      },
+      {
+        "task_id": "TASK-003",
+        "task_number": 3,
+        "title": "Task Retrieval Functionality"
+      },
+      {
+        "task_id": "TASK-004",
+        "task_number": 4,
+        "title": "Error Handling Enhancement"
+      },
+      {
+        "task_id": "TASK-005",
+        "task_number": 5,
+        "title": "Task Deletion Functionality"
+      },
+      {
+        "task_id": "TASK-006",
+        "task_number": 6,
+        "title": "Bulk Operations Support"
+      },
+      {
+        "task_id": "TASK-007",
+        "task_number": 7,
+        "title": "Comprehensive Test Suite"
+      },
+      {
+        "task_id": "TASK-008",
+        "task_number": 8,
+        "title": "Documentation Enhancement"
+      },
+      {
+        "task_id": "TASK-009",
+        "task_number": 9,
+        "title": "CLI Interface Implementation"
+      },
+      {
+        "task_id": "TASK-010",
+        "task_number": 10,
+        "title": "Logging and Monitoring Enhancement"
+      }
+    ],
+    "edges": [
+      {
+        "from": "TASK-001",
+        "to": "TASK-002",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-001",
+        "to": "TASK-003",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-001",
+        "to": "TASK-005",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-002",
+        "to": "TASK-004",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-002",
+        "to": "TASK-005",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-002",
+        "to": "TASK-006",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-003",
+        "to": "TASK-006",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-003",
+        "to": "TASK-007",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-003",
+        "to": "TASK-009",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-004",
+        "to": "TASK-007",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-004",
+        "to": "TASK-010",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-005",
+        "to": "TASK-006",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-005",
+        "to": "TASK-007",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-005",
+        "to": "TASK-009",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-001",
+        "to": "TASK-008",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-003",
+        "to": "TASK-008",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-005",
+        "to": "TASK-008",
+        "dependency_type": "required"
+      },
+      {
+        "from": "TASK-006",
+        "to": "TASK-008",
+        "dependency_type": "required"
+      }
+    ],
+    "parallel_execution_groups": [
+      {
+        "group_id": 1,
+        "tasks": ["TASK-001"],
+        "description": "Foundation setup - must complete first"
+      },
+      {
+        "group_id": 2,
+        "tasks": ["TASK-002", "TASK-003"],
+        "description": "Can be developed in parallel after foundation"
+      },
+      {
+        "group_id": 3,
+        "tasks": ["TASK-004", "TASK-005"],
+        "description": "Can be developed in parallel after validation"
+      },
+      {
+        "group_id": 4,
+        "tasks": ["TASK-006"],
+        "description": "Requires core CRUD operations complete"
+      },
+      {
+        "group_id": 5,
+        "tasks": ["TASK-007", "TASK-008", "TASK-009", "TASK-010"],
+        "description": "Final enhancements - can be parallelized"
+      }
+    ]
+  },
+  "critical_path": ["TASK-001", "TASK-002", "TASK-006", "TASK-007"],
+  "total_tasks": 10
+}
