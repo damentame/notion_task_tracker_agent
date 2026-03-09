@@ -1,0 +1,167 @@
+{
+  "project": "notion_task_tracker_agent",
+  "version": "1.0",
+  "generated_at": "2026-03-09T20:37:00Z",
+  "task_graph": {
+    "nodes": [
+      {
+        "task_id": "T001",
+        "task_order_number": 1,
+        "name": "Environment Setup Validation",
+        "dependencies": []
+      },
+      {
+        "task_id": "T002",
+        "task_order_number": 2,
+        "name": "Implement Task Retrieval Functions",
+        "dependencies": ["T001"]
+      },
+      {
+        "task_id": "T003",
+        "task_order_number": 3,
+        "name": "Implement Task Query and Filter Functions",
+        "dependencies": ["T002"]
+      },
+      {
+        "task_id": "T004",
+        "task_order_number": 4,
+        "name": "Implement Task Deletion Function",
+        "dependencies": ["T002"]
+      },
+      {
+        "task_id": "T005",
+        "task_order_number": 5,
+        "name": "Add Task Priority Management",
+        "dependencies": ["T001"]
+      },
+      {
+        "task_id": "T006",
+        "task_order_number": 6,
+        "name": "Add Due Date Handling",
+        "dependencies": ["T001"]
+      },
+      {
+        "task_id": "T007",
+        "task_order_number": 7,
+        "name": "Implement Bulk Operations",
+        "dependencies": ["T002", "T003", "T004"]
+      },
+      {
+        "task_id": "T008",
+        "task_order_number": 8,
+        "name": "Enhanced Error Handling and Validation",
+        "dependencies": ["T002", "T003", "T004"]
+      },
+      {
+        "task_id": "T009",
+        "task_order_number": 9,
+        "name": "Implement Logging Infrastructure",
+        "dependencies": ["T001"]
+      },
+      {
+        "task_id": "T010",
+        "task_order_number": 10,
+        "name": "Create CLI Interface",
+        "dependencies": ["T002", "T003", "T004", "T005", "T006"]
+      },
+      {
+        "task_id": "T011",
+        "task_order_number": 11,
+        "name": "Add Comprehensive Test Suite",
+        "dependencies": ["T002", "T003", "T004", "T005", "T006", "T007", "T008"]
+      },
+      {
+        "task_id": "T012",
+        "task_order_number": 12,
+        "name": "Create Setup and Usage Documentation",
+        "dependencies": ["T010", "T011"]
+      },
+      {
+        "task_id": "T013",
+        "task_order_number": 13,
+        "name": "Add Task Completion Timestamp Tracking",
+        "dependencies": ["T001"]
+      },
+      {
+        "task_id": "T014",
+        "task_order_number": 14,
+        "name": "Implement Task Statistics and Reporting",
+        "dependencies": ["T002", "T003", "T013"]
+      }
+    ],
+    "edges": [
+      {"from": "T001", "to": "T002"},
+      {"from": "T002", "to": "T003"},
+      {"from": "T002", "to": "T004"},
+      {"from": "T001", "to": "T005"},
+      {"from": "T001", "to": "T006"},
+      {"from": "T002", "to": "T007"},
+      {"from": "T003", "to": "T007"},
+      {"from": "T004", "to": "T007"},
+      {"from": "T002", "to": "T008"},
+      {"from": "T003", "to": "T008"},
+      {"from": "T004", "to": "T008"},
+      {"from": "T001", "to": "T009"},
+      {"from": "T002", "to": "T010"},
+      {"from": "T003", "to": "T010"},
+      {"from": "T004", "to": "T010"},
+      {"from": "T005", "to": "T010"},
+      {"from": "T006", "to": "T010"},
+      {"from": "T002", "to": "T011"},
+      {"from": "T003", "to": "T011"},
+      {"from": "T004", "to": "T011"},
+      {"from": "T005", "to": "T011"},
+      {"from": "T006", "to": "T011"},
+      {"from": "T007", "to": "T011"},
+      {"from": "T008", "to": "T011"},
+      {"from": "T010", "to": "T012"},
+      {"from": "T011", "to": "T012"},
+      {"from": "T001", "to": "T013"},
+      {"from": "T002", "to": "T014"},
+      {"from": "T003", "to": "T014"},
+      {"from": "T013", "to": "T014"}
+    ],
+    "parallel_execution_groups": [
+      {
+        "group_id": "G1",
+        "description": "Foundation setup tasks",
+        "tasks": ["T001"]
+      },
+      {
+        "group_id": "G2",
+        "description": "Core CRUD operations (can run in parallel after T001)",
+        "tasks": ["T002", "T005", "T006", "T009", "T013"]
+      },
+      {
+        "group_id": "G3",
+        "description": "Advanced read operations (can run in parallel after T002)",
+        "tasks": ["T003", "T004"]
+      },
+      {
+        "group_id": "G4",
+        "description": "Cross-functional features (can run in parallel after G3)",
+        "tasks": ["T007", "T008"]
+      },
+      {
+        "group_id": "G5",
+        "description": "User-facing interface",
+        "tasks": ["T010"]
+      },
+      {
+        "group_id": "G6",
+        "description": "Analytics features",
+        "tasks": ["T014"]
+      },
+      {
+        "group_id": "G7",
+        "description": "Quality assurance",
+        "tasks": ["T011"]
+      },
+      {
+        "group_id": "G8",
+        "description": "Final documentation",
+        "tasks": ["T012"]
+      }
+    ]
+  }
+}
