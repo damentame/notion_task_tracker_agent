@@ -1,0 +1,167 @@
+{
+  "graph_metadata": {
+    "project": "notion_task_tracker_agent",
+    "total_nodes": 12,
+    "total_edges": 7,
+    "critical_path_length": 3
+  },
+  "nodes": [
+    {
+      "task_id": "TASK-001",
+      "task_order_number": 1,
+      "title": "Add task retrieval functionality",
+      "depends_on": [],
+      "blocks": ["TASK-002", "TASK-003", "TASK-010", "TASK-011"]
+    },
+    {
+      "task_id": "TASK-002",
+      "task_order_number": 2,
+      "title": "Add task filtering by status",
+      "depends_on": ["TASK-001"],
+      "blocks": ["TASK-009"]
+    },
+    {
+      "task_id": "TASK-003",
+      "task_order_number": 3,
+      "title": "Add task filtering by assignee",
+      "depends_on": ["TASK-001"],
+      "blocks": ["TASK-009"]
+    },
+    {
+      "task_id": "TASK-004",
+      "task_order_number": 4,
+      "title": "Add task archiving functionality",
+      "depends_on": [],
+      "blocks": ["TASK-009"]
+    },
+    {
+      "task_id": "TASK-005",
+      "task_order_number": 5,
+      "title": "Enhance error handling with retry logic",
+      "depends_on": [],
+      "blocks": ["TASK-006", "TASK-010"]
+    },
+    {
+      "task_id": "TASK-006",
+      "task_order_number": 6,
+      "title": "Add rate limit handling",
+      "depends_on": ["TASK-005"],
+      "blocks": []
+    },
+    {
+      "task_id": "TASK-007",
+      "task_order_number": 7,
+      "title": "Add input validation for task creation",
+      "depends_on": [],
+      "blocks": []
+    },
+    {
+      "task_id": "TASK-008",
+      "task_order_number": 8,
+      "title": "Add environment variable validation",
+      "depends_on": [],
+      "blocks": []
+    },
+    {
+      "task_id": "TASK-009",
+      "task_order_number": 9,
+      "title": "Enhance documentation with usage examples",
+      "depends_on": ["TASK-001", "TASK-002", "TASK-003", "TASK-004"],
+      "blocks": []
+    },
+    {
+      "task_id": "TASK-010",
+      "task_order_number": 10,
+      "title": "Add batch task operations",
+      "depends_on": ["TASK-001", "TASK-005"],
+      "blocks": []
+    },
+    {
+      "task_id": "TASK-011",
+      "task_order_number": 11,
+      "title": "Add database schema validation",
+      "depends_on": ["TASK-001"],
+      "blocks": []
+    },
+    {
+      "task_id": "TASK-012",
+      "task_order_number": 12,
+      "title": "Add comprehensive error types",
+      "depends_on": [],
+      "blocks": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "TASK-001",
+      "to": "TASK-002",
+      "relationship": "prerequisite"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-003",
+      "relationship": "prerequisite"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-009",
+      "relationship": "prerequisite"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-010",
+      "relationship": "prerequisite"
+    },
+    {
+      "from": "TASK-001",
+      "to": "TASK-011",
+      "relationship": "prerequisite"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-006",
+      "relationship": "prerequisite"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-010",
+      "relationship": "prerequisite"
+    }
+  ],
+  "parallel_execution_groups": [
+    {
+      "group_id": "GROUP-1",
+      "description": "Independent foundation tasks",
+      "tasks": ["TASK-001", "TASK-004", "TASK-005", "TASK-007", "TASK-008", "TASK-012"],
+      "can_execute_parallel": true
+    },
+    {
+      "group_id": "GROUP-2",
+      "description": "Tasks dependent on retrieval",
+      "tasks": ["TASK-002", "TASK-003", "TASK-011"],
+      "can_execute_parallel": true,
+      "requires_completion_of": ["TASK-001"]
+    },
+    {
+      "group_id": "GROUP-3",
+      "description": "Rate limiting dependent on retry logic",
+      "tasks": ["TASK-006"],
+      "can_execute_parallel": false,
+      "requires_completion_of": ["TASK-005"]
+    },
+    {
+      "group_id": "GROUP-4",
+      "description": "Batch operations requiring multiple prerequisites",
+      "tasks": ["TASK-010"],
+      "can_execute_parallel": false,
+      "requires_completion_of": ["TASK-001", "TASK-005"]
+    },
+    {
+      "group_id": "GROUP-5",
+      "description": "Documentation requiring all features complete",
+      "tasks": ["TASK-009"],
+      "can_execute_parallel": false,
+      "requires_completion_of": ["TASK-001", "TASK-002", "TASK-003", "TASK-004"]
+    }
+  ]
+}
