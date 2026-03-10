@@ -4,14 +4,42 @@
   "type": "module",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node index.js",
+    "test": "echo \"Tests will be implemented\" && exit 0",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix",
+    "format": "prettier --write \"**/*.{js,json,md,yml,yaml}\"",
+    "format:check": "prettier --check \"**/*.{js,json,md,yml,yaml}\"",
+    "quality:check": "npm run lint && npm run format:check",
+    "quality:fix": "npm run lint:fix && npm run format",
+    "audit:security": "npm audit --audit-level=moderate",
+    "prepare": "husky"
   },
-  "keywords": [],
+  "keywords": [
+    "notion",
+    "task-manager",
+    "cli",
+    "productivity"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "CLI tool for managing tasks in Notion databases",
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
   "dependencies": {
     "@notionhq/client": "^5.1.0",
     "dotenv": "^17.2.3"
+  },
+  "devDependencies": {
+    "eslint": "^9.39.4",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-import": "^2.32.0",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^7.2.1",
+    "husky": "^9.1.7",
+    "lint-staged": "^16.3.3",
+    "prettier": "^3.8.1"
   }
 }

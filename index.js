@@ -5,11 +5,12 @@ dotenv.config();
 
 const notion = new Client({ auth: process.env.NOTION_API_KEY });
 const databaseId = process.env.NOTION_DATABASE_ID;
+const TASK_COMPLETION_DELAY_MS = 5000;
 
 /**
  * Create a task in Notion
  */
-export async function createTask(title, assignedTo = "Agent", notes = "") {
+export async function createTask(title, _assignedTo = "Agent", notes = "") {
   try {
     const response = await notion.pages.create({
       parent: { database_id: databaseId },
@@ -36,7 +37,6 @@ export async function createTask(title, assignedTo = "Agent", notes = "") {
       },
     });
 
-    console.log("Task created:", response.id);
     return response.id;
   } catch (error) {
     console.error("Error creating task:", error.body || error);
@@ -59,8 +59,6 @@ export async function updateTask(pageId, status, notes = "") {
         },
       },
     });
-
-    console.log(`Task ${pageId} updated to ${status}`);
   } catch (error) {
     console.error("Error updating task:", error.body || error);
   }
@@ -81,7 +79,7 @@ async function main() {
   if (taskId) {
     setTimeout(async () => {
       await updateTask(taskId, "Done", "Agent completed this test task.");
-    }, 5000);
+    }, TASK_COMPLETION_DELAY_MS);
   }
 }
 
