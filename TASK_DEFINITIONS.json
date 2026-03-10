@@ -1,0 +1,461 @@
+{
+  "project": "notion_task_tracker_agent",
+  "generated_date": "2026-03-10",
+  "analyst": "Business Requirements Analyst Agent",
+  "total_tasks": 14,
+  "tasks": [
+    {
+      "task_id": "TASK-001",
+      "task_order_number": 1,
+      "title": "Add environment variable validation at startup",
+      "description": "Implement startup validation to ensure NOTION_API_KEY and NOTION_DATABASE_ID environment variables are configured before any operations execute. This prevents runtime failures due to missing configuration.",
+      "category": "reliability",
+      "priority": "critical",
+      "estimated_complexity": "low",
+      "requirements_mapping": ["NFR-001", "NFR-002"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "Check NOTION_API_KEY is set and non-empty at module initialization",
+        "Check NOTION_DATABASE_ID is set and non-empty at module initialization",
+        "Throw ConfigurationError with clear message if any required variable is missing",
+        "Prevent any Notion API operations if validation fails",
+        "Validation executes before notion client initialization"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["validateEnvironment"],
+        "execution_point": "Top of module, before notion client creation",
+        "error_handling": "Throw ConfigurationError with missing variable names"
+      },
+      "implementation_notes": "This is the highest priority task as it prevents silent failures and provides immediate feedback on configuration issues."
+    },
+    {
+      "task_id": "TASK-002",
+      "task_order_number": 2,
+      "title": "Add comprehensive custom error types",
+      "description": "Create custom error classes for different failure scenarios (API errors, validation errors, configuration errors) to improve error handling, debugging, and error recovery logic throughout the codebase.",
+      "category": "code_quality",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "requirements_mapping": ["NFR-006"],
+      "dependencies": [],
+      "acceptance_criteria": [
+        "NotionAPIError class extends Error with API-specific context",
+        "ValidationError class extends Error for input validation failures",
+        "ConfigurationError class extends Error for environment/config issues",
+        "Each error class includes helpful context (operation, parameters, original error)",
+        "Error classes are used consistently throughout codebase"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_classes": ["NotionAPIError", "ValidationError", "ConfigurationError"],
+        "patterns": ["Error subclassing with custom properties"],
+        "properties_to_add": ["errorCode", "context", "originalError"]
+      },
+      "implementation_notes": "Implement before other tasks to enable better error handling in subsequent implementations."
+    },
+    {
+      "task_id": "TASK-003",
+      "task_order_number": 3,
+      "title": "Add input validation for task creation",
+      "description": "Implement validation for createTask function inputs before making API calls. Validate title is non-empty, check parameter types, and enforce any business rules for task data.",
+      "category": "reliability",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "requirements_mapping": ["NFR-007"],
+      "dependencies": ["TASK-002"],
+      "acceptance_criteria": [
+        "Validate title parameter is string and non-empty",
+        "Validate title length (max 2000 characters per Notion limits)",
+        "Validate assignedTo is string if provided",
+        "Validate notes is string if provided",
+        "Throw ValidationError with specific field and reason for failures",
+        "Validation executes before API call"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["validateTaskInput"],
+        "validation_rules": [
+          "title: required, string, 1-2000 chars",
+          "assignedTo: optional, string",
+          "notes: optional, string, max 2000 chars"
+        ]
+      },
+      "implementation_notes": "Use ValidationError from TASK-002 for consistent error handling."
+    },
+    {
+      "task_id": "TASK-004",
+      "task_order_number": 4,
+      "title": "Add input validation for task updates",
+      "description": "Implement validation for updateTask function inputs including page ID format validation and status value validation.",
+      "category": "reliability",
+      "priority": "high",
+      "estimated_complexity": "low",
+      "requirements_mapping": ["NFR-007"],
+      "dependencies": ["TASK-002"],
+      "acceptance_criteria": [
+        "Validate pageId is valid UUID format",
+        "Validate status is one of allowed values",
+        "Validate notes is string if provided",
+        "Throw ValidationError for invalid inputs",
+        "Validation executes before API call"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["validateUpdateInput"],
+        "validation_rules": [
+          "pageId: required, valid UUID v4 format",
+          "status: required, string, valid status value",
+          "notes: optional, string, max 2000 chars"
+        ]
+      },
+      "implementation_notes": "Status values should match Notion database status property configuration."
+    },
+    {
+      "task_id": "TASK-005",
+      "task_order_number": 5,
+      "title": "Add retry logic with exponential backoff",
+      "description": "Implement retry wrapper for API calls to handle transient failures. Use exponential backoff strategy with configurable retry attempts. Distinguish between retryable and non-retryable errors.",
+      "category": "reliability",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["NFR-003"],
+      "dependencies": ["TASK-002"],
+      "acceptance_criteria": [
+        "Retry failed API calls up to 3 times (configurable)",
+        "Use exponential backoff: 1s, 2s, 4s between retries",
+        "Only retry on transient errors (network, timeout, 500-series)",
+        "Do not retry on permanent errors (401, 403, 404, 400)",
+        "Log each retry attempt with context",
+        "Throw appropriate error after max retries exceeded"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["withRetry"],
+        "patterns": ["Higher-order function wrapper for async operations"],
+        "configuration": {
+          "max_retries": 3,
+          "initial_delay_ms": 1000,
+          "backoff_multiplier": 2
+        }
+      },
+      "implementation_notes": "Apply withRetry wrapper to all Notion API calls (createTask, updateTask, future query operations)."
+    },
+    {
+      "task_id": "TASK-006",
+      "task_order_number": 6,
+      "title": "Add task retrieval functionality",
+      "description": "Implement functions to query and retrieve tasks from Notion database. Support retrieving all tasks, single task by ID, and paginated results.",
+      "category": "feature_development",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["FR-003", "FR-004"],
+      "dependencies": ["TASK-002", "TASK-005"],
+      "acceptance_criteria": [
+        "getTasks() function retrieves all tasks from database",
+        "getTaskById(pageId) function retrieves single task",
+        "Handle pagination for large result sets (>100 tasks)",
+        "Return structured task data with all properties",
+        "Handle API errors using NotionAPIError",
+        "Apply retry logic to API calls"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "api_endpoints": [
+          "notion.databases.query",
+          "notion.pages.retrieve"
+        ],
+        "new_functions": ["getTasks", "getTaskById"],
+        "response_processing": "Parse Notion API response format into simplified task objects"
+      },
+      "implementation_notes": "This is a critical foundation task that unblocks multiple filtering and query features."
+    },
+    {
+      "task_id": "TASK-007",
+      "task_order_number": 7,
+      "title": "Add database schema validation",
+      "description": "Implement validation to verify Notion database has required properties with correct types. This ensures the database structure matches what the code expects.",
+      "category": "reliability",
+      "priority": "high",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["NFR-008", "AMB-003"],
+      "dependencies": ["TASK-002", "TASK-005"],
+      "acceptance_criteria": [
+        "Retrieve database schema using notion.databases.retrieve",
+        "Validate presence of required properties: Task, Assigned To, Status, Notes, ID",
+        "Validate property types match expectations (title, people, status, rich_text, number)",
+        "Throw ConfigurationError if schema mismatch detected",
+        "Provide detailed error message indicating missing/incorrect properties",
+        "Can be called as health check function"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "api_endpoints": ["notion.databases.retrieve"],
+        "new_functions": ["validateDatabaseSchema"],
+        "required_schema": {
+          "Task": "title",
+          "Assigned To": "people",
+          "Status": "status",
+          "Notes": "rich_text",
+          "ID": "number"
+        }
+      },
+      "implementation_notes": "Should be called during initialization or as explicit health check. Critical for preventing runtime errors."
+    },
+    {
+      "task_id": "TASK-008",
+      "task_order_number": 8,
+      "title": "Add task filtering by status",
+      "description": "Implement filtering capability to retrieve tasks based on their status value (To-do, In Progress, Done, etc.). Uses Notion database query filters.",
+      "category": "feature_development",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["FR-005"],
+      "dependencies": ["TASK-006"],
+      "acceptance_criteria": [
+        "getTasksByStatus(status) function filters by status",
+        "Supports all valid status values in database",
+        "Returns empty array if no matches found",
+        "Handles pagination for large filtered result sets",
+        "Applies retry logic and error handling"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "api_endpoints": ["notion.databases.query with filter parameter"],
+        "new_functions": ["getTasksByStatus"],
+        "filter_structure": {
+          "property": "Status",
+          "status": {
+            "equals": "<status_value>"
+          }
+        }
+      },
+      "implementation_notes": "Requires TASK-006 completion for base query functionality."
+    },
+    {
+      "task_id": "TASK-009",
+      "task_order_number": 9,
+      "title": "Add task filtering by assignee",
+      "description": "Implement filtering capability to retrieve tasks assigned to specific people. Should support filtering by person and retrieving unassigned tasks.",
+      "category": "feature_development",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["FR-006"],
+      "dependencies": ["TASK-006"],
+      "acceptance_criteria": [
+        "getTasksByAssignee(personName) function filters by assignee",
+        "getUnassignedTasks() function retrieves tasks with no assignee",
+        "Handles Notion people property format correctly",
+        "Returns empty array if no matches found",
+        "Applies retry logic and error handling"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "api_endpoints": ["notion.databases.query with filter parameter"],
+        "new_functions": ["getTasksByAssignee", "getUnassignedTasks"],
+        "filter_structure": {
+          "property": "Assigned To",
+          "people": {
+            "contains": "<person_id>"
+          }
+        }
+      },
+      "implementation_notes": "Note that current implementation sets people to empty array, so filtering may need refinement based on actual usage."
+    },
+    {
+      "task_id": "TASK-010",
+      "task_order_number": 10,
+      "title": "Add task filtering by date range",
+      "description": "Implement filtering capability to retrieve tasks based on creation date, last edited date, or custom date properties.",
+      "category": "feature_development",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["FR-007"],
+      "dependencies": ["TASK-006"],
+      "acceptance_criteria": [
+        "getTasksByDateRange(startDate, endDate, dateProperty) function filters by date",
+        "Supports filtering by created_time, last_edited_time, or custom date properties",
+        "Validates date parameters are valid Date objects or ISO strings",
+        "Returns tasks within inclusive date range",
+        "Applies retry logic and error handling"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "api_endpoints": ["notion.databases.query with filter parameter"],
+        "new_functions": ["getTasksByDateRange"],
+        "filter_structure": {
+          "timestamp": "created_time",
+          "created_time": {
+            "on_or_after": "<start_date>",
+            "on_or_before": "<end_date>"
+          }
+        }
+      },
+      "implementation_notes": "Consider adding date validation as part of TASK-003/TASK-004 validation enhancements."
+    },
+    {
+      "task_id": "TASK-011",
+      "task_order_number": 11,
+      "title": "Add task archiving functionality",
+      "description": "Implement function to archive tasks in Notion. Notion doesn't support true deletion, but allows archiving pages which removes them from default queries.",
+      "category": "feature_development",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "requirements_mapping": ["FR-008"],
+      "dependencies": ["TASK-002", "TASK-004", "TASK-005"],
+      "acceptance_criteria": [
+        "archiveTask(pageId) function archives a task by page ID",
+        "Archived tasks are no longer visible in default database queries",
+        "Validates pageId before making API call",
+        "Operation can be reversed by setting archived to false",
+        "Logs operation success/failure appropriately",
+        "Applies retry logic and error handling"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "api_endpoints": ["notion.pages.update with archived: true"],
+        "new_functions": ["archiveTask", "unarchiveTask (optional)"],
+        "api_payload": {
+          "archived": true
+        }
+      },
+      "implementation_notes": "Simple implementation but useful for task lifecycle management."
+    },
+    {
+      "task_id": "TASK-012",
+      "task_order_number": 12,
+      "title": "Add rate limit handling",
+      "description": "Implement rate limit detection and handling to prevent API quota exhaustion. Detect 429 responses from Notion API and implement appropriate backoff strategy.",
+      "category": "reliability",
+      "priority": "medium",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["NFR-004", "AMB-001"],
+      "dependencies": ["TASK-005"],
+      "acceptance_criteria": [
+        "Detect 429 Too Many Requests responses from Notion API",
+        "Extract retry-after header if present",
+        "Implement exponential backoff with max wait time (60s)",
+        "Log rate limit events with timestamp and retry delay",
+        "Resume operations after cooldown period",
+        "Integrate with existing retry logic from TASK-005"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "error_codes": ["429"],
+        "new_functions": ["handleRateLimit"],
+        "response_headers": ["retry-after"],
+        "integration_point": "Enhance withRetry function from TASK-005"
+      },
+      "implementation_notes": "Requires TASK-005 retry logic as foundation. Should respect retry-after header from Notion API."
+    },
+    {
+      "task_id": "TASK-013",
+      "task_order_number": 13,
+      "title": "Add batch task creation operations",
+      "description": "Implement function to create multiple tasks in a single operation for efficiency. Handle partial failures gracefully and return results for each task.",
+      "category": "feature_development",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["FR-009", "AMB-002"],
+      "dependencies": ["TASK-003", "TASK-005"],
+      "acceptance_criteria": [
+        "createTasksBatch(tasks[]) function creates multiple tasks",
+        "Each task in array validated before processing",
+        "Operations execute in parallel using Promise.allSettled",
+        "Return array of results indicating success/failure for each task",
+        "Handle partial failures without stopping entire batch",
+        "Apply retry logic to each individual operation",
+        "Log batch summary (total, successful, failed)"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["createTasksBatch"],
+        "patterns": ["Promise.allSettled for parallel operations with failure isolation"],
+        "input_format": "Array of task objects {title, assignedTo, notes}",
+        "return_format": "Array of {success, taskId, error} objects"
+      },
+      "implementation_notes": "Consider batch size limits and memory constraints for very large batches."
+    },
+    {
+      "task_id": "TASK-014",
+      "task_order_number": 14,
+      "title": "Add batch task update operations",
+      "description": "Implement function to update multiple tasks in a single operation. Support updating status and notes for multiple tasks efficiently.",
+      "category": "feature_development",
+      "priority": "low",
+      "estimated_complexity": "medium",
+      "requirements_mapping": ["FR-010", "AMB-002"],
+      "dependencies": ["TASK-004", "TASK-005"],
+      "acceptance_criteria": [
+        "updateTasksBatch(updates[]) function updates multiple tasks",
+        "Each update validated before processing",
+        "Operations execute in parallel using Promise.allSettled",
+        "Return array of results for each update operation",
+        "Handle partial failures gracefully",
+        "Apply retry logic to each operation",
+        "Log batch summary statistics"
+      ],
+      "technical_details": {
+        "files_to_modify": ["index.js"],
+        "new_functions": ["updateTasksBatch"],
+        "patterns": ["Promise.allSettled for parallel updates"],
+        "input_format": "Array of update objects {pageId, status, notes}",
+        "return_format": "Array of {success, pageId, error} objects"
+      },
+      "implementation_notes": "Mirror createTasksBatch implementation pattern for consistency."
+    },
+    {
+      "task_id": "TASK-015",
+      "task_order_number": 15,
+      "title": "Enhance documentation with comprehensive usage guide",
+      "description": "Create comprehensive documentation including setup instructions, API reference, usage examples for all functions, troubleshooting guide, and best practices.",
+      "category": "documentation",
+      "priority": "medium",
+      "estimated_complexity": "low",
+      "requirements_mapping": ["NFR-009"],
+      "dependencies": ["TASK-006", "TASK-008", "TASK-009", "TASK-011"],
+      "acceptance_criteria": [
+        "README includes installation instructions",
+        "README documents all environment variables",
+        "README includes Notion database setup guide",
+        "All functions documented with parameters, return values, examples",
+        "Error handling scenarios documented",
+        "Troubleshooting section for common issues",
+        "Code examples for all major use cases"
+      ],
+      "technical_details": {
+        "files_to_modify": ["README.md"],
+        "sections_to_add": [
+          "Installation",
+          "Configuration",
+          "Notion Database Setup",
+          "API Reference",
+          "Usage Examples",
+          "Error Handling",
+          "Troubleshooting",
+          "Best Practices"
+        ]
+      },
+      "implementation_notes": "Should be completed after all major features are implemented to ensure accuracy and completeness."
+    }
+  ],
+  "task_summary": {
+    "by_priority": {
+      "critical": 1,
+      "high": 6,
+      "medium": 5,
+      "low": 3
+    },
+    "by_category": {
+      "reliability": 7,
+      "feature_development": 6,
+      "code_quality": 1,
+      "documentation": 1
+    },
+    "by_complexity": {
+      "low": 6,
+      "medium": 9,
+      "high": 0
+    }
+  }
+}

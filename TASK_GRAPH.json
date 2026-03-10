@@ -1,0 +1,344 @@
+{
+  "graph_metadata": {
+    "project": "notion_task_tracker_agent",
+    "generated_date": "2026-03-10",
+    "analyst": "Business Requirements Analyst Agent",
+    "total_nodes": 15,
+    "total_edges": 16,
+    "critical_path_length": 4,
+    "max_parallelization": 6
+  },
+  "nodes": [
+    {
+      "task_id": "TASK-001",
+      "task_order_number": 1,
+      "title": "Add environment variable validation at startup",
+      "depends_on": [],
+      "blocks": [],
+      "can_run_parallel_with": ["TASK-002", "TASK-005"]
+    },
+    {
+      "task_id": "TASK-002",
+      "task_order_number": 2,
+      "title": "Add comprehensive custom error types",
+      "depends_on": [],
+      "blocks": ["TASK-003", "TASK-004", "TASK-005", "TASK-006", "TASK-007", "TASK-011"],
+      "can_run_parallel_with": ["TASK-001"]
+    },
+    {
+      "task_id": "TASK-003",
+      "task_order_number": 3,
+      "title": "Add input validation for task creation",
+      "depends_on": ["TASK-002"],
+      "blocks": ["TASK-013"],
+      "can_run_parallel_with": ["TASK-004", "TASK-005", "TASK-006", "TASK-007"]
+    },
+    {
+      "task_id": "TASK-004",
+      "task_order_number": 4,
+      "title": "Add input validation for task updates",
+      "depends_on": ["TASK-002"],
+      "blocks": ["TASK-014"],
+      "can_run_parallel_with": ["TASK-003", "TASK-005", "TASK-006", "TASK-007"]
+    },
+    {
+      "task_id": "TASK-005",
+      "task_order_number": 5,
+      "title": "Add retry logic with exponential backoff",
+      "depends_on": ["TASK-002"],
+      "blocks": ["TASK-006", "TASK-007", "TASK-012", "TASK-013", "TASK-014"],
+      "can_run_parallel_with": ["TASK-001", "TASK-003", "TASK-004"]
+    },
+    {
+      "task_id": "TASK-006",
+      "task_order_number": 6,
+      "title": "Add task retrieval functionality",
+      "depends_on": ["TASK-002", "TASK-005"],
+      "blocks": ["TASK-008", "TASK-009", "TASK-010", "TASK-013", "TASK-015"],
+      "can_run_parallel_with": ["TASK-007"]
+    },
+    {
+      "task_id": "TASK-007",
+      "task_order_number": 7,
+      "title": "Add database schema validation",
+      "depends_on": ["TASK-002", "TASK-005"],
+      "blocks": [],
+      "can_run_parallel_with": ["TASK-006"]
+    },
+    {
+      "task_id": "TASK-008",
+      "task_order_number": 8,
+      "title": "Add task filtering by status",
+      "depends_on": ["TASK-006"],
+      "blocks": ["TASK-015"],
+      "can_run_parallel_with": ["TASK-009", "TASK-010"]
+    },
+    {
+      "task_id": "TASK-009",
+      "task_order_number": 9,
+      "title": "Add task filtering by assignee",
+      "depends_on": ["TASK-006"],
+      "blocks": ["TASK-015"],
+      "can_run_parallel_with": ["TASK-008", "TASK-010"]
+    },
+    {
+      "task_id": "TASK-010",
+      "task_order_number": 10,
+      "title": "Add task filtering by date range",
+      "depends_on": ["TASK-006"],
+      "blocks": ["TASK-015"],
+      "can_run_parallel_with": ["TASK-008", "TASK-009"]
+    },
+    {
+      "task_id": "TASK-011",
+      "task_order_number": 11,
+      "title": "Add task archiving functionality",
+      "depends_on": ["TASK-002", "TASK-004", "TASK-005"],
+      "blocks": ["TASK-015"],
+      "can_run_parallel_with": ["TASK-006", "TASK-007"]
+    },
+    {
+      "task_id": "TASK-012",
+      "task_order_number": 12,
+      "title": "Add rate limit handling",
+      "depends_on": ["TASK-005"],
+      "blocks": [],
+      "can_run_parallel_with": ["TASK-006", "TASK-007", "TASK-011"]
+    },
+    {
+      "task_id": "TASK-013",
+      "task_order_number": 13,
+      "title": "Add batch task creation operations",
+      "depends_on": ["TASK-003", "TASK-005"],
+      "blocks": [],
+      "can_run_parallel_with": ["TASK-014"]
+    },
+    {
+      "task_id": "TASK-014",
+      "task_order_number": 14,
+      "title": "Add batch task update operations",
+      "depends_on": ["TASK-004", "TASK-005"],
+      "blocks": [],
+      "can_run_parallel_with": ["TASK-013"]
+    },
+    {
+      "task_id": "TASK-015",
+      "task_order_number": 15,
+      "title": "Enhance documentation with comprehensive usage guide",
+      "depends_on": ["TASK-006", "TASK-008", "TASK-009", "TASK-011"],
+      "blocks": [],
+      "can_run_parallel_with": []
+    }
+  ],
+  "edges": [
+    {
+      "from": "TASK-002",
+      "to": "TASK-003",
+      "relationship": "prerequisite",
+      "reason": "Custom error types needed for validation error handling"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-004",
+      "relationship": "prerequisite",
+      "reason": "Custom error types needed for validation error handling"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-005",
+      "relationship": "prerequisite",
+      "reason": "Custom error types needed for retry logic error handling"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-006",
+      "relationship": "prerequisite",
+      "reason": "Custom error types needed for API error handling"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-007",
+      "relationship": "prerequisite",
+      "reason": "Custom error types needed for schema validation errors"
+    },
+    {
+      "from": "TASK-002",
+      "to": "TASK-011",
+      "relationship": "prerequisite",
+      "reason": "Custom error types needed for API error handling"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-006",
+      "relationship": "prerequisite",
+      "reason": "Retry logic needed for reliable task retrieval"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-007",
+      "relationship": "prerequisite",
+      "reason": "Retry logic needed for reliable schema validation"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-012",
+      "relationship": "prerequisite",
+      "reason": "Rate limiting builds on retry logic foundation"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-011",
+      "relationship": "prerequisite",
+      "reason": "Retry logic needed for reliable archiving"
+    },
+    {
+      "from": "TASK-003",
+      "to": "TASK-013",
+      "relationship": "prerequisite",
+      "reason": "Batch creation needs input validation for each task"
+    },
+    {
+      "from": "TASK-004",
+      "to": "TASK-011",
+      "relationship": "prerequisite",
+      "reason": "Archive operation needs update input validation"
+    },
+    {
+      "from": "TASK-004",
+      "to": "TASK-014",
+      "relationship": "prerequisite",
+      "reason": "Batch updates need update input validation"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-013",
+      "relationship": "prerequisite",
+      "reason": "Batch operations need retry logic for reliability"
+    },
+    {
+      "from": "TASK-005",
+      "to": "TASK-014",
+      "relationship": "prerequisite",
+      "reason": "Batch operations need retry logic for reliability"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-008",
+      "relationship": "prerequisite",
+      "reason": "Status filtering requires base task retrieval"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-009",
+      "relationship": "prerequisite",
+      "reason": "Assignee filtering requires base task retrieval"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-010",
+      "relationship": "prerequisite",
+      "reason": "Date filtering requires base task retrieval"
+    },
+    {
+      "from": "TASK-006",
+      "to": "TASK-015",
+      "relationship": "prerequisite",
+      "reason": "Documentation needs retrieval features to document"
+    },
+    {
+      "from": "TASK-008",
+      "to": "TASK-015",
+      "relationship": "prerequisite",
+      "reason": "Documentation needs filtering features to document"
+    },
+    {
+      "from": "TASK-009",
+      "to": "TASK-015",
+      "relationship": "prerequisite",
+      "reason": "Documentation needs filtering features to document"
+    },
+    {
+      "from": "TASK-011",
+      "to": "TASK-015",
+      "relationship": "prerequisite",
+      "reason": "Documentation needs archiving feature to document"
+    }
+  ],
+  "parallel_execution_groups": [
+    {
+      "group_id": "GROUP-1",
+      "phase": 1,
+      "description": "Foundation - Independent setup tasks",
+      "tasks": ["TASK-001", "TASK-002"],
+      "can_execute_parallel": true,
+      "dependencies": [],
+      "estimated_duration_units": 2
+    },
+    {
+      "group_id": "GROUP-2",
+      "phase": 2,
+      "description": "Validation and reliability layer",
+      "tasks": ["TASK-003", "TASK-004", "TASK-005"],
+      "can_execute_parallel": true,
+      "requires_completion_of": ["TASK-002"],
+      "estimated_duration_units": 3
+    },
+    {
+      "group_id": "GROUP-3",
+      "phase": 3,
+      "description": "Core retrieval and schema validation",
+      "tasks": ["TASK-006", "TASK-007"],
+      "can_execute_parallel": true,
+      "requires_completion_of": ["TASK-002", "TASK-005"],
+      "estimated_duration_units": 2
+    },
+    {
+      "group_id": "GROUP-4",
+      "phase": 4,
+      "description": "Filtering capabilities and archiving",
+      "tasks": ["TASK-008", "TASK-009", "TASK-010", "TASK-011", "TASK-012"],
+      "can_execute_parallel": true,
+      "requires_completion_of": ["TASK-006"],
+      "note": "TASK-012 requires TASK-005, TASK-011 requires TASK-004",
+      "estimated_duration_units": 3
+    },
+    {
+      "group_id": "GROUP-5",
+      "phase": 5,
+      "description": "Batch operations",
+      "tasks": ["TASK-013", "TASK-014"],
+      "can_execute_parallel": true,
+      "requires_completion_of": ["TASK-003", "TASK-004", "TASK-005"],
+      "estimated_duration_units": 2
+    },
+    {
+      "group_id": "GROUP-6",
+      "phase": 6,
+      "description": "Documentation finalization",
+      "tasks": ["TASK-015"],
+      "can_execute_parallel": false,
+      "requires_completion_of": ["TASK-006", "TASK-008", "TASK-009", "TASK-011"],
+      "estimated_duration_units": 1
+    }
+  ],
+  "critical_paths": [
+    {
+      "path_id": "CP-1",
+      "description": "Main feature development path",
+      "sequence": ["TASK-002", "TASK-005", "TASK-006", "TASK-008", "TASK-015"],
+      "total_complexity_units": 9
+    },
+    {
+      "path_id": "CP-2",
+      "description": "Validation and reliability path",
+      "sequence": ["TASK-002", "TASK-003", "TASK-013"],
+      "total_complexity_units": 6
+    }
+  ],
+  "independent_tasks": [
+    {
+      "task_id": "TASK-001",
+      "note": "Can be implemented anytime, no dependencies"
+    }
+  ]
+}
