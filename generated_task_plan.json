@@ -1,0 +1,638 @@
+{
+  "tasks": [
+    {
+      "task_name": "Implement RAG-based task generation system",
+      "task_type": "implementation",
+      "description": "Build a strict, DB-aligned task generation system that embeds RAG chunks directly into agent prompts. This system must generate exhaustive, implementation-ready task lists based strictly on provided project_document requirements and context.\n\nThe implementation should construct prompts that enforce strict requirement sourcing, ensuring every generated task is directly justified by requirement snippets from the RAG chunks. The system must prevent agents from inventing requirements, constraints, or success criteria not explicitly present in the project_document content.\n\nKey components include: default objective definition, high-level query handling, RAG chunk embedding, and strict schema enforcement for all generated tasks.",
+      "parameters": {
+        "input_format": "RAG context with chunks containing document_id, chunk_id, requirement_type, similarity, text",
+        "output_format": "JSON task list conforming to main.task DB schema",
+        "schema_enforcement": "strict",
+        "requirement_source_validation": "mandatory"
+      },
+      "status": "PENDING",
+      "priority": 1,
+      "task_notes": "Critical foundation for the entire task generation pipeline. Must ensure RAG chunks are properly embedded and that the agent prompt enforces strict adherence to provided requirements. Risk: agents may still hallucinate requirements if prompt is not sufficiently strict.",
+      "task_data": {
+        "requirement_snippets": [
+          "Build strict, DB-aligned task generation instructions and embed RAG chunks directly into a new agent prompt",
+          "Generate an exhaustive, implementation-ready task list for this project based strictly on the provided project_document requirements and context.",
+          "Every task MUST be directly justified by one or more requirement snippets taken from the project_document content represented in the RAG chunks.",
+          "Do NOT invent requirements, constraints, or success criteria that are not explicitly present or clearly implied by that content."
+        ],
+        "requirement_type": "functional",
+        "constraints": [
+          "Must embed RAG chunks directly into agent prompt",
+          "Must align strictly with DB schema (main.task)",
+          "Must prevent requirement invention or hallucination",
+          "Must enforce requirement snippet justification for every task"
+        ],
+        "success_criteria": [
+          "System generates task lists with all tasks justified by RAG chunk content",
+          "Generated tasks conform to main.task DB schema",
+          "Agent prompt successfully embeds RAG chunks",
+          "No tasks are generated without explicit requirement source"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37152, 37156, 37158, 37159],
+        "dependencies": []
+      }
+    },
+    {
+      "task_name": "Implement strict task schema validation with requirement traceability",
+      "task_type": "implementation",
+      "description": "Implement comprehensive task schema validation that mirrors the DB main.task table and enforces strict requirement traceability. This validation layer ensures every task object contains all required fields with proper types and data structures.\n\nThe schema must capture: task_name, task_type, description, parameters (object), status, priority, task_notes, and a rich task_data object containing requirement_snippets, requirement_type, constraints, success_criteria, project_id, document_ids, chunk_ids, and dependencies.\n\nThis component is critical for maintaining data integrity and ensuring that all generated tasks can be traced back to their source requirements in the project_document.",
+      "parameters": {
+        "validation_level": "strict",
+        "required_fields": [
+          "task_name",
+          "task_type",
+          "description",
+          "parameters",
+          "status",
+          "priority",
+          "task_notes",
+          "task_data"
+        ],
+        "task_data_required_fields": [
+          "requirement_snippets",
+          "requirement_type",
+          "constraints",
+          "success_criteria",
+          "project_id",
+          "document_ids",
+          "chunk_ids",
+          "dependencies"
+        ]
+      },
+      "status": "PENDING",
+      "priority": 1,
+      "task_notes": "Must enforce schema at both API and DB layers. Consider using Pydantic models or similar validation frameworks. Trade-off: strict validation may initially slow down development but ensures data quality and prevents schema drift.",
+      "task_data": {
+        "requirement_snippets": [
+          "Each task MUST be returned as a JSON object with: task_name, task_type, description, parameters, status, priority",
+          "task_data: object, used to capture rich, requirement-level metadata: requirement_snippets, requirement_type, constraints, success_criteria, project_id, document_ids, chunk_ids, dependencies",
+          "constraints: array of strings; explicit constraints extracted from the requirement text",
+          "success_criteria: array of strings; explicit success / acceptance criteria sentences",
+          "dependencies: array of strings; each entry is the task_name of another task that must be completed first"
+        ],
+        "requirement_type": "functional",
+        "constraints": [
+          "Task schema MUST mirror DB main.task structure",
+          "All fields must have correct types (string, integer, object, array)",
+          "task_data must contain all specified metadata fields",
+          "document_ids and chunk_ids must be arrays of integers",
+          "dependencies must be array of strings referencing task_name values"
+        ],
+        "success_criteria": [
+          "All generated tasks pass schema validation",
+          "Each task contains valid requirement traceability metadata",
+          "Schema validation prevents invalid task objects from being stored",
+          "All array and object fields conform to specified structure"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37158, 37159, 37160],
+        "dependencies": []
+      }
+    },
+    {
+      "task_name": "Implement constraint and success criteria extraction engine",
+      "task_type": "implementation",
+      "description": "Build an extraction engine that automatically identifies and extracts constraints and success criteria from requirement text. This engine must handle chunks marked with has_constraints=true and has_success_criteria=true flags.\n\nThe engine should parse requirement text to identify:\n- Explicit constraint language (e.g. 'must', 'shall', 'required', 'cannot')\n- Success/acceptance criteria indicators (e.g. 'acceptance criteria', 'must pass', 'validate', 'verify')\n- Priority indicators (e.g. 'critical', 'high', 'low')\n\nExtracted constraints and success criteria must be preserved as verbatim sentences or phrases and attached to the appropriate task fields in the task_data object.",
+      "parameters": {
+        "extraction_method": "NLP-based pattern matching",
+        "constraint_indicators": [
+          "must",
+          "shall",
+          "required",
+          "cannot",
+          "prohibited"
+        ],
+        "success_criteria_indicators": [
+          "acceptance criteria",
+          "must pass",
+          "validate",
+          "verify",
+          "ensure"
+        ],
+        "priority_indicators": {
+          "1": ["critical", "urgent", "highest"],
+          "2": ["high", "important"],
+          "3": ["medium", "normal"],
+          "4": ["low"],
+          "5": ["lowest", "optional"]
+        }
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Consider using spaCy or similar NLP libraries for sophisticated extraction. Risk: overly broad pattern matching may extract false positives. Need to balance precision and recall. Open question: should we use LLM-based extraction for better accuracy?",
+      "task_data": {
+        "requirement_snippets": [
+          "If a chunk is marked has_constraints=true, you MUST capture those constraints explicitly in the task.",
+          "If a chunk is marked has_success_criteria=true, you MUST extract those success / acceptance criteria sentences and attach them to the relevant tasks.",
+          "When a requirement contains acceptance or validation language (e.g. 'must pass', 'validate', 'verify', 'acceptance criteria'), treat those as success_criteria for the task and preserve the wording as much as possible.",
+          "constraints: array of strings; explicit constraints extracted from the requirement text",
+          "success_criteria: array of strings; explicit success / acceptance criteria sentences",
+          "Derive this from priority indicators in the text (e.g. 'critical', 'high', 'low') when present."
+        ],
+        "requirement_type": "functional",
+        "constraints": [
+          "Must extract constraints from chunks with has_constraints=true",
+          "Must extract success criteria from chunks with has_success_criteria=true",
+          "Must preserve original wording of constraints and criteria",
+          "Must identify and extract priority indicators"
+        ],
+        "success_criteria": [
+          "Engine correctly identifies constraints in marked chunks",
+          "Engine correctly identifies success criteria in marked chunks",
+          "Extracted text preserves verbatim wording from source",
+          "Priority derivation works correctly for all indicator keywords"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37156, 37158, 37159],
+        "dependencies": [
+          "Implement RAG-based task generation system"
+        ]
+      }
+    },
+    {
+      "task_name": "Update Cursor agent activity serialization to use RAG context",
+      "task_type": "implementation",
+      "description": "Refactor the serialize_document_cursor_activity() function in temporal/activities/api_activities.py to accept RAG context instead of full documents. This optimization reduces payload size by sending only relevant chunks to the Cursor agent instead of entire documents.\n\nThe updated function should:\n- Accept RAG context as input parameter\n- Extract and send only relevant chunks with enriched metadata\n- Include document_id, chunk_id, requirement_type, similarity scores, and constraint/success_criteria flags\n- Significantly reduce API payload size while maintaining all necessary context for task generation\n\nThis change improves performance and reduces costs associated with agent invocations.",
+      "parameters": {
+        "file_path": "temporal/activities/api_activities.py",
+        "function_name": "serialize_document_cursor_activity",
+        "input_change": "full document -> RAG context",
+        "output_optimization": "relevant chunks only with metadata"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "This is a breaking change to the function signature. Ensure all callers of serialize_document_cursor_activity are updated to pass RAG context instead of full documents. Risk: may need to update multiple call sites. Consider adding deprecation warnings if maintaining backward compatibility.",
+      "task_data": {
+        "requirement_snippets": [
+          "Update: serialize_document_cursor_activity()",
+          "Accept RAG context instead of full document",
+          "Send only relevant chunks",
+          "Include enriched metadata",
+          "Reduce payload size significantly"
+        ],
+        "requirement_type": "non-functional",
+        "constraints": [
+          "Must accept RAG context as input instead of full document",
+          "Must send only relevant chunks (not entire documents)",
+          "Must include enriched metadata (document_id, chunk_id, requirement_type, similarity, flags)",
+          "Must maintain backward compatibility or update all callers"
+        ],
+        "success_criteria": [
+          "Function accepts RAG context parameter",
+          "Payload size is significantly reduced compared to full document serialization",
+          "All relevant chunks are included with complete metadata",
+          "All callers are updated to pass RAG context"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37366],
+        "dependencies": [
+          "Implement RAG-based task generation system"
+        ]
+      }
+    },
+    {
+      "task_name": "Define project team structure and core roles",
+      "task_type": "design",
+      "description": "Establish the core team structure for the project consisting of 4-5 people with clearly defined roles and responsibilities. The team structure includes: Product Manager (1), Technical Lead (1), Backend/CLI Developer (2), and Quality Assurance (1).\n\nThis task involves documenting the organizational structure, defining clear responsibilities for each role, and establishing the deliverables expected from each team member. The structure is critical for project coordination and accountability.\n\nThe team structure appears in multiple requirement chunks with identical content, indicating this is a foundational organizational requirement that must be implemented consistently across the project.",
+      "parameters": {
+        "team_size": "4-5 people",
+        "roles": [
+          "Product Manager (1)",
+          "Technical Lead (1)",
+          "Backend/CLI Developer (2)",
+          "Quality Assurance (1)"
+        ],
+        "documentation_format": "hierarchical structure with role definitions"
+      },
+      "status": "PENDING",
+      "priority": 3,
+      "task_notes": "This appears to be a foundational organizational requirement. The same team structure is repeated in three separate chunks (202, 183, 164), suggesting high importance. Consider creating a RACI matrix or similar responsibility assignment framework.",
+      "task_data": {
+        "requirement_snippets": [
+          "Project Team (4-5 people)\n├── Product Manager (1)\n├── Technical Lead (1)\n├── Backend/CLI Developer (2)\n└── Quality Assurance (1)"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Team must consist of 4-5 people",
+          "Must include exactly 1 Product Manager",
+          "Must include exactly 1 Technical Lead",
+          "Must include 2 Backend/CLI Developers",
+          "Must include 1 Quality Assurance role"
+        ],
+        "success_criteria": [
+          "Team structure is documented and communicated",
+          "All roles are clearly defined with responsibilities",
+          "Team members are assigned to appropriate roles"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [202, 183, 164],
+        "dependencies": []
+      }
+    },
+    {
+      "task_name": "Define and document Product Manager role and deliverables",
+      "task_type": "design",
+      "description": "Document comprehensive responsibilities and MVP deliverables for the Product Manager role. The Product Manager is responsible for defining and prioritizing the feature roadmap, gathering user requirements and feedback, coordinating between stakeholders and the development team, managing project timeline and milestones, ensuring business requirements are met, and creating user documentation and marketing materials.\n\nMVP deliverables that must be produced by the Product Manager include:\n- User stories and acceptance criteria\n- MVP scope definition\n- User testing plan\n- Go-to-market strategy for CLI tool\n\nThis role definition establishes clear accountability for product strategy and user-facing deliverables.",
+      "parameters": {
+        "role": "Product Manager",
+        "count": 1,
+        "deliverable_types": [
+          "user_stories",
+          "acceptance_criteria",
+          "mvp_scope",
+          "testing_plan",
+          "gtm_strategy"
+        ]
+      },
+      "status": "PENDING",
+      "priority": 3,
+      "task_notes": "This is a planning/organizational task rather than technical implementation. Product Manager should be onboarded with these responsibilities clearly communicated. Consider creating templates for each deliverable type to standardize outputs.",
+      "task_data": {
+        "requirement_snippets": [
+          "Product Manager (1)\nResponsibilities:\n- Define and prioritize feature roadmap\n- Gather user requirements and feedback\n- Coordinate between stakeholders and development team\n- Manage project timeline and milestones\n- Ensure business requirements are met\n- User documentation and marketing materials",
+          "MVP Deliverables:\n- User stories and acceptance criteria\n- MVP scope definition\n- User testing plan\n- Go-to-market strategy for CLI tool"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must define feature roadmap prioritization process",
+          "Must establish user feedback collection mechanisms",
+          "Must coordinate between all stakeholders",
+          "Must manage timeline and milestones"
+        ],
+        "success_criteria": [
+          "User stories and acceptance criteria are documented",
+          "MVP scope is clearly defined and approved",
+          "User testing plan is complete and actionable",
+          "Go-to-market strategy for CLI tool is documented"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [202, 183, 164],
+        "dependencies": [
+          "Define project team structure and core roles"
+        ]
+      }
+    },
+    {
+      "task_name": "Define and document Technical Lead role and deliverables",
+      "task_type": "design",
+      "description": "Document comprehensive responsibilities for the Technical Lead role. The Technical Lead is responsible for architecture design and technical decisions, code review and quality standards, implementation of core modules, integration with Notion API, performance and security oversight, and mentoring other developers.\n\nThis role is critical for maintaining technical quality, establishing coding standards, and providing technical direction for the engineering team. The Technical Lead serves as the primary technical decision-maker and quality gatekeeper for the project.",
+      "parameters": {
+        "role": "Technical Lead",
+        "count": 1,
+        "key_responsibilities": [
+          "architecture_design",
+          "code_review",
+          "core_module_implementation",
+          "notion_api_integration",
+          "performance_security_oversight",
+          "developer_mentoring"
+        ]
+      },
+      "status": "PENDING",
+      "priority": 3,
+      "task_notes": "Technical Lead should establish coding standards and architecture patterns early. Consider creating architecture decision records (ADRs) for major technical decisions. The Notion API integration suggests this is a Notion-related tool/CLI project.",
+      "task_data": {
+        "requirement_snippets": [
+          "Technical Lead (1)\nResponsibilities:\n- Architecture design and technical decisions\n- Code review and quality standards\n- Implementation of core modules\n- Integration with Notion API\n- Performance and security oversight\n- Mentoring other developers"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must make architecture design decisions",
+          "Must establish and enforce code quality standards",
+          "Must oversee Notion API integration",
+          "Must ensure performance and security requirements are met",
+          "Must provide mentoring to other developers"
+        ],
+        "success_criteria": [
+          "Architecture design is documented and approved",
+          "Code review process is established and followed",
+          "Core modules are implemented to quality standards",
+          "Notion API integration is functional and secure",
+          "Performance and security standards are defined and met"
+        ],
+        "project_id": 1,
+        "document_ids": [1],
+        "chunk_ids": [202, 183, 164],
+        "dependencies": [
+          "Define project team structure and core roles"
+        ]
+      }
+    },
+    {
+      "task_name": "Implement task instruction prompt builder with RAG chunk integration",
+      "task_type": "implementation",
+      "description": "Build the task_instruction_prompt generation system that constructs detailed, explicit prompts for task generation agents. This prompt builder must embed RAG chunks directly and provide strict instructions about requirement sourcing, schema adherence, and constraint/success criteria enforcement.\n\nThe prompt must clearly communicate to the agent:\n- The primary objective (from task_query or default)\n- Strict requirement source enforcement (no invention)\n- Complete task schema with all required fields\n- Explicit instructions for extracting constraints and success criteria\n- Output format requirements (JSON code block with 'tasks' array)\n\nThis component shapes how the agent interprets requirements and generates tasks, making it critical for ensuring schema compliance and requirement traceability.",
+      "parameters": {
+        "template_format": "f-string with embedded variables",
+        "required_sections": [
+          "PRIMARY OBJECTIVE",
+          "STRICT REQUIREMENT SOURCE",
+          "TASK SCHEMA",
+          "OUTPUT FORMAT"
+        ],
+        "rag_embedding": "direct chunk text injection",
+        "schema_specification": "detailed with examples"
+      },
+      "status": "PENDING",
+      "priority": 1,
+      "task_notes": "The prompt design is critical for agent behavior. Consider A/B testing different prompt formulations to optimize for schema compliance and requirement adherence. Risk: overly verbose prompts may reduce agent performance or increase costs. Trade-off: detailed instructions vs. token efficiency.",
+      "task_data": {
+        "requirement_snippets": [
+          "This block is what the agent should use to shape each task. It is deliberately explicit about how tasks map to the main.task schema and how constraints / success criteria must be enforced.",
+          "task_instruction_prompt = f\"\"\"You are generating a detailed task plan for project_id={project_id or 'UNKNOWN'} based ONLY on the requirements and context provided in the RAG chunks.",
+          "PRIMARY OBJECTIVE:\n- {high_level_query}",
+          "STRICT REQUIREMENT SOURCE:\n- Every task MUST be directly justified by one or more requirement snippets taken from the project_document content represented in the RAG chunks.\n- Do NOT invent requirements, constraints, or success criteria that are not explicitly present or clearly implied by that content."
+        ],
+        "requirement_type": "functional",
+        "constraints": [
+          "Prompt must be deliberately explicit about schema mapping",
+          "Must enforce constraint and success criteria capture",
+          "Must embed RAG chunks directly into prompt",
+          "Must prevent requirement invention through strict instructions"
+        ],
+        "success_criteria": [
+          "Generated prompts successfully guide agents to produce schema-compliant tasks",
+          "Agents do not invent requirements outside of RAG chunks",
+          "Constraints and success criteria are properly extracted and attached",
+          "Output format is consistently valid JSON with 'tasks' array"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37156, 37158],
+        "dependencies": [
+          "Implement RAG-based task generation system"
+        ]
+      }
+    },
+    {
+      "task_name": "Implement priority derivation logic with default fallback",
+      "task_type": "implementation",
+      "description": "Implement logic to derive task priority from requirement text indicators, with a default fallback to priority 3 when no indicators are present. The system must scan requirement text for priority keywords (e.g. 'critical', 'high', 'low') and map them to integer priority values where 1 is highest priority and larger numbers are lower priority.\n\nPriority mapping:\n- Critical/Urgent -> 1\n- High/Important -> 2\n- Medium/Normal/Unspecified -> 3 (default)\n- Low -> 4\n- Lowest/Optional -> 5\n\nThis ensures all tasks have consistent, meaningful priority assignments that can be used for task scheduling and resource allocation.",
+      "parameters": {
+        "default_priority": 3,
+        "priority_scale": "1 (highest) to 5+ (lowest)",
+        "keyword_mapping": {
+          "1": ["critical", "urgent"],
+          "2": ["high", "important"],
+          "3": [],
+          "4": ["low"],
+          "5": ["lowest", "optional"]
+        }
+      },
+      "status": "PENDING",
+      "priority": 3,
+      "task_notes": "Consider case-insensitive matching and handling of compound indicators (e.g. 'high priority' vs 'priority: high'). Open question: should we support numeric priority specifications (e.g. 'P0', 'P1')? Risk: conflicting indicators in same requirement text.",
+      "task_data": {
+        "requirement_snippets": [
+          "priority: integer, where 1 is highest priority and larger numbers are lower priority.",
+          "Derive this from priority indicators in the text (e.g. 'critical', 'high', 'low') when present.",
+          "If no priority indicators are present, default to 3."
+        ],
+        "requirement_type": "constraint",
+        "constraints": [
+          "Must use integer values for priority",
+          "1 is highest priority, larger numbers are lower priority",
+          "Must default to 3 when no indicators present",
+          "Must scan text for priority indicator keywords"
+        ],
+        "success_criteria": [
+          "Priority is correctly derived from indicator keywords",
+          "Default priority of 3 is applied when no indicators found",
+          "All tasks have valid priority integer values",
+          "Priority derivation is consistent across all tasks"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37158, 37159],
+        "dependencies": [
+          "Implement constraint and success criteria extraction engine"
+        ]
+      }
+    },
+    {
+      "task_name": "Implement task dependency resolution and validation",
+      "task_type": "implementation",
+      "description": "Build a dependency resolution system that validates task dependencies and ensures dependency integrity. The dependencies field in each task must reference other tasks by their task_name values, creating a directed acyclic graph (DAG) of task execution order.\n\nThe system must:\n- Validate that all dependency references point to valid task_name values\n- Detect circular dependencies and raise errors\n- Order tasks topologically based on dependencies\n- Ensure tasks marked as dependencies are defined before dependent tasks\n\nThis is critical for execution orchestration and ensuring tasks are completed in the correct order.",
+      "parameters": {
+        "dependency_format": "array of task_name strings",
+        "validation_checks": [
+          "circular_dependency_detection",
+          "invalid_reference_detection",
+          "topological_ordering"
+        ],
+        "error_handling": "raise ValidationError on dependency issues"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Consider using standard graph algorithms (DFS for cycle detection, Kahn's algorithm for topological sort). Risk: complex dependency chains may be difficult to visualize and debug. Consider building a dependency visualization tool.",
+      "task_data": {
+        "requirement_snippets": [
+          "dependencies: array of strings; each entry is the task_name of another task that must be completed first"
+        ],
+        "requirement_type": "functional",
+        "constraints": [
+          "Dependencies must be array of strings",
+          "Each dependency entry must reference a valid task_name",
+          "No circular dependencies allowed",
+          "Dependency graph must be a valid DAG"
+        ],
+        "success_criteria": [
+          "System detects and rejects circular dependencies",
+          "System validates all task_name references in dependencies array",
+          "Tasks can be topologically sorted based on dependencies",
+          "Dependency validation runs before task persistence"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37160],
+        "dependencies": [
+          "Implement strict task schema validation with requirement traceability"
+        ]
+      }
+    },
+    {
+      "task_name": "Implement agent polling and result storage system",
+      "task_type": "implementation",
+      "description": "Build a polling system that monitors Cursor agent execution until completion and stores generated task results in the database. The system must handle long-running agent invocations, track agent status, retrieve results when complete, and persist them to the main.task table with proper schema validation.\n\nThe polling mechanism should:\n- Accept agent_id, task_query, document_id, project_id, db_agent_id, and agent_instance_id parameters\n- Poll agent status at appropriate intervals\n- Handle timeouts and failures gracefully\n- Parse agent response JSON and validate against schema\n- Store validated tasks in database with full traceability metadata\n\nThis component closes the loop between agent invocation and task persistence.",
+      "parameters": {
+        "polling_interval_seconds": 5,
+        "max_polling_duration_seconds": 600,
+        "retry_on_failure": true,
+        "max_retries": 3
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Consider exponential backoff for polling to reduce API load. Risk: long-running agents may timeout. Open question: should we support webhook-based completion notification instead of polling? Trade-off: polling simplicity vs webhook efficiency.",
+      "task_data": {
+        "requirement_snippets": [
+          "Polls until the agent completes and stores results in the database",
+          "Args:\n    rag_context: RAG retrieval results (for logging/context)\n    agent_id: Cursor agent ID\n    task_query: Optional high-level task query text (will be embedded into a richer instruction prompt)\n    document_id: Optional document ID to store results with\n    project_id: Optional project ID to store results with\n    db_agent_id: Optional DB agent_id for traceability in task records\n    agent_instance_id: Optional agent_instance_id used during planning"
+        ],
+        "requirement_type": "non-functional",
+        "constraints": [
+          "Must poll until agent completes",
+          "Must store results in database",
+          "Must accept all specified parameters (agent_id, task_query, document_id, project_id, db_agent_id, agent_instance_id)",
+          "Must provide traceability through db_agent_id and agent_instance_id"
+        ],
+        "success_criteria": [
+          "System successfully polls agent status until completion",
+          "Generated tasks are stored in database with correct schema",
+          "All traceability parameters are captured in task records",
+          "System handles agent failures and timeouts gracefully"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37147],
+        "dependencies": [
+          "Implement RAG-based task generation system",
+          "Implement strict task schema validation with requirement traceability"
+        ]
+      }
+    },
+    {
+      "task_name": "Generate task generation instructions with explicit examples",
+      "task_type": "design",
+      "description": "Create comprehensive task generation instructions that include strict constraints, detailed success criteria, clear acceptance criteria, explicit dependencies, and technical specifications. These instructions serve as the standard template/guidelines that all task generation agents must follow.\n\nThe instructions must be explicit and prescriptive, leaving no ambiguity about how tasks should be structured, what information they must contain, and how they should be validated. This ensures consistency across all task generation operations and reduces variance in agent outputs.",
+      "parameters": {
+        "instruction_components": [
+          "strict_constraints",
+          "detailed_success_criteria",
+          "clear_acceptance_criteria",
+          "explicit_dependencies",
+          "technical_specifications"
+        ],
+        "format": "structured template with examples",
+        "audience": "Cursor agents performing task generation"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Consider including both positive examples (good tasks) and negative examples (bad tasks) to improve agent understanding. The instructions should be versioned so we can track changes over time and correlate with task generation quality.",
+      "task_data": {
+        "requirement_snippets": [
+          "TASK GENERATION INSTRUCTIONS:\nGenerate tasks with:\n- Strict constraints and parameters\n- Detailed success criteria\n- Clear acceptance criteria\n- Explicit dependencies\n- Technical specifications"
+        ],
+        "requirement_type": "acceptance_criteria",
+        "constraints": [
+          "Must include strict constraints and parameters",
+          "Must include detailed success criteria",
+          "Must include clear acceptance criteria",
+          "Must specify explicit dependencies",
+          "Must include technical specifications"
+        ],
+        "success_criteria": [
+          "Task generation instructions are documented and comprehensive",
+          "Instructions include all required components (constraints, success criteria, acceptance criteria, dependencies, technical specs)",
+          "Instructions are clear and unambiguous",
+          "Agents following instructions produce consistent, high-quality tasks"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37366],
+        "dependencies": [
+          "Implement task instruction prompt builder with RAG chunk integration"
+        ]
+      }
+    },
+    {
+      "task_name": "Implement requirement snippet verbatim extraction and storage",
+      "task_type": "implementation",
+      "description": "Build a system component that extracts verbatim snippets from project_document text in RAG chunks and stores them in the task_data.requirement_snippets array. Each snippet must be an exact quote from the source text that justifies the task.\n\nThe extraction should:\n- Preserve exact wording, punctuation, and formatting from source text\n- Select minimal but sufficient snippets that justify the task\n- Store multiple snippets when a task is informed by multiple requirements\n- Link each snippet back to its source chunk_id and document_id\n\nThis provides auditable traceability from each task back to its source requirements, enabling requirement coverage analysis and impact assessment.",
+      "parameters": {
+        "extraction_method": "verbatim copy with trimming",
+        "snippet_length_target": "1-3 sentences per snippet",
+        "storage_field": "task_data.requirement_snippets",
+        "format": "array of strings"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Consider implementing snippet deduplication if multiple chunks contain identical text. Trade-off: longer snippets provide more context but increase storage; shorter snippets may lose important context. Risk: snippet extraction may miss important qualifying clauses if not careful about boundaries.",
+      "task_data": {
+        "requirement_snippets": [
+          "requirement_snippets: array of strings; each is a verbatim snippet from the project_document text that justifies this task",
+          "Every task MUST be directly justified by one or more requirement snippets taken from the project_document content represented in the RAG chunks."
+        ],
+        "requirement_type": "functional",
+        "constraints": [
+          "Snippets must be verbatim (exact quotes) from source text",
+          "Must be stored as array of strings in task_data",
+          "Must preserve original wording and formatting",
+          "Each task must have at least one requirement snippet"
+        ],
+        "success_criteria": [
+          "All tasks contain requirement_snippets array",
+          "Snippets are verbatim matches to source text",
+          "Each snippet can be traced back to source chunk_id and document_id",
+          "Snippets provide sufficient justification for the task"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37156, 37159],
+        "dependencies": [
+          "Implement RAG-based task generation system"
+        ]
+      }
+    },
+    {
+      "task_name": "Implement chunk metadata enrichment and propagation",
+      "task_type": "implementation",
+      "description": "Build a metadata enrichment system that captures and propagates chunk-level metadata (document_id, chunk_id, requirement_type, has_constraints, has_success_criteria, similarity) into generated tasks. This metadata provides rich context about the source of each requirement and enables advanced filtering, analysis, and requirement coverage tracking.\n\nThe system must:\n- Collect all document_ids from chunks that informed each task\n- Collect all chunk_ids from chunks that informed each task\n- Extract requirement_type from chunks and include in task_data\n- Use has_constraints and has_success_criteria flags to trigger extraction\n- Store similarity scores for analysis and ranking\n\nThis enables bi-directional traceability between tasks and their source requirements.",
+      "parameters": {
+        "metadata_fields": [
+          "document_id",
+          "chunk_id",
+          "requirement_type",
+          "has_constraints",
+          "has_success_criteria",
+          "similarity"
+        ],
+        "storage_location": "task_data object",
+        "aggregation": "collect all unique values across chunks"
+      },
+      "status": "PENDING",
+      "priority": 2,
+      "task_notes": "Metadata enrichment is essential for requirement coverage analysis and impact assessment. Consider building a separate service to query 'which tasks implement requirement chunk X' and 'which requirements are not covered by any task'. Risk: metadata bloat if not carefully managed.",
+      "task_data": {
+        "requirement_snippets": [
+          "document_ids: array of integers; all document_id values from chunks that informed this task",
+          "chunk_ids: array of integers; all chunk_id values from chunks that informed this task",
+          "requirement_type: string; use the requirement_type field from the chunk when available (e.g. 'functional', 'constraint', 'acceptance_criteria', 'general')",
+          "Include enriched metadata"
+        ],
+        "requirement_type": "functional",
+        "constraints": [
+          "Must capture all document_id values from informing chunks",
+          "Must capture all chunk_id values from informing chunks",
+          "Must extract and store requirement_type from chunks",
+          "Must include enriched metadata in serialized output",
+          "Arrays must contain integers (document_ids, chunk_ids)",
+          "requirement_type must be string"
+        ],
+        "success_criteria": [
+          "All tasks contain document_ids and chunk_ids arrays",
+          "requirement_type is correctly extracted and stored",
+          "Metadata enables bi-directional traceability queries",
+          "Enriched metadata is included in Cursor agent payloads"
+        ],
+        "project_id": 1,
+        "document_ids": [2],
+        "chunk_ids": [37160, 37366],
+        "dependencies": [
+          "Implement strict task schema validation with requirement traceability"
+        ]
+      }
+    }
+  ]
+}
