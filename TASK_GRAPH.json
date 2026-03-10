@@ -1,0 +1,237 @@
+{
+  "graph_metadata": {
+    "type": "directed_acyclic_graph",
+    "total_nodes": 15,
+    "total_edges": 12,
+    "critical_path_length": 5
+  },
+  "nodes": [
+    {
+      "task_id": "T001",
+      "task_order_number": 1,
+      "tier": "foundation",
+      "can_execute_parallel": true
+    },
+    {
+      "task_id": "T002",
+      "task_order_number": 2,
+      "tier": "foundation",
+      "can_execute_parallel": true
+    },
+    {
+      "task_id": "T003",
+      "task_order_number": 3,
+      "tier": "core",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T004",
+      "task_order_number": 4,
+      "tier": "core",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T005",
+      "task_order_number": 5,
+      "tier": "core",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T006",
+      "task_order_number": 6,
+      "tier": "enhancement",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T007",
+      "task_order_number": 7,
+      "tier": "enhancement",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T008",
+      "task_order_number": 8,
+      "tier": "enhancement",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T009",
+      "task_order_number": 9,
+      "tier": "quality",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T010",
+      "task_order_number": 10,
+      "tier": "quality",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T011",
+      "task_order_number": 11,
+      "tier": "documentation",
+      "can_execute_parallel": true
+    },
+    {
+      "task_id": "T012",
+      "task_order_number": 12,
+      "tier": "quality",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T013",
+      "task_order_number": 13,
+      "tier": "observability",
+      "can_execute_parallel": true
+    },
+    {
+      "task_id": "T014",
+      "task_order_number": 14,
+      "tier": "enhancement",
+      "can_execute_parallel": false
+    },
+    {
+      "task_id": "T015",
+      "task_order_number": 15,
+      "tier": "reliability",
+      "can_execute_parallel": false
+    }
+  ],
+  "edges": [
+    {
+      "from": "T002",
+      "to": "T003",
+      "relationship": "prerequisite",
+      "reason": "Error patterns established in T002 should be reused in T003"
+    },
+    {
+      "from": "T002",
+      "to": "T004",
+      "relationship": "prerequisite",
+      "reason": "Query functions need consistent error handling"
+    },
+    {
+      "from": "T003",
+      "to": "T005",
+      "relationship": "prerequisite",
+      "reason": "Delete operation builds on update patterns"
+    },
+    {
+      "from": "T002",
+      "to": "T006",
+      "relationship": "prerequisite",
+      "reason": "Assignment fix requires error handling foundation"
+    },
+    {
+      "from": "T003",
+      "to": "T007",
+      "relationship": "prerequisite",
+      "reason": "Status expansion depends on update function stability"
+    },
+    {
+      "from": "T002",
+      "to": "T008",
+      "relationship": "prerequisite",
+      "reason": "Bulk operations reuse single operation patterns"
+    },
+    {
+      "from": "T003",
+      "to": "T008",
+      "relationship": "prerequisite",
+      "reason": "Bulk updates depend on single update implementation"
+    },
+    {
+      "from": "T004",
+      "to": "T008",
+      "relationship": "prerequisite",
+      "reason": "Bulk operations may need query functionality"
+    },
+    {
+      "from": "T002",
+      "to": "T009",
+      "relationship": "prerequisite",
+      "reason": "Core functions must be stable before testing"
+    },
+    {
+      "from": "T009",
+      "to": "T010",
+      "relationship": "prerequisite",
+      "reason": "Integration tests build on unit test patterns"
+    },
+    {
+      "from": "T001",
+      "to": "T011",
+      "relationship": "prerequisite",
+      "reason": "Documentation should reference environment template"
+    },
+    {
+      "from": "T004",
+      "to": "T014",
+      "relationship": "prerequisite",
+      "reason": "Search builds on basic retrieval functionality"
+    },
+    {
+      "from": "T002",
+      "to": "T015",
+      "relationship": "prerequisite",
+      "reason": "Retry logic wraps existing error handling"
+    },
+    {
+      "from": "T003",
+      "to": "T015",
+      "relationship": "prerequisite",
+      "reason": "Retry logic applies to all API operations"
+    }
+  ],
+  "execution_phases": {
+    "phase_1_foundation": {
+      "tasks": ["T001", "T002", "T013"],
+      "parallel_execution": true,
+      "description": "Independent foundational tasks that can run concurrently"
+    },
+    "phase_2_core_functions": {
+      "tasks": ["T003", "T004"],
+      "parallel_execution": false,
+      "description": "Core CRUD operations that depend on error handling"
+    },
+    "phase_3_extended_features": {
+      "tasks": ["T005", "T006", "T007", "T012"],
+      "parallel_execution": false,
+      "description": "Enhanced functionality building on core features"
+    },
+    "phase_4_advanced_features": {
+      "tasks": ["T008", "T014", "T015"],
+      "parallel_execution": false,
+      "description": "Advanced features requiring multiple dependencies"
+    },
+    "phase_5_quality": {
+      "tasks": ["T009", "T010"],
+      "parallel_execution": false,
+      "description": "Testing phase after implementation stabilizes"
+    },
+    "phase_6_documentation": {
+      "tasks": ["T011"],
+      "parallel_execution": true,
+      "description": "Final documentation after features complete"
+    }
+  },
+  "critical_path": [
+    "T002",
+    "T003",
+    "T008",
+    "T009",
+    "T010"
+  ],
+  "parallel_opportunities": [
+    {
+      "group": "group_1",
+      "tasks": ["T001", "T002", "T013"],
+      "rationale": "No dependencies between these tasks"
+    },
+    {
+      "group": "group_2",
+      "tasks": ["T006", "T007"],
+      "rationale": "Both depend only on T002/T003 and don't block each other"
+    }
+  ]
+}
