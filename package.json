@@ -1,15 +1,26 @@
 {
-  "name": "notion-task-manager",
+  "name": "rag-enhanced-task-generation",
   "version": "1.0.0",
   "type": "module",
-  "main": "index.js",
+  "main": "rag_system.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "node test/rag_system_test.js",
+    "demo": "node demo/rag_demo.js",
+    "demo:minimal": "node -e \"import('./demo/rag_demo.js').then(m => m.runMinimalDemo())\"",
+    "start": "node index.js"
   },
-  "keywords": [],
+  "keywords": [
+    "rag",
+    "task-generation",
+    "notion",
+    "retrieval-augmented-generation",
+    "task-management",
+    "constraint-extraction",
+    "requirements-analysis"
+  ],
   "author": "",
   "license": "ISC",
-  "description": "",
+  "description": "RAG-Enhanced Task Generation System - Strict, database-aligned task generation with requirement justification",
   "dependencies": {
     "@notionhq/client": "^5.1.0",
     "dotenv": "^17.2.3"

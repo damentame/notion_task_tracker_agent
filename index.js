@@ -67,10 +67,19 @@ export async function updateTask(pageId, status, notes = "") {
 }
 
 /**
+ * RAG-Enhanced Task Generation
+ * Import and use the RAG system
+ */
+import { quickStart, printSystemInfo } from './rag_system.js';
+
+/**
  * Example usage — Create and Update a test task
  */
 async function main() {
-  // Step 1: Create a test task
+  // Print RAG system information
+  printSystemInfo();
+
+  // Step 1: Create a test task (traditional method)
   const taskId = await createTask(
     "Test Task: Set up Notion integration",
     "Agent",
@@ -83,6 +92,29 @@ async function main() {
       await updateTask(taskId, "Done", "Agent completed this test task.");
     }, 5000);
   }
+
+  // Step 3: RAG-Enhanced Task Generation Example
+  // Uncomment to run RAG system
+  /*
+  const ragResult = await quickStart(`
+    Build a user authentication system with the following requirements:
+    
+    CONSTRAINTS:
+    - Must use JWT tokens
+    - Must implement rate limiting
+    - Must hash passwords with bcrypt
+    
+    SUCCESS CRITERIA:
+    - Users can log in successfully
+    - Invalid attempts are blocked
+    - Tokens expire after 24 hours
+  `, 1, {
+    documentName: 'Auth Requirements',
+    createNotionTasks: true
+  });
+  
+  console.log(`Generated ${ragResult.generatedTasks.length} tasks`);
+  */
 }
 
 main();
