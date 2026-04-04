@@ -1,0 +1,308 @@
+{
+  "metadata": {
+    "project": "Notion Task Tracker Agent",
+    "generated_date": "2026-04-04",
+    "total_tasks": 12,
+    "task_categories": [
+      "configuration",
+      "core_functionality",
+      "error_handling",
+      "documentation",
+      "testing",
+      "enhancement"
+    ]
+  },
+  "tasks": [
+    {
+      "task_number": 1,
+      "task_order_number": 1,
+      "title": "Create Environment Configuration Template",
+      "category": "configuration",
+      "priority": "high",
+      "description": "Create a .env.example file documenting all required environment variables with descriptions and example values. This provides clear setup guidance for users.",
+      "acceptance_criteria": [
+        "File .env.example exists in project root",
+        "Contains NOTION_API_KEY with description",
+        "Contains NOTION_DATABASE_ID with description",
+        "Includes instructions on how to obtain these values"
+      ],
+      "dependencies": [],
+      "estimated_complexity": "low",
+      "files_to_modify": [],
+      "files_to_create": [".env.example"],
+      "technical_notes": "Should include comments explaining where to find Notion API keys and database IDs"
+    },
+    {
+      "task_number": 2,
+      "task_order_number": 2,
+      "title": "Enhance README with Comprehensive Documentation",
+      "category": "documentation",
+      "priority": "high",
+      "description": "Expand README.md to include project overview, setup instructions, usage examples, API documentation, and troubleshooting guidance.",
+      "acceptance_criteria": [
+        "README includes project description and purpose",
+        "Setup instructions with prerequisites listed",
+        "Environment variable configuration steps documented",
+        "Usage examples for all exported functions",
+        "API reference for createTask and updateTask",
+        "Troubleshooting section added"
+      ],
+      "dependencies": [1],
+      "estimated_complexity": "medium",
+      "files_to_modify": ["README.md"],
+      "files_to_create": [],
+      "technical_notes": "Reference .env.example in setup instructions"
+    },
+    {
+      "task_number": 3,
+      "task_order_number": 3,
+      "title": "Fix Assigned To Functionality",
+      "category": "core_functionality",
+      "priority": "high",
+      "description": "Implement the assignedTo parameter in createTask function. Currently accepts the parameter but sets people array to empty. Need to properly map assignedTo to Notion people property.",
+      "acceptance_criteria": [
+        "assignedTo parameter properly utilized",
+        "People property correctly populated in Notion",
+        "Function handles both email and user ID formats",
+        "Appropriate error handling for invalid assignees"
+      ],
+      "dependencies": [],
+      "estimated_complexity": "medium",
+      "files_to_modify": ["index.js"],
+      "files_to_create": [],
+      "technical_notes": "Notion people property requires user IDs or emails. May need to query workspace users first or document expected format."
+    },
+    {
+      "task_number": 4,
+      "task_order_number": 4,
+      "title": "Implement Task Retrieval Function",
+      "category": "core_functionality",
+      "priority": "high",
+      "description": "Create a getTask function to retrieve a specific task by page ID from the Notion database. Returns task details including all properties.",
+      "acceptance_criteria": [
+        "Function getTask(pageId) exported",
+        "Returns task object with all properties",
+        "Handles non-existent page IDs gracefully",
+        "Proper error handling and logging",
+        "Returns null or throws descriptive error for invalid IDs"
+      ],
+      "dependencies": [],
+      "estimated_complexity": "low",
+      "files_to_modify": ["index.js"],
+      "files_to_create": [],
+      "technical_notes": "Use notion.pages.retrieve() API method"
+    },
+    {
+      "task_number": 5,
+      "task_order_number": 5,
+      "title": "Implement Task Query/List Function",
+      "category": "core_functionality",
+      "priority": "high",
+      "description": "Create a listTasks function to query the Notion database with optional filters (status, assignee, date range). Returns array of tasks matching criteria.",
+      "acceptance_criteria": [
+        "Function listTasks(filters) exported",
+        "Supports filtering by status",
+        "Supports filtering by assignee",
+        "Returns array of task objects",
+        "Handles empty results gracefully",
+        "Proper error handling for invalid filters"
+      ],
+      "dependencies": [],
+      "estimated_complexity": "medium",
+      "files_to_modify": ["index.js"],
+      "files_to_create": [],
+      "technical_notes": "Use notion.databases.query() API method with filter objects"
+    },
+    {
+      "task_number": 6,
+      "task_order_number": 6,
+      "title": "Implement Task Deletion Function",
+      "category": "core_functionality",
+      "priority": "medium",
+      "description": "Create a deleteTask function to archive/delete a task from the Notion database by page ID. Notion archives pages rather than permanently deleting them.",
+      "acceptance_criteria": [
+        "Function deleteTask(pageId) exported",
+        "Successfully archives page in Notion",
+        "Returns confirmation of deletion",
+        "Handles non-existent page IDs gracefully",
+        "Proper error handling and logging"
+      ],
+      "dependencies": [],
+      "estimated_complexity": "low",
+      "files_to_modify": ["index.js"],
+      "files_to_create": [],
+      "technical_notes": "Use notion.pages.update() with archived: true property"
+    },
+    {
+      "task_number": 7,
+      "task_order_number": 7,
+      "title": "Enhance Error Handling and Validation",
+      "category": "error_handling",
+      "priority": "high",
+      "description": "Improve error handling across all functions. Add input validation, descriptive error messages, and proper error propagation. Validate environment variables on startup.",
+      "acceptance_criteria": [
+        "All functions validate input parameters",
+        "Environment variables validated at module load",
+        "Descriptive error messages for common failures",
+        "Errors properly propagated to callers",
+        "Network errors handled with retry logic or clear messaging"
+      ],
+      "dependencies": [3, 4, 5, 6],
+      "estimated_complexity": "medium",
+      "files_to_modify": ["index.js"],
+      "files_to_create": [],
+      "technical_notes": "Consider creating custom error classes for different failure types"
+    },
+    {
+      "task_number": 8,
+      "task_order_number": 8,
+      "title": "Add Logging Infrastructure",
+      "category": "enhancement",
+      "priority": "medium",
+      "description": "Implement structured logging with configurable log levels (debug, info, warn, error). Replace console.log/error with proper logging framework.",
+      "acceptance_criteria": [
+        "Logging framework integrated (e.g., winston, pino)",
+        "Configurable log levels via environment variable",
+        "Structured log format with timestamps",
+        "All console.log/error replaced with logger calls",
+        "Log levels appropriately assigned to messages"
+      ],
+      "dependencies": [7],
+      "estimated_complexity": "medium",
+      "files_to_modify": ["index.js", "package.json"],
+      "files_to_create": [],
+      "technical_notes": "Consider winston or pino for logging. Add LOG_LEVEL environment variable."
+    },
+    {
+      "task_number": 9,
+      "task_order_number": 9,
+      "title": "Create Unit Tests for Core Functions",
+      "category": "testing",
+      "priority": "high",
+      "description": "Implement comprehensive unit tests for all exported functions using a testing framework. Mock Notion API calls to avoid external dependencies during testing.",
+      "acceptance_criteria": [
+        "Testing framework configured (Jest or Mocha)",
+        "Tests for createTask function",
+        "Tests for updateTask function",
+        "Tests for getTask function",
+        "Tests for listTasks function",
+        "Tests for deleteTask function",
+        "Notion API calls properly mocked",
+        "Test coverage > 80%",
+        "npm test command executes tests successfully"
+      ],
+      "dependencies": [3, 4, 5, 6, 7],
+      "estimated_complexity": "high",
+      "files_to_modify": ["package.json"],
+      "files_to_create": ["index.test.js", "jest.config.js"],
+      "technical_notes": "Use Jest with ES modules support. Mock @notionhq/client for testing."
+    },
+    {
+      "task_number": 10,
+      "task_order_number": 10,
+      "title": "Refactor Main Function for Better Examples",
+      "category": "enhancement",
+      "priority": "low",
+      "description": "Update the main() example function to demonstrate all available functionality including new functions. Make it more comprehensive and educational.",
+      "acceptance_criteria": [
+        "main() demonstrates createTask",
+        "main() demonstrates updateTask",
+        "main() demonstrates getTask",
+        "main() demonstrates listTasks",
+        "main() demonstrates deleteTask",
+        "Examples include error handling patterns",
+        "Code is well-commented for educational purposes"
+      ],
+      "dependencies": [3, 4, 5, 6],
+      "estimated_complexity": "low",
+      "files_to_modify": ["index.js"],
+      "files_to_create": [],
+      "technical_notes": "Consider making main() conditional on a RUN_EXAMPLE environment variable"
+    },
+    {
+      "task_number": 11,
+      "task_order_number": 11,
+      "title": "Add CLI Interface",
+      "category": "enhancement",
+      "priority": "low",
+      "description": "Create a command-line interface for interacting with the task tracker without writing code. Support commands for create, update, list, get, and delete operations.",
+      "acceptance_criteria": [
+        "CLI script created (cli.js)",
+        "Supports 'create' command with arguments",
+        "Supports 'update' command with arguments",
+        "Supports 'list' command with filters",
+        "Supports 'get' command with page ID",
+        "Supports 'delete' command with page ID",
+        "Help text available via --help flag",
+        "Package.json includes bin entry for CLI",
+        "CLI properly handles errors and displays user-friendly messages"
+      ],
+      "dependencies": [3, 4, 5, 6, 7],
+      "estimated_complexity": "high",
+      "files_to_modify": ["package.json"],
+      "files_to_create": ["cli.js"],
+      "technical_notes": "Consider using commander or yargs for CLI framework"
+    },
+    {
+      "task_number": 12,
+      "task_order_number": 12,
+      "title": "Create Integration Tests",
+      "category": "testing",
+      "priority": "medium",
+      "description": "Implement integration tests that verify functionality against a real Notion test database. These tests should be optional and run only when test credentials are provided.",
+      "acceptance_criteria": [
+        "Integration test suite created",
+        "Tests run against real Notion API with test database",
+        "Tests only run when NOTION_TEST_DATABASE_ID is set",
+        "Tests cover complete workflows (create, update, retrieve, delete)",
+        "Tests clean up created resources",
+        "Separate npm script for integration tests",
+        "Documentation on running integration tests"
+      ],
+      "dependencies": [3, 4, 5, 6, 9],
+      "estimated_complexity": "medium",
+      "files_to_modify": ["package.json", "README.md"],
+      "files_to_create": ["integration.test.js"],
+      "technical_notes": "Use separate test database ID. Include setup/teardown to avoid polluting production data."
+    }
+  ],
+  "task_dependency_graph": {
+    "independent_tasks": [1, 3, 4, 5, 6],
+    "dependent_tasks": {
+      "2": [1],
+      "7": [3, 4, 5, 6],
+      "8": [7],
+      "9": [3, 4, 5, 6, 7],
+      "10": [3, 4, 5, 6],
+      "11": [3, 4, 5, 6, 7],
+      "12": [3, 4, 5, 6, 9]
+    }
+  },
+  "implementation_sequence": {
+    "phase_1_foundation": {
+      "description": "Setup configuration and documentation foundation",
+      "tasks": [1, 2],
+      "parallel_execution": false
+    },
+    "phase_2_core_features": {
+      "description": "Implement missing core CRUD operations",
+      "tasks": [3, 4, 5, 6],
+      "parallel_execution": true
+    },
+    "phase_3_robustness": {
+      "description": "Enhance error handling and logging",
+      "tasks": [7, 8],
+      "parallel_execution": false
+    },
+    "phase_4_quality": {
+      "description": "Add testing and improve examples",
+      "tasks": [9, 10],
+      "parallel_execution": true
+    },
+    "phase_5_enhancement": {
+      "description": "Optional enhancements for better usability",
+      "tasks": [11, 12],
+      "parallel_execution": true
+    }
+  }
+}
